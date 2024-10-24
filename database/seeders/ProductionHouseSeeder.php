@@ -15,6 +15,6 @@ class ProductionHouseSeeder extends Seeder
     public function run()
     {
         // Create 10 Production Houses with the factory
-        ProductionHouse::factory()->count(20)->create();
+        ProductionHouse::factory()->count(5)->create();
     }
 }

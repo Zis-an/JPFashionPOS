@@ -96,12 +96,11 @@
                                     </div>
                                     <div id="cost-details-container">
 
-                                        @foreach($cost_details as $key => $value)
-
+                                        @foreach($cost_details as $value)
                                             <div class="cost-detail-item d-flex align-items-center mb-2">
-                                                <input type="text" name="cost_details[]" value="{{ $key }}" class="form-control cost-detail-input mr-2"
+                                                <input type="text" name="cost_details[]" value="{{ $value['detail'] }}" class="form-control cost-detail-input mr-2"
                                                        placeholder="Cost Details" required>
-                                                <input type="number" name="cost_amount[]" value="{{ $value }}" class="form-control amount-input mr-2"
+                                                <input type="number" name="cost_amount[]" value="{{ $value['amount'] }}" class="form-control amount-input mr-2"
                                                        placeholder="Amount" required>
                                                 <button class="btn btn-danger btn-sm remove-item-btn">&times;</button>
                                             </div>

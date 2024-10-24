@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AssetCategoryController;
 use App\Http\Controllers\Admin\AssetController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductionController;
 use App\Http\Controllers\Admin\ProductionHouseController;
+use App\Http\Controllers\Admin\ProductStockController;
 use App\Http\Controllers\Admin\RawMaterialCategoryController;
 use App\Http\Controllers\Admin\RawMaterialController;
 use App\Http\Controllers\Admin\RawMaterialPurchaseController;
@@ -322,17 +324,19 @@ Route::delete('/products/{product}/image/{key}', [ProductController::class, 'del
 Route::delete('/products/{product}/thumbnail', [ProductController::class, 'deleteThumb'])->name('products.deleteThumb');
 Route::resource('/products', ProductController::class)->middleware('permission:products.list');
 
+
 // Raw Material Stock
-Route::get('/raw-material-stocks/trashed', [RawMaterialStockController::class, 'trashed_list'])
-    ->middleware('permission:rawMaterialStocks.trashed')
-    ->name('raw-material-stocks.trashed');
-Route::get('/raw-material-stocks/trashed/{stock}/restore', [RawMaterialStockController::class, 'restore'])
-    ->middleware('permission:rawMaterialStocks.restore')
-    ->name('raw-material-stocks.restore');
-Route::get('/raw-material-stocks/trashed/{stock}/delete', [RawMaterialStockController::class, 'force_delete'])
-    ->middleware('permission:rawMaterialStocks.force_delete')
-    ->name('raw-material-stocks.force_delete');
+//Route::get('/raw-material-stocks/trashed', [RawMaterialStockController::class, 'trashed_list'])
+//    ->middleware('permission:rawMaterialStocks.trashed')
+//    ->name('raw-material-stocks.trashed');
+//Route::get('/raw-material-stocks/trashed/{stock}/restore', [RawMaterialStockController::class, 'restore'])
+//    ->middleware('permission:rawMaterialStocks.restore')
+//    ->name('raw-material-stocks.restore');
+//Route::get('/raw-material-stocks/trashed/{stock}/delete', [RawMaterialStockController::class, 'force_delete'])
+//    ->middleware('permission:rawMaterialStocks.force_delete')
+//    ->name('raw-material-stocks.force_delete');
 Route::resource('/raw-material-stocks', RawMaterialStockController::class)->middleware('permission:rawMaterialStocks.list');
+
 
 // Deposit
 Route::get('/deposits/trashed', [DepositController::class, 'trashed_list'])
@@ -424,8 +428,31 @@ Route::get('/sells/{sell}/status/{status}',[SellController::class, 'updateStatus
 Route::resource('/sells', SellController::class)
     ->middleware('permission:sells.list');
 
+// Product Stock
+//Route::get('/product-stocks/trashed', [ProductStockController::class, 'trashed_list'])
+//    ->middleware('permission:productStocks.trashed')
+//    ->name('product-stocks.trashed');
+//Route::get('/product-stocks/trashed/{stock}/restore', [ProductStockController::class, 'restore'])
+//    ->middleware('permission:productStocks.restore')
+//    ->name('product-stocks.restore');
+//Route::get('/product-stocks/trashed/{stock}/delete', [ProductStockController::class, 'force_delete'])
+//    ->middleware('permission:productStocks.force_delete')
+//    ->name('product-stocks.force_delete');
+Route::resource('/product-stocks', ProductStockController::class)
+    ->middleware('permission:productStocks.list');
 
-
+// Currency
+Route::get('/currencies/trashed', [CurrencyController::class, 'trashed_list'])
+    ->middleware('permission:currencies.trashed')
+    ->name('currencies.trashed');
+Route::get('/currencies/trashed/{currency}/restore', [CurrencyController::class, 'restore'])
+    ->middleware('permission:currencies.restore')
+    ->name('currencies.restore');
+Route::get('/currencies/trashed/{currency}/delete', [CurrencyController::class, 'force_delete'])
+    ->middleware('permission:currencies.force_delete')
+    ->name('currencies.force_delete');
+Route::resource('/currencies', CurrencyController::class)
+    ->middleware('permission:currencies.list');
 
 
 // Profile

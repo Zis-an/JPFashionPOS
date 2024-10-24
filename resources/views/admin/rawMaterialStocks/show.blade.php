@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'View Raw Material Stock')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -67,14 +65,14 @@
                             @method('DELETE')
                             @csrf
                             <a href="{{ route('admin.raw-material-stocks.index') }}" class="btn btn-success" >Go Back</a>
-                            @can('rawMaterialStocks.update')
-                                <a href="{{ route('admin.raw-material-stocks.edit',['raw_material_stock'=>$stock->id]) }}" class="btn btn-warning ">
-                                    <i class="fa fa-pen"></i> Edit
-                                </a>
-                            @endcan
-                            @can('rawMaterialStocks.delete')
-                                <button onclick="isDelete(this)" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
-                            @endcan
+{{--                            @can('rawMaterialStocks.update')--}}
+{{--                                <a href="{{ route('admin.raw-material-stocks.edit',['raw_material_stock'=>$stock->id]) }}" class="btn btn-warning ">--}}
+{{--                                    <i class="fa fa-pen"></i> Edit--}}
+{{--                                </a>--}}
+{{--                            @endcan--}}
+{{--                            @can('rawMaterialStocks.delete')--}}
+{{--                                <button onclick="isDelete(this)" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>--}}
+{{--                            @endcan--}}
                         </form>
 
                             <div class="row mt-4 mb-4">

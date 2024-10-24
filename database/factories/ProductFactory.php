@@ -3,10 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Brand;
-use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductCategory;
-use App\Models\Size;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -32,8 +30,6 @@ class ProductFactory extends Factory
             'sku' => $this->faker->unique()->word,  // Unique SKU
             'unit_id' => $this->faker->optional()->randomElement(Unit::pluck('id')->toArray()), // Randomly assign a unit or null
             'brand_id' => $this->faker->optional()->randomElement(Brand::pluck('id')->toArray()), // Randomly assign a brand or null
-            'color_id' => $this->faker->optional()->randomElement(Color::pluck('id')->toArray()), // Randomly assign a brand or null
-            'size_id' => $this->faker->optional()->randomElement(Size::pluck('id')->toArray()), // Randomly assign a brand or null
             'width' => $this->faker->randomFloat(2, 1, 100), // Random width between 1 and 100
             'length' => $this->faker->randomFloat(2, 1, 100), // Random length between 1 and 100
             'density' => $this->faker->randomFloat(2, 1, 10), // Random density between 1 and 10

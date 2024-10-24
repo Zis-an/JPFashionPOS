@@ -21,17 +21,30 @@ class RawMaterialFactory extends Factory
 
     public function definition()
     {
+        // Initialize a variable to hold the generated name
+        $sl = 0;
+
+        // Ensure uniqueness with a do-while loop
+        do {
+            if ($sl){
+                $name = $this->faker->word.$sl;
+            }else{
+                $name = $this->faker->word;
+            }
+            // Generate a random word for the name
+            $sl ++;
+        } while (RawMaterial::where('name', $name)->exists()); // Check if it exists
+
         return [
-            'name' => $this->faker->unique()->words(2, true), // Ensure the name is unique
-            'raw_material_category_id' => RawMaterialCategory::factory(), // Create a related category
-            'unit_id' => Unit::factory(), // Create a related unit
-            'sku' => $this->faker->unique()->lexify('SKU???'), // Ensure the SKU is unique
-            'image' => $this->faker->imageUrl(), // Random image URL
-            'details' => $this->faker->text(200), // Random details
-            'width' => $this->faker->randomFloat(2, 0, 100), // Random width
-            'length' => $this->faker->randomFloat(2, 0, 100), // Random length
-            'density' => $this->faker->randomFloat(2, 0, 100), // Random density
+            'name' => $name, // Generate a unique random name
+            'raw_material_category_id' => RawMaterialCategory::factory(), // Use a random category
+            'unit_id' => Unit::factory(), // Use a random unit
+            'sku' => $this->faker->unique()->word, // Generate a unique SKU
+            'image' => $this->faker->imageUrl(), // Generate a random image URL
+            'details' => $this->faker->text(200), // Generate random details
+            'width' => $this->faker->randomFloat(2, 0, 100), // Generate random width
+            'length' => $this->faker->randomFloat(2, 0, 100), // Generate random length
+            'density' => $this->faker->randomFloat(2, 0, 100), // Generate random density
         ];
     }
-
 }

@@ -33,6 +33,6 @@ class UnitSeeder extends Seeder
     public function run(): void
     {
         // Seed the units table with 20 entries
-        Unit::factory()->count(20)->create();
+        Unit::factory()->count(10)->create();
     }
 }

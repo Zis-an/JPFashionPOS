@@ -376,13 +376,13 @@ class RoleSeeder extends Seeder
                     'group_name' => 'RawMaterialStock',
                     'permissions' => [
                         'rawMaterialStocks.list',
-                        'rawMaterialStocks.create',
+//                        'rawMaterialStocks.create',
                         'rawMaterialStocks.view',
-                        'rawMaterialStocks.update',
-                        'rawMaterialStocks.delete',
-                        'rawMaterialStocks.trashed',
-                        'rawMaterialStocks.restore',
-                        'rawMaterialStocks.force_delete',
+//                        'rawMaterialStocks.update',
+//                        'rawMaterialStocks.delete',
+//                        'rawMaterialStocks.trashed',
+//                        'rawMaterialStocks.restore',
+//                        'rawMaterialStocks.force_delete',
                         'rawMaterialStocks.activity'
                     ]
                 ],
@@ -473,6 +473,48 @@ class RoleSeeder extends Seeder
                         'sells.force_delete',
                         'sells.activity',
                         'sells.updateStatus'
+                    ]
+                ],
+                [
+                    'group_name' => 'ProductStock',
+                    'permissions' => [
+                        'productStocks.list',
+//                        'productStocks.create',
+                        'productStocks.view',
+//                        'productStocks.update',
+//                        'productStocks.delete',
+//                        'productStocks.trashed',
+//                        'productStocks.restore',
+//                        'productStocks.force_delete',
+                        'productStocks.activity'
+                    ]
+                ],
+                [
+                    'group_name' => 'Currency',
+                    'permissions' => [
+                        'currencies.list',
+                        'currencies.create',
+                        'currencies.view',
+                        'currencies.update',
+                        'currencies.delete',
+                        'currencies.trashed',
+                        'currencies.restore',
+                        'currencies.force_delete',
+                        'currencies.activity'
+                    ]
+                ],
+                [
+                    'group_name' => 'SellPrice',
+                    'permissions' => [
+                        'sellPrices.list',
+                        'sellPrices.create',
+                        'sellPrices.view',
+                        'sellPrices.update',
+                        'sellPrices.delete',
+                        'sellPrices.trashed',
+                        'sellPrices.restore',
+                        'sellPrices.force_delete',
+                        'sellPrices.activity'
                     ]
                 ],
         ];

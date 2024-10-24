@@ -17,7 +17,7 @@ class RawMaterialPurchaseObserver
             if ($purchase->status == 'approved') {
                 Log::info("updated observer working status approved");
                 Log::info($purchase);
-                Log::info($purchase->raw_materials);
+                Log::info($purchase->rawMaterials);
 
                 // Process each raw material in the purchase
                 foreach ($purchase->raw_materials as $rawMaterial) {

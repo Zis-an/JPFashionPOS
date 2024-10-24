@@ -91,33 +91,15 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($existingRawMaterials as $material)
+
+                                @foreach($production->rawMaterials as $material)
+
                                     <tr>
-                                        @foreach($rawMaterials as $rawMaterial)
-                                            @if($rawMaterial->id == $material->raw_material_id)
-                                                <td>{{ $rawMaterial->name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
-                                        @foreach($brands as $brand)
-                                            @if($brand->id == $material->brand_id)
-                                                <td>{{ $brand->name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
-                                        @foreach($sizes as $size)
-                                            @if($size->id == $material->size_id)
-                                                <td>{{ $size->name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
-                                        @foreach($colors as $color)
-                                            @if($color->id == $material->color_id)
-                                                <td>{{ $color->color_name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
-                                        @foreach($warehouses as $warehouse)
-                                            @if($warehouse->id == $material->warehouse_id)
-                                                <td>{{ $warehouse->name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
+                                        <td>{{ optional($material->rawMaterial)->name }}</td>
+                                        <td>{{ optional($material->brand)->name }}</td>
+                                        <td>{{ optional($material->size)->name }}</td>
+                                        <td>{{ optional($material->color)->color_name }}</td>
+                                        <td>{{ optional($material->warehouse)->name }}</td>
                                         <td>{{ $material->price }}</td>
                                         <td>{{ $material->quantity }}</td>
                                         <td>{{ $material->total_price }}</td>
@@ -135,37 +117,21 @@
                                     <th>Brand</th>
                                     <th>Size</th>
                                     <th>Color</th>
-                                    <th>Price</th>
+                                    <th>Cost per Qty</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($existingProducts as $product)
+                                @foreach($production->products as $productionProduct)
                                     <tr>
-                                        @foreach($products as $stockProduct)
-                                            @if($stockProduct->id == $product->id)
-                                                <td>{{ $stockProduct->name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
-                                        @foreach($brands as $brand)
-                                            @if($brand->id == $product->brand_id)
-                                                <td>{{ $brand->name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
-                                        @foreach($sizes as $size)
-                                            @if($size->id == $product->size_id)
-                                                <td>{{ $size->name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
-                                        @foreach($colors as $color)
-                                            @if($color->id == $product->color_id)
-                                                <td>{{ $color->color_name ?? '' }}</td>
-                                            @endif
-                                        @endforeach
-                                        <td>{{ $product->per_pc_cost ?? '' }}</td>
-                                        <td>{{ $product->quantity ?? '' }}</td>
-                                        <td>{{ $product->sub_total ?? '' }}</td>
+                                        <td>{{ optional($productionProduct->product)->name }}</td>
+                                        <td>{{ optional($productionProduct->brand)->name }}</td>
+                                        <td>{{ optional($productionProduct->size)->name }}</td>
+                                        <td>{{ optional($productionProduct->color)->color_name }}</td>
+                                        <td>{{ $productionProduct->per_pc_cost }}</td>
+                                        <td>{{ $productionProduct->quantity }}</td>
+                                        <td>{{ $productionProduct->sub_total }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

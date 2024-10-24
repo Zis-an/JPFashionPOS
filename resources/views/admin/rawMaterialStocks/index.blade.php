@@ -1,17 +1,15 @@
 @extends('adminlte::page')
-
 @section('title', 'Raw Material Stocks')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
             <h1>Raw Material Stocks</h1>
-            @can('rawMaterialStocks.create')
-                <a href="{{ route('admin.raw-material-stocks.create') }}" class="btn btn-primary mt-2">Add new</a>
-            @endcan
-            @can('rawMaterialStocks.trashed')
-                <a href="{{ route('admin.raw-material-stocks.trashed') }}" class="btn btn-danger mt-2">Trash List</a>
-            @endcan
+{{--            @can('rawMaterialStocks.create')--}}
+{{--                <a href="{{ route('admin.raw-material-stocks.create') }}" class="btn btn-primary mt-2">Add new</a>--}}
+{{--            @endcan--}}
+{{--            @can('rawMaterialStocks.trashed')--}}
+{{--                <a href="{{ route('admin.raw-material-stocks.trashed') }}" class="btn btn-danger mt-2">Trash List</a>--}}
+{{--            @endcan--}}
 
         </div>
         <div class="col-sm-6">
@@ -60,12 +58,12 @@
                                             @can('rawMaterialStocks.view')
                                                 <a href="{{ route('admin.raw-material-stocks.show',['raw_material_stock'=>$stock->id]) }}" class="btn btn-info px-1 py-0 btn-sm"><i class="fa fa-eye"></i></a>
                                             @endcan
-                                            @can('rawMaterialStocks.update')
-                                                <a href="{{ route('admin.raw-material-stocks.edit',['raw_material_stock'=>$stock->id]) }}" class="btn btn-warning px-1 py-0 btn-sm"><i class="fa fa-pen"></i></a>
-                                            @endcan
-                                            @can('rawMaterialStocks.delete')
-                                                <button onclick="isDelete(this)" class="btn btn-danger btn-sm px-1 py-0"><i class="fa fa-trash"></i></button>
-                                            @endcan
+{{--                                            @can('rawMaterialStocks.update')--}}
+{{--                                                <a href="{{ route('admin.raw-material-stocks.edit',['raw_material_stock'=>$stock->id]) }}" class="btn btn-warning px-1 py-0 btn-sm"><i class="fa fa-pen"></i></a>--}}
+{{--                                            @endcan--}}
+{{--                                            @can('rawMaterialStocks.delete')--}}
+{{--                                                <button onclick="isDelete(this)" class="btn btn-danger btn-sm px-1 py-0"><i class="fa fa-trash"></i></button>--}}
+{{--                                            @endcan--}}
 
                                         </form>
                                     </td>

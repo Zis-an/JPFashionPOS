@@ -653,7 +653,15 @@
             url: '{{ route("products.all") }}', // New route for fetching products
             method: 'GET',
             success: function (data) {
-                products = data;
+                console.log(data);
+                console.log(data);
+                if (Array.isArray(data)) {
+                    products = data;
+                } else if (data.products) {
+                    products = data.products; // In case products are nested in the response
+                } else {
+                    products = []; // Fallback to an empty array if the structure is unexpected
+                }
                 populateProductList('');
             },
             error: function (error) {

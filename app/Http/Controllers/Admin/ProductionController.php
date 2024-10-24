@@ -59,8 +59,6 @@ class ProductionController extends Controller
             'production_date' => 'required',
             'warehouse_id' => 'required',
         ]);
-
-
         // Retrieve cost details and amounts
         $costDetails = $request->input('cost_details', []);
         $costAmounts = $request->input('cost_amount', []);
@@ -77,10 +75,8 @@ class ProductionController extends Controller
                 $totalCost += $amount;
             }
         }
-
         $totalRawMaterialCost = 0;
         $totalProductCost = 0;
-
         $production = Production::create([
             'production_house_id' => $request->production_house_id,
             'showroom_id' => $request->showroom_id,
@@ -92,7 +88,6 @@ class ProductionController extends Controller
             'total_product_cost' => 0, // Will be updated later
             'amount' => $totalCost + 0, // Will be updated later
         ]);
-
         foreach ($request->raw_material_id as $index => $rawMaterial) {
             DB::table('production_raw_materials')->insert([
                 'production_id' => $production->id,
@@ -106,7 +101,6 @@ class ProductionController extends Controller
                 'total_price' => isset($request->raw_material_total_price[$index]) ? (double) $request->raw_material_total_price[$index] : 0,
             ]);
         }
-
         foreach ($request->product_id as $index => $product) {
             DB::table('production_product')->insert([
                 'production_id' => $production->id,
@@ -119,8 +113,6 @@ class ProductionController extends Controller
                 'sub_total' => isset($request->total_price[$index]) ? (double) $request->total_price[$index] : 0,
             ]);
         }
-
-
         // Calculate the total price
         $totalRawMaterialCost = DB::table('production_raw_materials')
             ->where('production_id', $production->id)
@@ -129,13 +121,13 @@ class ProductionController extends Controller
         $totalProductCost = DB::table('production_product')
             ->where('production_id', $production->id)
             ->sum('sub_total');
-
         // Update the total_price and amount in the purchases table
         $totalForProduction = $totalCost + $totalRawMaterialCost + $totalProductCost;
         $production->update([
+            'total_raw_material_cost' => $totalRawMaterialCost, // Update amount
+            'total_product_cost' => $totalProductCost,// Update amount
             'amount' => $totalForProduction // Update amount
         ]);
-
         return redirect()->route('admin.productions.index')->with('success', 'Productions Created Successfully');
     }
 
@@ -181,15 +173,12 @@ class ProductionController extends Controller
             'showroom_id' => 'required',
             'account_id' => 'required',
             'production_date' => 'required',
-            'warehouse_id' => 'required',
         ]);
-
         // Retrieve and process cost details
         $costDetails = $request->input('cost_details', []);
         $costAmounts = $request->input('cost_amount', []);
         $combinedCosts = [];
         $totalCost = 0;
-
         foreach ($costDetails as $index => $detail) {
             $amount = isset($costAmounts[$index]) ? $costAmounts[$index] : null;
             if ($detail && $amount) {
@@ -200,7 +189,6 @@ class ProductionController extends Controller
                 $totalCost += $amount;
             }
         }
-
         // Update the production record
         $production->update([
             'production_house_id' => $request->production_house_id,
@@ -210,15 +198,12 @@ class ProductionController extends Controller
             'cost_details' => json_encode($combinedCosts),
             'total_cost' => $totalCost,
         ]);
-
         // Handle existing raw materials
         $existingRawMaterials = DB::table('production_raw_materials')
             ->where('production_id', $production->id)
             ->get();
-
         // Handle raw materials
         $newRawMaterials = $request->raw_material_id ?? [];
-
         // Add or update raw materials
         foreach ($newRawMaterials as $index => $rawMaterial) {
             // Prepare the data array
@@ -232,7 +217,6 @@ class ProductionController extends Controller
                 'quantity' => (double) ($request->raw_material_quantity[$index] ?? 0), // Ensure it's a float
                 'total_price' => (double) ($request->raw_material_total_price[$index] ?? 0), // Ensure it's a float
             ];
-
             // Check if the raw material exists
             $existingMaterial = $existingRawMaterials->firstWhere('raw_material_id', $rawMaterial);
 
@@ -328,30 +312,10 @@ class ProductionController extends Controller
     public function show($id): View|Factory|Application
     {
         $production = Production::findOrFail($id);
-
-        // Retrieve production's raw materials and products
-        $existingRawMaterials = DB::table('production_raw_materials')->where('production_id', $production->id)->get();
-        $existingProducts = DB::table('production_product')->where('production_id', $production->id)->get();
-
-        $warehouses = Warehouse::all();
-        $brands = Brand::all();
-        $colors = Color::all();
-        $sizes = Size::all();
-        $rawMaterials = RawMaterial::all();
-        $products = Product::all();
-
         $activities = AdminActivity::getActivities(Production::class, $id)->orderBy('created_at', 'desc')->take(10)->get();
-
         return view('admin.productions.show',
             compact('production',
-                'activities',
-                'existingRawMaterials',
-                'existingProducts', 'warehouses',
-                'brands',
-                'colors',
-                'sizes',
-                'rawMaterials',
-                'products'));
+                'activities',));
     }
 
     public function destroy($id): RedirectResponse
@@ -391,16 +355,13 @@ class ProductionController extends Controller
 
     public function updateStatus($id, $status): RedirectResponse
     {
-        // Validate the status
         if (!in_array($status, ['pending', 'approved', 'rejected'])) {
             return redirect()->route('admin.productions.index')->with('error', 'Invalid status.');
         }
-        // Find the asset
         $production = Production::find($id);
         if (!$production) {
             return redirect()->back()->with('error', 'Production Information not found.');
         }
-        // Update the asset status
         $production->status = $status;
         $production->update();
         return redirect()->back()->with('success', 'Production status updated successfully.');

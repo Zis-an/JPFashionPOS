@@ -82,7 +82,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="warehouse_id">Select Warehouse</label>
-                                    <select id="warehouse_id" name="warehouse_id" class="select2 form-control" required>
+                                    <select id="warehouse_id" name="warehouse_id" class="select2 form-control">
                                         <option value="" disabled selected>Select a warehouse</option>
                                         @foreach($warehouses as $warehouse)
                                             @if($warehouse->raw_material_stocks->count() > 0)
@@ -383,13 +383,12 @@
             // Populate the selected materials table with existing data
             existingRawMaterials.forEach(function (material) {
                 const warehouseId = material.warehouse_id;
-
                 $.ajax({
                     url: '{{ route("raw-materials.by-warehouse") }}',
                     type: 'GET',
                     data: { warehouse_id: warehouseId },
                     success: function (data) {
-                        const materialDetails = data.find(m => m.id === material.raw_material_id);
+                        const materialDetails = data.find(m => m.raw_material_id === material.raw_material_id);
                         if (materialDetails) {
                             // Store the existing materials in the selectedMaterials object
                             selectedMaterials[material.raw_material_id] = {
@@ -480,8 +479,8 @@
                                 name: $(this).find('h5').text(),
                                 sku: $(this).find('p').eq(0).text().replace('SKU: ', ''),
                                 price: price,
-                                count: count, // No conversion to integer
-                                quantity: availableQuantity, // Float/Double quantity
+                                count: count,
+                                quantity: availableQuantity,
                                 image: image,
                                 warehouseId: warehouseId,
                                 brandId: brandId,
@@ -503,10 +502,14 @@
                 for (const materialId in selectedMaterials) {
                     const material = selectedMaterials[materialId];
                     const totalCost = material.price * material.count;
+                    const assetUrl = "{{ asset('') }}";
 
                     $('#selected-materials').append(`
                     <tr>
-                        <td><img src="${material.image}" alt="${material.name}" style="width: 60px; height: 60px;"></td>
+                        <td class="d-flex justify-content-center">
+                            <img src="${assetUrl}${material.image}" alt="${material.name}" style="width: 100px; height: 60px;"
+                                    onerror="this.onerror=null;this.src='path/to/placeholder-image.jpg';">
+                        </td>
                         <td>
                             <input type="hidden" name="raw_material_id[]" value="${material.id}">
                             <input type="hidden" name="raw_material_warehouse_id[]" value="${material.warehouseId}">
@@ -538,7 +541,7 @@
                 // Update total cost when quantity changes
                 $('.count-input').on('input', function () {
                     const materialId = $(this).data('id');
-                    const newCount = parseFloat($(this).val()); // Changed to float
+                    const newCount = parseFloat($(this).val());
                     const availableQuantity = selectedMaterials[materialId].quantity;
 
                     // Input validation with alert functionality
@@ -554,7 +557,7 @@
                         return;
                     }
 
-                    selectedMaterials[materialId].count = newCount; // Store as float
+                    selectedMaterials[materialId].count = newCount;
                     const price = selectedMaterials[materialId].price;
                     const totalCost = price * newCount;
                     $(this).closest('tr').find('.total-cost-input').val(totalCost.toFixed(2)); // Update total cost input
@@ -562,14 +565,13 @@
 
                 // Event delegation for remove buttons to remove row and update selectedMaterials
                 $('#selected-materials').on('click', '.remove-product-btn', function () {
-                    const materialId = $(this).data('id'); // Get the material ID from the button
-                    delete selectedMaterials[materialId];  // Remove the material from selectedMaterials object
-                    updateSelectedMaterialsTable();        // Update the table to reflect the removal
+                    const materialId = $(this).data('id');
+                    delete selectedMaterials[materialId];
+                    updateSelectedMaterialsTable();
                 });
             }
         });
     </script>
-
 
     <script>
         // Price, Quantity, Total Dependency
@@ -588,211 +590,35 @@
                 const quantity = parseFloat(row.find('.quantity-input').val()) || 1;
 
                 if (quantity > 0) {
-                    row.find('.price-input').val((total / quantity).toFixed(2));
+                    const price = total / quantity;
+                    row.find('.price-input').val(price.toFixed(2));
                 }
             });
 
-            $('#purchased-items-table').on('click', '.remove-product-btn', function() {
-                const row = $(this).closest('tr');
-                row.remove();
-            });
-        }
-        bindEvents();
+            // Add new row
+            $('#add-row-btn').on('click', function() {
+                const newRow = `
+                    <tr>
+                        <td><input type="text" name="cost_name[]" class="form-control"></td>
+                        <td><input type="number" name="cost_price[]" class="form-control price-input" step="0.01" min="0" value="0"></td>
+                        <td><input type="number" name="cost_quantity[]" class="form-control quantity-input" step="1" min="1" value="1"></td>
+                        <td><input type="number" name="cost_total[]" class="form-control total-input" step="0.01" min="0" value="0"></td>
+                        <td><button type="button" class="btn btn-danger remove-row-btn">&times;</button></td>
+                    </tr>
+                `;
 
-        let brands = @json($brands);
-        let sizes = @json($sizes);
-        let colors = @json($colors);
-        let existingProducts = @json($existingProducts); // Pre-existing products from controller
-        let products = [];
-
-        // Function to load existing products into the table
-        function loadExistingProducts() {
-            existingProducts.forEach(product => {
-                $('#purchased-items-table tbody').append(`
-            <tr data-id="${product.product_id}">
-                <td>
-                    <input type="text" name="product_id[]" value="${product.product_id}" hidden>
-                    ${products.find(p => p.id === product.product_id)?.name || 'N/A'}
-                </td>
-                <td>
-                    <select name="brand_id[]" class="form-control select2 brand-select">
-                        ${brands.map(b => `<option value="${b.id}" ${b.id == product.brand_id ? 'selected' : ''}>${b.name}</option>`).join('')}
-                    </select>
-                </td>
-                <td>
-                    <select name="size_id[]" class="form-control select2 size-select">
-                        ${sizes.map(s => `<option value="${s.id}" ${s.id == product.size_id ? 'selected' : ''}>${s.name}</option>`).join('')}
-                    </select>
-                </td>
-                <td>
-                    <select name="color_id[]" class="form-control select2 color-select">
-                        ${colors.map(c => `<option value="${c.id}" ${c.id == product.color_id ? 'selected' : ''}>${c.color_name}</option>`).join('')}
-                    </select>
-                </td>
-                <td>
-                    <input type="number" name="price[]" class="form-control price-input form-control-sm" value="${product.per_pc_cost}" placeholder="Enter price" min="0">
-                </td>
-                <td class="d-flex">
-                    <input type="number" name="quantity[]" class="form-control quantity-input form-control-sm mr-2" value="${product.quantity}" min="1">
-                    <span class="unit-id-label">${product.unit?.code || 'N/A'}</span>
-                </td>
-                <td>
-                    <input type="number" name="total_price[]" class="form-control total-input form-control-sm" value="${product.sub_total}">
-                </td>
-                <td>
-                    <button class="btn btn-danger remove-product-btn">&times;</button>
-                </td>
-            </tr>
-        `);
+                $('#purchased-items-table tbody').append(newRow);
             });
 
-            $('.select2').select2({ theme: "classic" });
-            bindEvents();
-        }
-
-        // Load existing products when the document is ready
-        $(document).ready(function() {
-            // Fetch all products via API
-            $.ajax({
-                url: '{{ route("products.all") }}', // Use your existing API route
-                method: 'GET',
-                success: function(data) {
-                    products = data;
-                    loadExistingProducts(); // Load the existing products into the table
-                },
-                error: function(error) {
-                    console.error('Error fetching products:', error);
-                }
-            });
-        });
-
-        // Add new product to the table
-        $('#product-list').on('click', '.add-product-btn', function(e) {
-            e.preventDefault();
-
-            const productId = $(this).data('id');
-            const product = products.find(p => p.id === productId);
-
-            if (product) {
-                $('#purchased-items-table tbody').append(`
-                <tr data-id="${product.id}">
-                    <td>
-                        <input type="text" name="product_id[]" value="${product.id}" hidden>
-                        ${product.name}
-                    </td>
-                    <td>
-                        <select name="brand_id[]" class="form-control select2 brand-select">
-                            ${brands.map(b => `<option value="${b.id}" ${b.id === product.brand_id ? 'selected' : ''}>${b.name}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td>
-                        <select name="size_id[]" class="form-control select2 size-select">
-                            ${sizes.map(s => `<option value="${s.id}" ${s.id === product.size_id ? 'selected' : ''}>${s.name}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td>
-                        <select name="color_id[]" class="form-control select2 color-select">
-                            ${colors.map(c => `<option value="${c.id}" ${c.id === product.color_id ? 'selected' : ''}>${c.color_name}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td>
-                        <input type="number" name="price[]" class="form-control price-input form-control-sm" placeholder="Enter price" min="0">
-                    </td>
-                    <td class="d-flex">
-                        <input type="number" name="quantity[]" class="form-control quantity-input form-control-sm mr-2" value="1" min="1">
-                        <span class="unit-id-label">${product.unit?.code || 'N/A'}</span>
-                    </td>
-                    <td>
-                        <input type="number" name="total_price[]" class="form-control total-input form-control-sm" value="0">
-                    </td>
-                    <td>
-                        <button class="btn btn-danger remove-product-btn">&times;</button>
-                    </td>
-                </tr>
-            `);
-
-                $('.select2').select2({ theme: "classic" });
-                bindEvents();
-            } else {
-                console.error('Product not found');
-            }
-        });
-
-        // Populate Product List (for searching new products)
-        function populateProductList(query) {
-            const productList = $('#product-list');
-            const lowerQuery = query.toLowerCase();
-            const filteredProducts = products.filter(product =>
-                product.name.toLowerCase().includes(lowerQuery) ||
-                (product.sku && product.sku.toLowerCase().includes(lowerQuery))
-            );
-
-            productList.empty();
-            filteredProducts.forEach(product => {
-                productList.append(`
-                <li class="list-group-item d-flex justify-content-between align-items-center custom-list-item"
-                data-toggle="tooltip" title="SKU: ${product.sku || 'N/A'}, Width: ${product.width || 'N/A'}, Length: ${product.length || 'N/A'}">
-                    <a href="#" class="w-100 d-flex justify-content-between align-items-center text-decoration-none text-dark add-product-btn" data-id="${product.id}">
-                        ${product.name} - ${product.sku ? `(SKU: ${product.sku})` : '(SKU: N/A)'}
-                    </a>
-                </li>
-            `);
+            // Remove row
+            $('#purchased-items-table').on('click', '.remove-row-btn', function() {
+                $(this).closest('tr').remove();
             });
         }
 
-        // Search product functionality
-        $('#product-search').on('input', function() {
-            const query = $(this).val();
-            populateProductList(query);
-        });
-
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-
-
-
-        // Cost Details Section Functions
-        function addCostDetailItem() {
-            return `
-                <div class="cost-detail-item d-flex align-items-center mb-2">
-                    <input type="text" name="cost_details[]" class="form-control cost-detail-input mr-2" placeholder="Cost Details">
-                    <input type="number" name="cost_amount[]" class="form-control amount-input mr-2" placeholder="Amount">
-                    <button class="btn btn-danger remove-item-btn">&times;</button>
-                </div>
-            `;
-        }
-
-        function updateTotalAmount() {
-            let total = 0;
-            $(".amount-input").each(function() {
-                let amount = parseFloat($(this).val()) || 0;
-                total += amount;
-            });
-            $("#total-amount").val(total.toFixed(2));
-        }
-
-        // Add new cost detail item when 'Add' button is clicked
-        $(document).on("click", ".add-item-btn", function(e) {
-            e.preventDefault();
-            $("#cost-details-container").append(addCostDetailItem());
-            updateTotalAmount();
-        });
-
-        // Remove a cost detail item when 'Remove' button is clicked
-        $(document).on("click", ".remove-item-btn", function(e) {
-            e.preventDefault();
-            $(this).closest('.cost-detail-item').remove();
-            updateTotalAmount();
-        });
-
-        // Update total amount when amount input changes
-        $(document).on("input", ".amount-input", function() {
-            updateTotalAmount();
+        $(document).ready(function () {
+            bindEvents(); // Initialize the price-quantity-total logic
         });
     </script>
+@endsection
 
-
-
-
-@stop

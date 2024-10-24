@@ -13,6 +13,6 @@ class RawMaterialCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        RawMaterialCategory::factory()->count(20)->create();
+        RawMaterialCategory::factory()->count(5)->create();
     }
 }

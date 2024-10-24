@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SellController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect(route('admin.dashboard'));
 })->middleware('admin');
+
+Route::post('/sells/set-currency', [SellController::class, 'setCurrency'])
+    ->name('sells.setCurrency')
+    ->middleware('admin');
 
 
 

@@ -347,8 +347,9 @@ return [
                     'text' => 'Raw Material Stock',
                     'url' => 'admin/raw-material-stocks',
                     'icon' => 'fas fa-boxes custom-icon-class',
-                    'can' => ['rawMaterialStocks.list', 'rawMaterialStocks.create', 'rawMaterialStocks.update', 'rawMaterialStocks.delete',
-                        'rawMaterialStocks.restore', 'rawMaterialStocks.force_delete', 'rawMaterialStocks.trashed', 'rawMaterialStocks.activity'],
+//                    'can' => ['rawMaterialStocks.list', 'rawMaterialStocks.create', 'rawMaterialStocks.update', 'rawMaterialStocks.delete',
+//                        'rawMaterialStocks.restore', 'rawMaterialStocks.force_delete', 'rawMaterialStocks.trashed', 'rawMaterialStocks.activity'],
+                    'can' => ['rawMaterialStocks.list', 'rawMaterialStocks.activity'],
                 ],
             ]
         ],
@@ -458,6 +459,12 @@ return [
                     'can' => ['houses.list', 'houses.create', 'houses.update', 'houses.delete', 'houses.restore',
                         'houses.force_delete', 'houses.trashed', 'houses.activity'],
                 ],
+                [
+                    'text' => 'Product Stock',
+                    'url' => 'admin/product-stocks',
+                    'icon' => 'fas fa-luggage-cart custom-icon-class',
+                    'can' => ['productStocks.list', 'productStocks.activity'],
+                ],
             ],
         ],
         [
@@ -547,6 +554,13 @@ return [
             'icon' => 'fas fa-passport custom-icon-class',
             'can' => ['productions.list', 'productions.create', 'productions.update', 'productions.delete', 'productions.restore',
                 'productions.force_delete', 'productions.trashed', 'productions.activity'],
+        ],
+        [
+            'text' => 'Currency',
+            'url' => 'admin/currencies',
+            'icon' => 'fas fa-lira-sign custom-icon-class',
+            'can' => ['currencies.list', 'currencies.create', 'currencies.update', 'currencies.delete', 'currencies.restore',
+                'currencies.force_delete', 'currencies.trashed', 'currencies.activity'],
         ],
         [
             'text' => 'Sell',
@@ -863,5 +877,5 @@ return [
     |
     */
 
-    'livewire' => false,
+    'livewire' => true,
 ];

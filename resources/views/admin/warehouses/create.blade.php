@@ -85,13 +85,8 @@
         <b>version</b> {{env('DEV_VERSION')}}
     </div>
 @stop
-
 @section('plugins.toastr',true)
-
 @section('css')
-
 @stop
-
 @section('js')
-
 @stop

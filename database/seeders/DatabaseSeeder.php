@@ -20,10 +20,9 @@ class DatabaseSeeder extends Seeder
             AccountSeeder::class,
             AssetCategorySeeder::class,
             AssetSeeder::class,
-
             BrandSeeder::class,
-
             ColorSeeder::class,
+            CurrencySeeder::class,
             CustomerSeeder::class,
             DepartmentSeeder::class,
             EmployeeSeeder::class,
@@ -32,33 +31,14 @@ class DatabaseSeeder extends Seeder
             PaymentMethodSeeder::class,
             ProductCategorySeeder::class,
             ProductionHouseSeeder::class,
-            ProductionSeeder::class,
-
-
-            ProductSeeder::class,
-
             RawMaterialCategorySeeder::class,
-
-            RawMaterialSeeder::class,
-
-
             SellSeeder::class,
             ShowroomSeeder::class,
-
             SizeSeeder::class,
             SupplierSeeder::class,
             UnitSeeder::class,
             UserSeeder::class,
             WarehouseSeeder::class,
-
-            BrandRawMaterialSeeder::class,
-            ColorRawMaterialSeeder::class,
-            ProductionProductSeeder::class,
-            ProductionRawMaterialSeeder::class,
-            PurchaseRawMaterialSeeder::class,
-            RawMaterialPurchaseSeeder::class,
-            RawMaterialStockSeeder::class,
-            SizeRawMaterialSeeder::class,
         ]);
     }
 }
