@@ -11,7 +11,10 @@
                         <select id="currency_id" name="currency_id" class="select2 form-control" onchange="this.form.submit()">
                             <option value="">Select Currency</option>
                             @foreach($currencies as $currency)
-                                <option value="{{ $currency->id }}">{{ $currency->name }}</option>
+                                <option value="{{ $currency->id }}"
+                                    {{ session('currency') && session('currency')['id'] === $currency->id ? 'selected' : '' }}>
+                                    {{ $currency->name }}
+                                </option>
                             @endforeach
                         </select>
                     </form>
@@ -46,13 +49,25 @@
                         @endif
                         <div class="row">
                             <div class="col-md-6 border" id="selected-products-table">
-                                <h5>Selected Products</h5>
+                                <h5 class="mb-2 text-center">Selected Products</h5>
+                                <hr>
+                                <div class="col-12">
+                                    <div class="form-group mb-2">
+                                        <select name="customer" class="select2 form-control" id="customer">
+                                            <option value="" disabled selected> Select Customer </option>
+                                            @foreach($customers as $customer)
+                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
+                                        <th style="width: 150px;">Name</th>
                                         <th>Price</th>
                                         <th>Quantity</th>
+                                        <th style="width: 150px;">Discount Type</th>
                                         <th>Discount (%)</th>
                                         <th>Total</th>
                                         <th>Action</th>
@@ -63,49 +78,37 @@
                                     </tbody>
                                 </table>
                                 <div class="p-2 mb-3" style="background-color: #f0fbee; border-radius: 10px;">
-                                    <div class="row">
-                                        <!-- Row 1: Wholesale checkbox, Total Items -->
-                                        <div class="col-md-6 d-flex" style="padding-left: 30px;">
-                                            <input type="checkbox" class="form-check-input mr-2" id="wholesaleCheck">
-                                            <label for="wholesaleCheck" class="mb-0">Wholesale</label>
-                                        </div>
-                                    </div>
-
                                     <div class="row mt-2">
-                                        <!-- Row 2: Subtotal, VAT, Salesman -->
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-0">
-                                                <label for="sub_total">Sub Total</label>
-                                                <input type="number" name="sub_total" id="sub_total" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group mb-0">
-                                                <label for="vat">VAT</label>
-                                                <input type="number" name="vat" id="vat" class="form-control">
-                                            </div>
-                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group mb-0">
                                                 <label for="salesman">Salesman</label>
                                                 <select name="salesman" class="select2 form-control" id="salesman">
-                                                    <option value="dd">dd1</option>
-                                                    <option value="dd2">dd2</option>
-                                                    <option value="dd3">dd3</option>
-                                                    <option value="dd4">dd4</option>
+                                                    @foreach($salesman as $man)
+                                                        <option value="{{ $man->id }}">{{ $man->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
-
-                                        <!-- Buttons -->
-                                        <div class="col-md-6 mt-3">
-                                            <button type="reset" id="cancel-button" class="btn btn-primary w-100">Cancel</button>
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label for="account">Accounts</label>
+                                                <select name="account_id" class="select2 form-control" id="account">
+                                                    @foreach($accounts as $account)
+                                                        <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6 mt-3">
-                                            <button class="btn btn-danger w-100">Payment</button>
-                                        </div>
-
                                     </div>
+{{--                                    <div class="d-flex flex-wrap">--}}
+{{--                                        <!-- Buttons -->--}}
+{{--                                        <div class="col-md-6 mt-3">--}}
+{{--                                            <button type="reset" id="cancel-button" class="btn btn-primary w-100">Cancel</button>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-md-6 mt-3">--}}
+{{--                                            <button class="btn btn-danger w-100">Payment</button>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
                                 </div>
                             </div>
                             <div class="col-md-6 border">
@@ -134,8 +137,8 @@
                                 <hr>
                                 <div class="col-md-12 mt-4 mb-3">
                                     <input type="text" id="product-search" class="form-control mb-3" placeholder="Search products...">
-                                    <div class="d-flex flex-wrap" style="max-height: 400px; overflow-y: auto;" id="product-table">
-                                        <div id="product-table-body" class="d-flex flex-wrap"></div>
+                                    <div  id="product-table">
+                                        <div id="product-table-body" class="row justify-content-start"></div>
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +161,7 @@
     </div>
 @stop
 @section('plugins.toastr', true)
+@section('plugins.Sweetalert2', true)
 @section('plugins.Select2', true)
 @section('css')
     <style>
@@ -206,23 +210,6 @@
             display: block; /* Show button on hover */
         }
 
-        .product-card {
-            width: 100px;
-            margin: 5px;
-            padding: 2px 0;
-        }
-        .product-card img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
-            margin: 0 auto;
-        }
-        .product-card .card-body {
-            padding: 5px;
-            text-align: left;
-        }
         .active-category {
             background-color: #2573d9;
             border-color: #0c5460;
@@ -277,7 +264,6 @@
         }
     </style>
 @stop
-
 @section('js')
     <script>
         $(document).ready(function() {
@@ -286,13 +272,33 @@
             const scrollAmount = 300; // Adjust this value to scroll more or less
             let selectedProducts = {};
 
+            // Initialize functions
+            initScrollFunctionality();
+            initCategoryClick();
+            fetchProducts('all'); // Initial fetch
+            initCategorySelectChange();
+
             // Scroll functionality
-            document.getElementById('scroll-left').addEventListener('click', function() {
-                scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-            });
-            document.getElementById('scroll-right').addEventListener('click', function() {
-                scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            });
+            function initScrollFunctionality() {
+                document.getElementById('scroll-left').addEventListener('click', function() {
+                    scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                });
+                document.getElementById('scroll-right').addEventListener('click', function() {
+                    scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                });
+            }
+
+            // Handle category click
+            function initCategoryClick() {
+                $('.category-link').on('click', function(e) {
+                    e.preventDefault();
+                    $('.category-link').parent().removeClass('active-category');
+                    $(this).parent().addClass('active-category');
+
+                    let categoryId = $(this).data('category-id');
+                    fetchProducts(categoryId);
+                });
+            }
 
             // Fetch products based on the selected category
             function fetchProducts(categoryId) {
@@ -301,58 +307,65 @@
                     type: 'GET',
                     data: categoryId === 'all' ? {} : { category_id: categoryId },
                     success: function(response) {
-                        let productTableBody = $('#product-table-body');
-                        productTableBody.empty(); // Clear the container
-
-                        if (Array.isArray(response.products) && response.products.length > 0) {
-                            response.products.forEach((item) => {
-                                let product = item.product;
-                                let priceInSessionCurrency = null;
-
-                                if (Array.isArray(item.sell_prices) && item.sell_prices.length > 0) {
-                                    item.sell_prices.forEach((sellPrice) => {
-                                        if (sellPrice.currency_id === sessionCurrency.id) {
-                                            priceInSessionCurrency = sellPrice.price;
-                                        }
-                                    });
-                                }
-
-                                if (priceInSessionCurrency === null) {
-                                    priceInSessionCurrency = "Price was not provided";
-                                }
-
-                                let productCard = `
-                            <div class="card text-center product-card" style="border: none;"
-                                data-product-id="${product.id}"
-                                data-product-name="${product.name}"
-                                data-product-sku="${product.sku}"
-                                data-product-price="${priceInSessionCurrency}"
-                                data-product-quantity="${item.quantity}">
-                                <div class="card-img-top">
-                                    <img src="/uploads/${product.thumbnail}" alt="${product.name}">
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title" style="font-size: 12px; margin: 0;">${product.name || 'N/A'}</h5>
-                                    <p class="card-text" style="font-size: 10px; margin: 0;">SKU: ${product.sku || 'N/A'}</p>
-                                    <p class="card-text" style="font-size: 10px; margin: 0;">Quantity: ${item.quantity}</p>
-                                    <p class="card-text" style="font-size: 10px; margin: 0;">Price: ${priceInSessionCurrency}</p>
-                                </div>
-                            </div>
-                        `;
-                                productTableBody.append(productCard);
-                            });
-                        } else {
-                            console.warn('No products available for this category or incorrect response format.');
-                            productTableBody.append('<p>No products available in this category.</p>');
-                        }
-
-                        // Attach the click event for selecting products
-                        attachProductCardClick();
+                        populateProductTable(response.products);
+                        attachProductCardClick(); // Attach event after fetching products
                     },
                     error: function(err) {
                         console.error('Error fetching products:', err);
                     }
                 });
+            }
+
+            // Populate product table with fetched data
+            function populateProductTable(products) {
+                let productTableBody = $('#product-table-body');
+                productTableBody.empty(); // Clear the container
+
+                if (Array.isArray(products) && products.length > 0) {
+                    products.forEach(item => {
+                        let product = item.product;
+                        let priceInSessionCurrency = getPriceInSessionCurrency(item.sell_prices);
+
+                        let productCard = createProductCard(product, priceInSessionCurrency, item.quantity);
+                        productTableBody.append(productCard);
+                    });
+                } else {
+                    productTableBody.append('<p>No products available in this category.</p>');
+                }
+            }
+
+            // Get price in session currency
+            function getPriceInSessionCurrency(sellPrices) {
+                let price = null;
+                if (Array.isArray(sellPrices) && sellPrices.length > 0) {
+                    sellPrices.forEach(sellPrice => {
+                        if (sellPrice.currency_id === sessionCurrency.id) {
+                            price = sellPrice.price;
+                        }
+                    });
+                }
+                return price !== null ? price : "Price was not provided";
+            }
+
+            // Create HTML for product card
+            function createProductCard(product, price, quantity) {
+                return `
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6 " style="cursor: pointer">
+                <div class="card text-center border-0 p-0 product-card"
+                    data-product-id="${product.id}"
+                    data-product-name="${product.name}"
+                    data-product-sku="${product.sku}"
+                    data-product-price="${price}"
+                    data-product-quantity="${quantity}">
+                    <div class="card-body p-1">
+                        <img class="img-fluid img-rounded" style="max-height: 60px" src="/uploads/${product.thumbnail}" alt="${product.name}">
+                        <div class="d-block">${product.name || 'N/A'}</div>
+                        <div class="small">SKU: ${product.sku || 'N/A'}</div>
+                        <div class="small">Quantity: ${quantity}</div>
+                        <div class="small">Price: ${price}</div>
+                    </div>
+                </div>
+            </div>`;
             }
 
             // Attach click event to product cards
@@ -364,84 +377,118 @@
                     const productQuantity = parseInt($(this).data('product-quantity'));
 
                     if (productQuantity <= 0) {
-                        alert('Stock out, selection not possible');
+                        swal.fire({
+                            title: "Invalid Amount", // Title of the alert
+                            text: "Stock out, selection not possible.", // Main text message
+                            icon: "error", // Type of alert (error in this case)
+                            confirmButtonText: "OK" // Optional: Customize the button text
+                        });
                         return;
                     }
 
-                    if (!selectedProducts[productId]) {
-                        selectedProducts[productId] = {
-                            name: productName,
-                            price: productPrice,
-                            quantity: 1,
-                            maxQuantity: productQuantity,
-                            discount: 0 // Initialize discount
-                        };
-                    } else {
-                        if (selectedProducts[productId].quantity < productQuantity) {
-                            selectedProducts[productId].quantity += 1;
-                        } else {
-                            alert('Stock out, selection not possible anymore');
-                            return;
-                        }
-                    }
-
+                    updateSelectedProducts(productId, productName, productPrice, productQuantity);
                     renderSelectedProducts();
                 });
+            }
+
+            // Update selected products based on user selection
+            function updateSelectedProducts(productId, productName, productPrice, productQuantity) {
+                if (!selectedProducts[productId]) {
+                    selectedProducts[productId] = {
+                        name: productName,
+                        price: productPrice,
+                        quantity: 1,
+                        maxQuantity: productQuantity,
+                        discount: 0 // Initialize discount
+                    };
+                } else {
+                    if (selectedProducts[productId].quantity < productQuantity) {
+                        selectedProducts[productId].quantity += 1;
+                    } else {
+                        swal.fire({
+                            title: "Invalid Amount", // Title of the alert
+                            text: "Stock out, selection not possible anymore.", // Main text message
+                            icon: "error", // Type of alert (error in this case)
+                            confirmButtonText: "OK" // Optional: Customize the button text
+                        });
+                    }
+                }
             }
 
             // Render selected products in the table
             function renderSelectedProducts() {
                 let selectedProductsBody = $('#selected-products-body');
                 selectedProductsBody.empty();
-
                 let total = 0;
 
                 Object.keys(selectedProducts).forEach(productId => {
                     const product = selectedProducts[productId];
-
                     const productPrice = product.price !== null ? product.price : 0;
                     const productQuantity = product.quantity;
+                    const productTotal = calculateProductTotal(product);
 
-                    // Calculate total
-                    const productTotal = productQuantity * productPrice;
-
-                    const tableRow = `
-                <tr>
-                    <td>${product.name}</td>
-                    <td>
-                        <input type="number" min="0" value="${productPrice.toFixed(2)}" class="price-input form-control" data-product-id="${productId}" readonly>
-                    </td>
-                    <td>
-                        <input type="number" min="1" max="${product.maxQuantity}" value="${productQuantity}"
-                            class="quantity-input form-control" data-product-id="${productId}">
-                    </td>
-                    <td>
-                        <input type="number" min="0" class="discount-input form-control" data-product-id="${productId}" value="${product.discount.toFixed(2)}" placeholder="0.00%">
-                    </td>
-                    <td class="product-total">${productTotal.toFixed(2)}</td>
-                    <td>
-                        <button class="btn btn-danger remove-product" data-product-id="${productId}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
-
+                    const tableRow = createSelectedProductRow(productId, product, productTotal);
                     selectedProductsBody.append(tableRow);
                     total += productTotal;
                 });
 
                 selectedProductsBody.append(`
-            <tr>
-                <td colspan="4"><strong>Total</strong></td>
-                <td><strong>${total.toFixed(2)}</strong></td>
-            </tr>
-        `);
+                    <tr>
+                        <td colspan="5"><strong>Total</strong></td>
+                        <td id="overall-total"><strong>0.00</strong></td>
+                    </tr>
+                `);
 
+                attachRemoveProductAndQuantityChangeListeners();
+                updateOverallTotal();
+            }
+
+            // Calculate total for a product
+            function calculateProductTotal(product) {
+                return (product.price * product.quantity) - product.discount;
+            }
+
+            // Create HTML for selected product row
+            function createSelectedProductRow(productId, product, productTotal) {
+                return `
+                <tr>
+                    <td>
+                        ${product.name}
+                        <input type="hidden" name="product_id[]" value="${productId}">
+                    </td>
+                    <td>
+                        <input type="number" name="product_price[]" min="0" value="${product.price.toFixed(2)}" class="price-input form-control" data-product-id="${productId}" readonly>
+                    </td>
+                    <td>
+                        <input type="number" name="product_quantity[]" min="1" max="${product.maxQuantity}" value="${product.quantity}" class="quantity-input form-control" data-product-id="${productId}">
+                    </td>
+                    <td>
+                        <select name="discount_type[]" class="form-control select2 discount_type">
+                            <option value="percentage">Percentage</option>
+                            <option value="fixed">Fixed</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" name="discount_amount[]" min="0" class="discount-input form-control" data-product-id="${productId}" value="${product.discount.toFixed(2)}" placeholder="0.00">
+                    </td>
+                    <td>
+                        <input type="text" name="product_total[]" value="${productTotal.toFixed(2)}" class="form-control product-total" readonly>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger remove-product" data-product-id="${productId}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            }
+
+            // Attach listeners for removing products and changing quantities
+            function attachRemoveProductAndQuantityChangeListeners() {
                 $('.remove-product').off('click').on('click', function() {
                     const productId = $(this).data('product-id');
-                    delete selectedProducts[productId];
-                    renderSelectedProducts();
+                    delete selectedProducts[productId]; // Remove product from selectedProducts
+                    renderSelectedProducts(); // Re-render the product table
+                    updateOverallTotal(); // Update the overall total after rendering
                 });
 
                 $('.quantity-input').off('change').on('change', function() {
@@ -451,66 +498,97 @@
                     if (newQuantity >= 1 && newQuantity <= selectedProducts[productId].maxQuantity) {
                         selectedProducts[productId].quantity = newQuantity;
                     } else {
-                        alert('Invalid quantity. Please enter a valid quantity.');
+                        swal.fire({
+                            title: "Invalid quantity", // Title of the alert
+                            text: "Please enter a valid quantity.", // Main text message
+                            icon: "error", // Type of alert (error in this case)
+                            confirmButtonText: "OK" // Optional: Customize the button text
+                        });
                         $(this).val(selectedProducts[productId].quantity);
                     }
 
                     renderSelectedProducts();
+                    updateOverallTotal();
                 });
 
-                $('.discount-input').off('change').on('change', function() {
-                    const productId = $(this).data('product-id');
-                    const discountValue = parseFloat($(this).val()) || 0;
+                updateProductAndTotalOnDiscountChange();
+            }
 
-                    // Validate discount
+            // Update product total and overall total when discount or discount type changes
+            function updateProductAndTotalOnDiscountChange() {
+                $('.discount-input, .discount_type').off('change input').on('change input', function() {
+                    const productRow = $(this).closest('tr'); // Get the current product row
+                    const productId = productRow.find('.discount-input').data('product-id'); // Get the product ID
+                    const discountValue = parseFloat(productRow.find('.discount-input').val()) || 0; // Get discount value
+                    const discountType = productRow.find('.discount_type').val(); // Get selected discount type
+                    const product = selectedProducts[productId]; // Get the product from the selectedProducts object
+
                     if (discountValue < 0) {
-                        alert('Invalid discount. Please enter a valid percentage.');
-                        $(this).val(''); // Reset the input
+                        swal.fire({
+                            title: "Invalid discount", // Title of the alert
+                            text: "Please enter a valid amount.", // Main text message
+                            icon: "error", // Type of alert (error in this case)
+                            confirmButtonText: "OK" // Optional: Customize the button text
+                        });
+                        productRow.find('.discount-input').val(''); // Reset the input
                         return;
                     }
 
-                    // Calculate discounted price
-                    const originalPrice = selectedProducts[productId].price || 0;
-                    const discountedPrice = originalPrice - (originalPrice * (discountValue / 100));
-                    selectedProducts[productId].discount = discountValue; // Store discount percentage
-                    selectedProducts[productId].price = discountedPrice; // Update to discounted price
-
-                    // Update the product total
-                    const productTotal = selectedProducts[productId].quantity * discountedPrice;
-                    $(this).closest('tr').find('.product-total').text(productTotal.toFixed(2));
-
-                    updateOverallTotal(); // Call to recalculate overall total
+                    applyDiscountToProduct(productRow, product, discountValue, discountType);
+                    updateOverallTotal();
                 });
+
+                // Prevent deletion on Enter key press in discount input
+                $('.discount-input').off('keypress').on('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent default action
+                    }
+                });
+            }
+
+            // Apply discount to product total
+            function applyDiscountToProduct(productRow, product, discountValue, discountType) {
+                const productPrice = product.price || 0; // Ensure product price is valid
+                const productQuantity = product.quantity || 0; // Ensure product quantity is valid
+                let productTotal = productPrice * productQuantity; // Calculate total before discount
+
+                if (discountType === 'percentage') {
+                    const discountAmount = productTotal * (discountValue / 100); // Calculate percentage discount
+                    productTotal -= discountAmount; // Subtract discount from total
+                } else if (discountType === 'fixed') {
+                    productTotal -= discountValue; // Subtract fixed amount from total
+                }
+
+                if (productTotal < 0) {
+                    swal.fire({
+                        title: "Invalid discount", // Title of the alert
+                        text: "Discounted total cannot be less than zero.", // Main text message
+                        icon: "error", // Type of alert (error in this case)
+                        confirmButtonText: "OK" // Optional: Customize the button text
+                    });
+                    productTotal = 0; // Reset to zero if below zero
+                }
+
+                selectedProducts[productRow.find('.discount-input').data('product-id')].discount = discountValue; // Update discount
+                productRow.find('.product-total').val(productTotal.toFixed(2)); // Update displayed product total
             }
 
             // Update the overall total
             function updateOverallTotal() {
-                let overallTotal = 0;
-
+                let overallTotal = 0; // Initialize overall total
                 $('#selected-products-body .product-total').each(function() {
-                    overallTotal += parseFloat($(this).text()) || 0;
+                    overallTotal += parseFloat($(this).val()) || 0; // Sum all product totals
                 });
-
-                $('#overall-total').text(overallTotal.toFixed(2));
+                $('#overall-total').text(overallTotal.toFixed(2)); // Update displayed overall total
             }
 
-            // Cancel button functionality
-            $('#cancel-button').on('click', function() {
-                if (confirm('Are you sure you want to cancel?')) {
-                    selectedProducts = {}; // Clear selected products
-                    renderSelectedProducts(); // Refresh the selected products table
-                }
-            });
-
-            // On page load, fetch all products
-            fetchProducts('all');
-
-            // Handle category selection change
-            $('#category-select').on('change', function() {
-                const selectedCategory = $(this).val();
-                fetchProducts(selectedCategory);
-            });
+            // Set event listeners for category selection
+            function initCategorySelectChange() {
+                $('#category-select').on('change', function() {
+                    const categoryId = $(this).val();
+                    fetchProducts(categoryId);
+                });
+            }
         });
     </script>
-@stop
-
+@endsection

@@ -31,14 +31,24 @@
                         <table id="adminsList" class="table  dataTable table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>Customer</th>
+                                <th>Salesman</th>
+                                <th>Account</th>
+                                <th>Total Amount</th>
+                                <th>Discount Amount</th>
+                                <th>Net Total</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($sells as $sell)
                                 <tr>
-                                    <td>{{ $sell->name ?? '' }}</td>
+                                    <td>{{ $sell->customer->name ?? '' }}</td>
+                                    <td>{{ $sell->salesman->name ?? '' }}</td>
+                                    <td>{{ $sell->account->name ?? '' }}</td>
+                                    <td>{{ $sell->total_amount ?? '' }}</td>
+                                    <td>{{ $sell->discount_amount ?? '' }}</td>
+                                    <td>{{ $sell->net_total ?? '' }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.sells.destroy', $sell->id) }}" method="POST">
                                             @method('DELETE')
@@ -67,7 +77,12 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th>Name</th>
+                                <th>Customer</th>
+                                <th>Salesman</th>
+                                <th>Account</th>
+                                <th>Total Amount</th>
+                                <th>Discount Amount</th>
+                                <th>Net Total</th>
                                 <th>Action</th>
                             </tr>
                             </tfoot>

@@ -20,4 +20,24 @@ class Sell extends Model
     {
         return $this->hasMany(Showroom::class, 'showroom_id', 'id');
     }
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
+
+    public function salesman()
+    {
+        return $this->hasOne(Admin::class, 'id', 'salesman_id');
+    }
+
+    public function product()
+    {
+        return $this->hasmany(Product::class, 'id', 'product_id');
+    }
+
+    public function account()
+    {
+        return $this->hasOne(Account::class, 'id', 'account_id');
+    }
 }

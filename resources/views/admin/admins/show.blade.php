@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'view Admin')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -36,13 +34,19 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">Full Name</label>
-                                        <input id="name" name="name" class="form-control" placeholder="Enter full name" value="{{ $admin->name ?? '' }}">
+                                        <input id="name" name="name" class="form-control" placeholder="Enter full name" value="{{ $admin->name ?? '' }}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="email">Email Address</label>
-                                        <input id="email" name="email" class="form-control" placeholder="Enter email address" value="{{ $admin->email ?? '' }}">
+                                        <input id="email" name="email" class="form-control" placeholder="Enter email address" value="{{ $admin->email ?? '' }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">Type</label>
+                                        <input id="type" name="type" value="{{ ucfirst($admin->type) ?? '' }}" class="form-control" placeholder="Enter type" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">

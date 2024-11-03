@@ -236,7 +236,6 @@
         }
     </style>
 @stop
-
 @section('js')
     <script>
         $(document).ready(function () {

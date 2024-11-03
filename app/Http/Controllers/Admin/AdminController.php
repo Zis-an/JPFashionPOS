@@ -47,6 +47,7 @@ class AdminController extends Controller
         $admin = Admin::create([
             'name' =>$request->name,
             'email' =>$request->email,
+            'type' =>$request->type ?? '',
             'status' =>$request->status,
             'photo' =>$imagePath,
             'password' => Hash::make($request->password) ,
@@ -104,6 +105,11 @@ class AdminController extends Controller
         $admin->email = $request->email;
         $admin->status = $request->status;
         $admin->photo = $imagePath;
+
+        if(!empty($request->type)) {
+            $admin->type = $request->type;
+        }
+
         $admin->save();  // Use save() instead of update() to ensure the model is properly updated
         // Role management
         if (!$admin->hasAnyRole(['super_admin'])) {

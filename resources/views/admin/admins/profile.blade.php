@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Profile')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">

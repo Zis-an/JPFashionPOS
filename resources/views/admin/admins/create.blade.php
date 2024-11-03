@@ -87,7 +87,14 @@
                                     <img src="" alt="Selected Image" id="selected-image">
                                 </div>
                             </div>
-
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="type">Select Type</label>
+                                    <select id="type" name="type" class="select2 form-control">
+                                        <option value="salesman">Salesman</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         @can('admins.create')

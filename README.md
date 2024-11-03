@@ -41,6 +41,9 @@
     <li>Account Transfer Approval</li>
     <li>Raw Materials Purchase Approval</li>
     <li>Production House</li>
+    <li>Production</li>
+    <li>Production Approval</li>
+    <li>Sell</li>
 </ol>
 
 
@@ -51,11 +54,8 @@
 
 <h5>Upcoming Task</h5>
 <ol>
-    <li>Production</li>
-    <li>Production Approval</li>
     <li>Settings Section</li>
     <li>Transfer to Showroom</li>
-    <li>Sell</li>
     <li>Sell Approval</li>
     <li>Product Transfer (Showroom to showroom)</li>
     <li>Raw Material Transfer (Warehouse to Warehouse)</li>
@@ -79,4 +79,32 @@
             <li>Transfer Balance Report</li>
         </ol>
     </li>
+</ol>
+
+<h5>Dashboard</h5>
+<ol>
+    <li>Today's Sell</li>
+    <li>Last 7 Days Sell</li>
+    <li>Current Month's Sell</li>
+    <li>Current Year's Sell</li>
+    <li>Pending Sell</li>
+    <li>Product Stock</li>
+    <li>R.M Stock</li>
+    <li>Total Asset</li>
+    <li>R.M Purchase Pending</li>
+    <li>R.M Purchase Approved</li>
+    <li>Production Pending</li>
+    <li>Production Approved</li>
+    <li>Today's Expense</li>
+    <li>Last 7 Days Expense</li>
+    <li>Current Month's Expense</li>
+    <li>Current Year's Expense</li>
+    <li>Sell Graph(col-6)</li>
+    <li>Expense Graph(col-6)</li>
+    <li>Asset Graph(col-6)</li>
+    <li>Accounts Graph(col-6)</li>
+    <li>Latest Sale(col-6)(list)</li>
+    <li>Latest R.M Purchase(col-6)(list)</li>
+    <li>Latest Production(col-6)(list)</li>
+    <li>Latest Expense(col-6)(list)</li>
 </ol>

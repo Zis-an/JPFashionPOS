@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Admin')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -87,6 +85,14 @@
                                 </div>
                                 <div class="form-group mb-2">
                                     <img src="{{ getAssetUrl($admin->photo,$admin->photo,'male') }}" alt="Selected Image" id="selected-image">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="type">Select Type</label>
+                                    <select id="type" name="type" class="select2 form-control">
+                                        <option value="salesman"{{ $admin->type == 'salesman' ? 'selected' : '' }}>Salesman</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

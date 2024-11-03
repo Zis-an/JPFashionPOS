@@ -3,7 +3,7 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1>View Sell - {{ $sell->name }}</h1>
+            <h1>View Sell - {{ $sell->customer->name }}</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -30,13 +30,51 @@
                                 </ul>
                             </div>
                         @endif
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="name">Name</label>
-                                        <input id="name" name="name" class="form-control" placeholder="Enter sell name" value="{{ $sell->name ?? '' }}" readonly>
-                                    </div>
-                                </div>
+                            <div class="d-flex justify-content-end mb-2">
+                                <button onclick="openInvoicePrintWindow()" class="btn btn-primary">
+                                    <i class="fas fa-print"></i>&nbsp;&nbsp;Print Invoice
+                                </button>
+                            </div>
+                            <table class="table table-bordered w-100 text-left">
+                                <tr>
+                                    <th style="width: 30%;">Customer Name</th>
+                                    <td>{{ $sell->customer->name ?? '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 30%;">Salesman Name</th>
+                                    <td>{{ $sell->salesman->name ?? '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width: 30%;">Net Total</th>
+                                    <td>{{ $sell->net_total ?? '' }}</td>
+                                </tr>
+                            </table>
+                            <div class="mt-3">
+                                <legend>Products</legend>
+                                <table class="table table-bordered w-100 text-left">
+                                    <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Discount Type</th>
+                                        <th>Discount Amount</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($existingProducts as $product)
+                                            <tr>
+                                                <td>{{ getProductName($product->product_id) }}</td>
+                                                <td>{{ $product->price ?? '' }}</td>
+                                                <td>{{ $product->quantity ?? '' }}</td>
+                                                <td>{{ $product->discount_type ?? '' }}</td>
+                                                <td>{{ $product->discount_amount ?? '' }}</td>
+                                                <td>{{ $product->toal ?? '' }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
 
                         <form action="{{ route('admin.sells.destroy', $sell->id) }}" method="POST">
@@ -121,6 +159,11 @@
             </div>
         </div>
     </div>
+
+
+
+
+
 @stop
 @section('footer')
     <strong>Developed by <a href="https://www.techyfo.com">Techyfo</a>.</strong>
@@ -251,5 +294,22 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        function openInvoicePrintWindow() {
+            const url = '{{ route("admin.sells.invoiceTemplate", $sell->id) }}'; // Route to load the invoice
+
+            // Open a new window for the print preview
+            const printWindow = window.open(url, '_blank');
+            if (printWindow) {
+                printWindow.focus();
+                printWindow.onload = function() {
+                    printWindow.print();
+                };
+            } else {
+                alert("Popup blocker detected! Please allow popups for this site.");
+            }
+        }
     </script>
 @stop

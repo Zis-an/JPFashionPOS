@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Raw Materials')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -178,11 +176,9 @@
         <b>Version</b> {{ env('DEV_VERSION') }}
     </div>
 @stop
-
 @section('plugins.toastr',true)
 @section('plugins.Select2',true)
 @section('plugins.Summernote', true)
-
 @section('css')
     <style>
         .select2-container--default .select2-selection--multiple .select2-selection__choice{

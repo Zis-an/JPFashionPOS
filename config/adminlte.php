@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'JP Fashion',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>JP</b> Fashion',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -135,7 +135,7 @@ return [
 
     'usermenu_enabled' => true,
     'usermenu_header' => true,
-    'usermenu_header_class' => 'bg-primary',
+    'usermenu_header_class' => 'bg-info',
     'usermenu_image' => true,
     'usermenu_desc' => true,
     'usermenu_profile_url' => true,
@@ -157,7 +157,7 @@ return [
     'layout_fixed_sidebar' => null,
     'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
-    'layout_dark_mode' => null,
+    'layout_dark_mode' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -171,12 +171,12 @@ return [
     |
     */
 
-    'classes_auth_card' => 'card-outline card-primary',
+    'classes_auth_card' => 'card-outline card-info',
     'classes_auth_header' => '',
     'classes_auth_body' => '',
     'classes_auth_footer' => '',
     'classes_auth_icon' => '',
-    'classes_auth_btn' => 'btn-flat btn-primary',
+    'classes_auth_btn' => 'btn-flat btn-info',
 
     /*
     |--------------------------------------------------------------------------
@@ -196,7 +196,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-dark-info elevation-4 custom-sidebar',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -214,7 +214,7 @@ return [
     |
     */
 
-    'sidebar_mini' => 'lg',
+    'sidebar_mini' => 'md',
     'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
@@ -568,6 +568,73 @@ return [
             'icon' => 'fas fa-clipboard-check custom-icon-class',
             'can' => ['sells.list', 'sells.create', 'sells.update', 'sells.delete', 'sells.restore',
                 'sells.force_delete', 'sells.trashed', 'sells.activity'],
+        ],
+        [
+            'text' => 'Report',
+            'url' => 'admin/reports',
+            'icon' => 'fas fa-scroll custom-icon-class',
+            'submenu' => [
+                [
+                    'text' => 'Raw Material Stock',
+                    'url' => 'admin/raw-material-stock-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['rawMaterialStockReports.list','rawMaterialStockReports.view'],
+                ],
+                [
+                    'text' => 'Product Stock',
+                    'url' => 'admin/product-stock-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['productStockReports.list','productStockReports.view'],
+                ],
+                [
+                    'text' => 'Sell',
+                    'url' => 'admin/sell-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['sellReports.list','sellReports.view'],
+                ],
+                [
+                    'text' => 'Asset',
+                    'url' => 'admin/assets',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['assetReports.list','assetReports.view'],
+                ],
+                [
+                    'text' => 'Expense',
+                    'url' => 'admin/expenses',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['expenseReports.list','expenseReports.view'],
+                ],
+                [
+                    'text' => 'Raw Material Purchase',
+                    'url' => 'admin/raw-material-purchase-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['rawMaterialPurchaseReports.list','rawMaterialPurchaseReports.view'],
+                ],
+                [
+                    'text' => 'Account Balance Sheet',
+                    'url' => 'admin/account-balance-sheet',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['balanceSheets.list','balanceSheets.view'],
+                ],
+                [
+                    'text' => 'Deposit Balance',
+                    'url' => 'admin/deposit-balance-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['depositBalance.list','depositBalance.view'],
+                ],
+                [
+                    'text' => 'Withdraw Balance',
+                    'url' => 'admin/withdraw-balance-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['withdrawBalance.list','withdrawBalance.view'],
+                ],
+                [
+                    'text' => 'Transfer Balance',
+                    'url' => 'admin/transfer-balance-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['transferBalance.list','transferBalance.view'],
+                ],
+            ],
         ],
         [
             'text' => 'Secure Area',

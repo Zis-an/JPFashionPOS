@@ -284,7 +284,7 @@
                                     </table>
                                 </div>
                                 <!-- New Line Chart -->
-                                <div class="col-md-9">
+                                <div class="col-md-9" style="background-color: white;">
                                     <div>
                                         <canvas id="lineChart"></canvas>
                                     </div>

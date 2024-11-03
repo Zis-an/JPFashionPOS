@@ -517,6 +517,30 @@ class RoleSeeder extends Seeder
                         'sellPrices.activity'
                     ]
                 ],
+                [
+                    'group_name' => 'Report',
+                    'permissions' => [
+                        'rawMaterialStockReports.list',
+                        'rawMaterialStockReports.view',
+                        'productStockReports.list',
+                        'productStockReports.view',
+                        'sellReports.list',
+                        'sellReports.view',
+                        'assetReports.list',
+                        'assetReports.view',
+                        'expenseReports.list',
+                        'expenseReports.view',
+                        'rawMaterialPurchaseReports.list',
+                        'rawMaterialPurchaseReports.view',
+                        'balanceSheets.list',
+                        'balanceSheets.view','depositBalance.list',
+                        'depositBalance.view',
+                        'withdrawBalance.list',
+                        'withdrawBalance.view',
+                        'transferBalance.list',
+                        'transferBalance.view'
+                    ]
+                ],
         ];
 
         for ($i=0 ; $i < count($permissions) ; $i++) {

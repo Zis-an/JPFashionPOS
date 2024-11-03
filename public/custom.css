@@ -2,3 +2,15 @@
     margin-right: 10px !important; /* Using !important to override other styles */
 }
 
+.custom-sidebar {
+    background-color: #0C4067;
+}
+
+.card {
+    /* Apply the watermark as a repeating background image */
+    background-image: url('watermark.png');
+    background-size: 150px; /* Size the watermark appropriately */
+    background-repeat: repeat; /* Repeat the watermark across the background */
+    background-position: center; /* Center aligns each tile */
+    opacity: 1; /* Adjust opacity for subtlety */
+}

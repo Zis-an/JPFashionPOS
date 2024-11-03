@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\RawMaterialCategoryController;
 use App\Http\Controllers\Admin\RawMaterialController;
 use App\Http\Controllers\Admin\RawMaterialPurchaseController;
 use App\Http\Controllers\Admin\RawMaterialStockController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SellController;
 use App\Http\Controllers\Admin\ShowroomController;
@@ -242,6 +243,7 @@ Route::get('/materials/trashed/{material}/delete', [RawMaterialController::class
 Route::resource('/materials', RawMaterialController::class)
     ->middleware('permission:materials.list');
 
+
 // RawMaterialPurchase
 Route::get('/rawMaterialPurchases/trashed', [RawMaterialPurchaseController::class, 'trashed_list'])
     ->middleware('permission:rawMaterialPurchases.trashed')
@@ -425,6 +427,7 @@ Route::get('/sells/trashed/{sell}/delete', [SellController::class, 'force_delete
 Route::get('/sells/{sell}/status/{status}',[SellController::class, 'updateStatus'])
     ->name('sells.updateStatus')
     ->middleware('permission:sells.updateStatus');
+Route::get('/sells/{id}/invoice', [SellController::class, 'showInvoice'])->name('sells.invoiceTemplate');
 Route::resource('/sells', SellController::class)
     ->middleware('permission:sells.list');
 
@@ -454,6 +457,27 @@ Route::get('/currencies/trashed/{currency}/delete', [CurrencyController::class, 
 Route::resource('/currencies', CurrencyController::class)
     ->middleware('permission:currencies.list');
 
+// Reports
+Route::get('/raw-material-stock-reports', [ReportController::class, 'rawMaterialStockReports'])
+    ->name('rawMaterialStockReports');
+Route::get('/product-stock-reports', [ReportController::class, 'productStockReports'])
+    ->name('productStockReports');
+Route::get('/sell-reports', [ReportController::class, 'sellReports'])
+    ->name('sellReports');
+Route::get('/asset-reports', [ReportController::class, 'assetReports'])
+    ->name('assetReports');
+Route::get('/expense-reports', [ReportController::class, 'expenseReports'])
+    ->name('expenseReports');
+Route::get('/raw-material-purchase-reports', [ReportController::class, 'rawMaterialPurchaseReports'])
+    ->name('rawMaterialPurchaseReports');
+Route::get('/balance-sheet-reports', [ReportController::class, 'balanceSheetReports'])
+    ->name('balanceSheetReports');
+Route::get('/deposit-balance-sheet', [ReportController::class, 'depositBalanceSheet'])
+    ->name('depositBalanceSheets');
+Route::get('/withdraw-balance-sheet', [ReportController::class, 'withdrawBalanceSheet'])
+    ->name('withdrawBalanceSheets');
+Route::get('/transfer-balance-sheet', [ReportController::class, 'transferBalanceSheet'])
+    ->name('transferBalanceSheets');
 
 // Profile
 Route::get('/profile',[AdminController::class,'profile'])->name('profile');

@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Admins')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -37,6 +35,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Roles</th>
+                                <th>Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -54,6 +53,7 @@
                                             <a class="badge badge-success text-capitalize">{{ $role->name }}</a>
                                         @endforeach
                                     </td>
+                                    <td class="text-capitalize">{{ $admin->type ?? '' }}</td>
                                     <td>
                                         @if($admin->status=='active') <span class="badge-success badge">Active</span>
                                         @else <span class="badge-danger badge">Deactivate</span>
@@ -85,6 +85,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Roles</th>
+                                <th>Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>

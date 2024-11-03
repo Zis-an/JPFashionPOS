@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\GlobalSetting;
+use App\Models\Product;
 use App\Models\RawMaterialPurchase;
 use App\Models\RawMaterialStock;
 
@@ -180,5 +181,20 @@ if (!function_exists('canStatusChangeFromApprove')) {
         }
 
         return true;
+    }
+}
+
+
+if (!function_exists('getProductName')) {
+    /**
+     * Get the name of the product by its ID.
+     *
+     * @param int $productId
+     * @return string
+     */
+    function getProductName($productId): string
+    {
+        $productModel = Product::find($productId);
+        return $productModel ? $productModel->name : 'Product not found';
     }
 }

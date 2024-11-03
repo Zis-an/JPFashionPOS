@@ -196,6 +196,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Livewire\LivewireServiceProvider::class,
+        Jackiedo\Cart\CartServiceProvider::class,
 
     ],
 
@@ -212,6 +213,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Cart' => Jackiedo\Cart\Facades\Cart::class,
     ])->toArray(),
 
 ];

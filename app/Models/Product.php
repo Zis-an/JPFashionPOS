@@ -36,4 +36,9 @@ class Product extends Model
     {
         return $this->belongsTo(Size::class, 'size_id');
     }
+
+    public function sell()
+    {
+        return $this->belongsTo(Sell::class, 'product_id');
+    }
 }

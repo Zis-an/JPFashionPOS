@@ -35,7 +35,7 @@
                             <tbody>
                             @foreach($sells as $sell)
                                 <tr>
-                                    <td>{{ $sell->name ?? '' }}</td>
+                                    <td>{{ $sell->customer->name ?? '' }}</td>
                                     <td class="text-center">
                                         @can('sells.restore')
                                             <a href="{{ route('admin.sells.restore',['sell'=>$sell->id]) }}" class="btn btn-success btn-sm px-1 py-0">

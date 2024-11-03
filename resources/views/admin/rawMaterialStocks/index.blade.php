@@ -102,12 +102,54 @@
 @section('plugins.datatablesPlugins', true)
 @section('plugins.Datatables', true)
 @section('plugins.Sweetalert2', true)
-
-
 @section('css')
+    <style>
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            color: black;
+        }
 
+        #selected-image {
+            max-height: 150px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            object-fit: cover;
+            display: block;
+            margin: 10px 0;
+            padding: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease;
+        }
+
+        .select2-container .select2-selection--single {
+            box-sizing: border-box;
+            cursor: pointer;
+            display: block;
+            height: 37px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .select2-container--classic .select2-selection--single .select2-selection__rendered {
+            color: #444;
+            line-height: 34px;
+        }
+
+        .select2-container--classic .select2-selection--single .select2-selection__arrow {
+            background-color: #ddd;
+            border: none;
+            border-left: 1px solid #aaa;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            height: 35px;
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            width: 20px;
+            background-image: linear-gradient(to bottom, #eeeeee 50%, #cccccc 100%);
+            transition: background-color 0.3s ease;
+        }
+    </style>
 @stop
-
 @section('js')
 
     <script>
@@ -181,6 +223,5 @@
             });
 
         });
-
     </script>
 @stop
