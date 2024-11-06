@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Sell Reports')
+@section('title', 'Raw Material Purchase Reports')
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -17,34 +17,34 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @can('sellReports.list')
+            @can('rawMaterialPurchaseReports.list')
                 <div class="card">
                     <div class="card-body table-responsive">
                         <form method="GET" action="{{ route('admin.rawMaterialPurchaseReports') }}" id="filterForm">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="customerFilter">Filter By Customer</label>
-                                        <select id="customerFilter" name="customerId" class="select2 form-control">
+                                        <label for="supplierFilter">Filter By Supplier</label>
+                                        <select id="supplierFilter" name="supplierId" class="select2 form-control">
                                             <option value="">Select an option</option>
-                                            {{--                                            @foreach($customers as $customer)--}}
-                                            {{--                                                <option value="{{ $customer->id }}" {{ request('customerId') == $customer->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $customer->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
+                                                @foreach($suppliers as $supplier)
+                                                    <option value="{{ $supplier->id }}" {{ request('supplierId') == $supplier->id ? 'selected' : '' }}>
+                                                        {{ $supplier->name }}
+                                                    </option>
+                                                @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="salesmanFilter">Filter By Salesman</label>
-                                        <select id="salesmanFilter" name="salesmanId" class="select2 form-control">
+                                        <label for="warehouseFilter">Filter By Warehouse</label>
+                                        <select id="warehouseFilter" name="warehouseId" class="select2 form-control">
                                             <option value="">Select an option</option>
-                                            {{--                                            @foreach($salesmen as $salesman)--}}
-                                            {{--                                                <option value="{{ $salesman->id }}" {{ request('salesmanId') == $salesman->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $salesman->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
+                                            @foreach($warehouses as $warehouse)
+                                                <option value="{{ $warehouse->id }}" {{ request('warehouseId') == $warehouse->id ? 'selected' : '' }}>
+                                                    {{ $warehouse->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -53,11 +53,11 @@
                                         <label for="accountFilter">Filter By Account</label>
                                         <select id="accountFilter" name="accountId" class="select2 form-control">
                                             <option value="">Select an option</option>
-                                            {{--                                            @foreach($accounts as $account)--}}
-                                            {{--                                                <option value="{{ $account->id }}" {{ request('accountId') == $account->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $account->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
+                                                @foreach($accounts as $account)
+                                                    <option value="{{ $account->id }}" {{ request('accountId') == $account->id ? 'selected' : '' }}>
+                                                        {{ $account->name }}
+                                                    </option>
+                                                @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -73,6 +73,18 @@
                                         <input type="date" id="endDate" name="endDate" class="form-control" value="{{ request('endDate') }}">
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="purchaseStartDate">Filter By Purchase Date (Start Date)</label>
+                                        <input type="date" id="purchaseStartDate" name="purchaseStartDate" class="form-control" value="{{ request('purchaseStartDate') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="purchaseEndDate">Filter By Purchase Date (End Date)</label>
+                                        <input type="date" id="purchaseEndDate" name="purchaseEndDate" class="form-control" value="{{ request('purchaseEndDate') }}">
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-12 mb-2">
@@ -84,36 +96,42 @@
                         <table id="sellList" class="table dataTable table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Customer</th>
-                                <th>Salesman</th>
+                                <th>Supplier</th>
+                                <th>Warehouse</th>
                                 <th>Account</th>
-                                <th>Total Amount</th>
-                                <th>Discount Amount</th>
-                                <th>Net Total</th>
+                                <th>Purchase Date</th>
+                                <th>Total Cost</th>
+                                <th>Total Price</th>
+                                <th>Amount</th>
+                                <th>Status</th>
                                 <th>Date</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{--                            @foreach($sells as $sell)--}}
-                            {{--                                <tr>--}}
-                            {{--                                    <td>{{ $sell->customer->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ $sell->salesman->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ $sell->account->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->total_amount, 2) }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->discount_amount, 2) }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->net_total, 2) }}</td>--}}
-                            {{--                                    <td>{{ $sell->created_at ? \Carbon\Carbon::parse($sell->created_at)->format('F j, Y') : '' }}</td>--}}
-                            {{--                                </tr>--}}
-                            {{--                            @endforeach--}}
+                                @foreach($purchases as $purchase)
+                                    <tr>
+                                        <td>{{ $purchase->supplier->name ?? '' }}</td>
+                                        <td>{{ $purchase->warehouse->name ?? '' }}</td>
+                                        <td>{{ $purchase->account->name ?? '' }}</td>
+                                        <td>{{ $purchase->purchase_date ? \Carbon\Carbon::parse($purchase->purchase_date)->format('F j, Y') : '' }}</td>
+                                        <td>{{ number_format($purchase->total_cost, 2) }}</td>
+                                        <td>{{ number_format($purchase->total_price, 2) }}</td>
+                                        <td>{{ number_format($purchase->amount, 2) }}</td>
+                                        <td>{{ $purchase->status }}</td>
+                                        <td>{{ $purchase->created_at ? \Carbon\Carbon::parse($purchase->created_at)->format('F j, Y') : '' }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th>Customer</th>
-                                <th>Salesman</th>
+                                <th>Supplier</th>
+                                <th>Warehouse</th>
                                 <th>Account</th>
-                                <th>Total Amount</th>
-                                <th>Discount Amount</th>
-                                <th>Net Total</th>
+                                <th>Purchase Date</th>
+                                <th>Total Cost</th>
+                                <th>Total Price</th>
+                                <th>Amount</th>
+                                <th>Status</th>
                                 <th>Date</th>
                             </tr>
                             </tfoot>

@@ -38,8 +38,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" value="{{ $size->name ?? '' }}" class="form-control" placeholder="Enter size name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $size->name ?? '' }}" class="form-control" placeholder="Enter size name" required>
                                 </div>
                             </div>
                         </div>

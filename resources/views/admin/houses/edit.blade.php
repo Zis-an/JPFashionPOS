@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Production House')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -37,32 +35,35 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" value="{{ $house->name ?? '' }}" class="form-control" placeholder="Enter house name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $house->name ?? '' }}" class="form-control" placeholder="Enter house name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="address">Address</label>
-                                    <input id="address" name="address" value="{{ $house->address ?? '' }}" class="form-control" placeholder="Enter house address">
+                                    <label for="address">Address <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="address" name="address" value="{{ $house->address ?? '' }}" class="form-control"
+                                           placeholder="Enter house address" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="phone">Phone</label>
-                                    <input id="phone" name="phone" value="{{ $house->phone ?? '' }}" type="tel" class="form-control" placeholder="Enter house phone number">
+                                    <label for="phone">Phone <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="phone" name="phone" value="{{ $house->phone ?? '' }}" type="tel" class="form-control"
+                                           placeholder="Enter house phone number" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" value="{{ $house->email ?? '' }}" class="form-control" placeholder="Enter house email">
+                                    <label for="email">Email <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input type="email" id="email" name="email" value="{{ $house->email ?? '' }}" class="form-control"
+                                           placeholder="Enter house email" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select id="status" name="status" class="form-control">
+                                    <label for="status">Status <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select id="status" name="status" class="form-control" required>
                                         <option value="active" {{ $house->status == 'active' ? 'selected' : '' }}>Active</option>
                                         <option value="inactive" {{ $house->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
                                     </select>

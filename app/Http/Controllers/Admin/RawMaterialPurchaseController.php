@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\AdminActivity;
+use App\Models\RawMaterial;
 use App\Models\RawMaterialPurchase;
 use App\Models\Supplier;
 use App\Models\Warehouse;
@@ -40,8 +41,11 @@ class RawMaterialPurchaseController extends Controller
         $sizes = Size::orderBy('id', 'DESC')->get();
         $colors = Color::orderBy('id', 'DESC')->get();
         $accounts = Account::all();
+
+        $rawMaterials = RawMaterial::with(['brands', 'sizes', 'colors'])->get();
+
         return view('admin.raw-material-purchases.create',
-            compact('suppliers', 'warehouses', 'brands', 'sizes', 'colors', 'accounts'));
+            compact('suppliers', 'warehouses', 'brands', 'sizes', 'colors', 'accounts', 'rawMaterials'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -295,5 +299,15 @@ class RawMaterialPurchaseController extends Controller
         $purchase->status = $status;
         $purchase->update();
         return redirect()->back()->with('success', 'Raw Material Purchase status updated successfully.');
+    }
+
+    public function printRawMaterialPurchase($id)
+    {
+        $purchase = RawMaterialPurchase::find($id);
+        $products = $purchase->raw_materials;
+        $brands = Brand::orderBy('id', 'DESC')->get();
+        $sizes = Size::orderBy('id', 'DESC')->get();
+        $colors = Color::orderBy('id', 'DESC')->get();
+        return view('admin.raw-material-purchases.invoice', compact('purchase', 'products', 'brands', 'sizes', 'colors'));
     }
 }

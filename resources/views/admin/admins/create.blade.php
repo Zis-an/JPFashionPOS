@@ -36,32 +36,32 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Full name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter full name">
+                                    <label for="name">Full name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter full name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email">Email Address</label>
-                                    <input id="email" name="email" class="form-control" placeholder="Enter email address">
+                                    <label for="email">Email Address <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="email" name="email" class="form-control" placeholder="Enter email address" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input id="password" name="password" type="password" class="form-control" placeholder="Enter Password">
+                                    <label for="password">Password <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="password" name="password" type="password" class="form-control" placeholder="Enter Password" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password_confirmation">Confirm Password</label>
-                                    <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Confirm password">
+                                    <label for="password_confirmation">Confirm Password <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Confirm password" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="role">Select Roles</label>
-                                    <select name="roles[]" class="select2 form-control" id="role" multiple>
+                                    <label for="role">Select Roles <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="roles[]" class="select2 form-control" id="role" multiple required>
                                         @foreach($roles as $role)
                                             <option value="{{$role->name}}">{{$role->name}}</option>
                                         @endforeach

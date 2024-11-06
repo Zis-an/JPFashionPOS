@@ -32,20 +32,20 @@ class EmployeeController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|string|email|unique:employees',
-            'phone' => 'nullable|unique:employees',
-            'address' => 'nullable|string',
+            'email' => 'required|email|unique:employees',
+            'phone' => 'nullable',
+            'address' => 'nullable',
             'date_of_birth' => 'nullable|date',
             'hire_date' => 'required|date',
-            'position' => 'required|string',
+            'position' => 'required',
             'department_id' => 'required',
-            'education_level' => 'nullable|string',
+            'education_level' => 'nullable',
             'ed_certificate' => 'nullable',
             'nid' => 'required|unique:employees',
             'service_days' => 'required',
-            'gender' => 'nullable|string|in:male,female,other',
+            'gender' => 'nullable|in:male,female,other',
             'salary' => 'required',
-            'status' => 'nullable|string|in:active,deactive,terminated',
+            'status' => 'nullable|in:active,deactive,terminated',
         ]);
 
         $certificatePaths = [];

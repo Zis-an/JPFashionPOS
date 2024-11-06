@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Production House')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -36,26 +34,29 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter house name" value="{{ old('name') }}">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter house name" value="{{ old('name') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="address">Address</label>
-                                    <input id="address" name="address" class="form-control" placeholder="Enter house address" value="{{ old('address') }}">
+                                    <label for="address">Address <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="address" name="address" class="form-control" placeholder="Enter house address"
+                                           value="{{ old('address') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="phone">Phone</label>
-                                    <input id="phone" name="phone" type="tel" class="form-control" placeholder="Enter house phone number" value="{{ old('phone') }}">
+                                    <label for="phone">Phone <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="phone" name="phone" type="tel" class="form-control" placeholder="Enter house phone number"
+                                           value="{{ old('phone') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter house email" value="{{ old('email') }}">
+                                    <label for="email">Email <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter house email"
+                                           value="{{ old('email') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -77,7 +78,6 @@
         </div>
     </div>
 @stop
-
 @section('footer')
     <strong>Developed by <a href="https://www.techyfo.com">Techyfo</a>.</strong>
     All rights reserved.
@@ -85,7 +85,6 @@
         <b>version</b> {{env('DEV_VERSION')}}
     </div>
 @stop
-
 @section('plugins.toastr',true)
 @section('css')
 @stop

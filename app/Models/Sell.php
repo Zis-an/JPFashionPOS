@@ -6,6 +6,7 @@ use App\Traits\AdminLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Sell extends Model
 {
@@ -31,13 +32,31 @@ class Sell extends Model
         return $this->hasOne(Admin::class, 'id', 'salesman_id');
     }
 
-    public function product()
+    public function sell_stocks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasmany(Product::class, 'id', 'product_id');
+        return $this->hasmany(SellStock::class);
     }
 
-    public function account()
+    public function account(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Account::class, 'id', 'account_id');
+        return $this->belongsTo(Account::class);
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($sale) {
+            $sale->unique_sale_id = $sale->generateUniqueSaleId();
+        });
+    }
+
+    // Generate a unique sale ID with uniqueness check
+    public function generateUniqueSaleId()
+    {
+        do {
+            $uniqueId = 'INV' . strtoupper(Str::random(8));
+        } while (self::where('unique_sale_id', $uniqueId)->exists());
+
+        return $uniqueId;
     }
 }

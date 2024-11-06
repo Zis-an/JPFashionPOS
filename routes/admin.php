@@ -257,6 +257,9 @@ Route::get('/rawMaterialPurchases/trashed/{rawMaterialPurchase}/delete', [RawMat
 Route::get('/rawMaterialPurchases/{rawMaterialPurchase}/status/{status}',
     [RawMaterialPurchaseController::class, 'updateStatus'])
     ->name('rawMaterialPurchases.updateStatus');
+Route::get('/raw-material-purchases/{rawMaterialPurchase}',
+    [RawMaterialPurchaseController::class, 'printRawMaterialPurchase'])
+    ->name('rawMaterialPurchases.print');
 Route::resource('/rawMaterialPurchases', RawMaterialPurchaseController::class)
     ->middleware('permission:rawMaterialPurchases.list');
 
@@ -337,7 +340,8 @@ Route::resource('/products', ProductController::class)->middleware('permission:p
 //Route::get('/raw-material-stocks/trashed/{stock}/delete', [RawMaterialStockController::class, 'force_delete'])
 //    ->middleware('permission:rawMaterialStocks.force_delete')
 //    ->name('raw-material-stocks.force_delete');
-Route::resource('/raw-material-stocks', RawMaterialStockController::class)->middleware('permission:rawMaterialStocks.list');
+Route::resource('/raw-material-stocks', RawMaterialStockController::class)
+    ->middleware('permission:rawMaterialStocks.list');
 
 
 // Deposit
@@ -470,14 +474,16 @@ Route::get('/expense-reports', [ReportController::class, 'expenseReports'])
     ->name('expenseReports');
 Route::get('/raw-material-purchase-reports', [ReportController::class, 'rawMaterialPurchaseReports'])
     ->name('rawMaterialPurchaseReports');
-Route::get('/balance-sheet-reports', [ReportController::class, 'balanceSheetReports'])
+Route::get('/account-balance-sheets', [ReportController::class, 'balanceSheetReports'])
     ->name('balanceSheetReports');
-Route::get('/deposit-balance-sheet', [ReportController::class, 'depositBalanceSheet'])
+Route::get('/deposit-balance-sheets', [ReportController::class, 'depositBalanceSheet'])
     ->name('depositBalanceSheets');
-Route::get('/withdraw-balance-sheet', [ReportController::class, 'withdrawBalanceSheet'])
+Route::get('/withdraw-balance-sheets', [ReportController::class, 'withdrawBalanceSheet'])
     ->name('withdrawBalanceSheets');
-Route::get('/transfer-balance-sheet', [ReportController::class, 'transferBalanceSheet'])
+Route::get('/transfer-balance-sheets', [ReportController::class, 'transferBalanceSheet'])
     ->name('transferBalanceSheets');
+Route::get('/sell-profit-loss', [ReportController::class, 'sellProfitLoss'])
+    ->name('sellProfitLoss');
 
 // Profile
 Route::get('/profile',[AdminController::class,'profile'])->name('profile');

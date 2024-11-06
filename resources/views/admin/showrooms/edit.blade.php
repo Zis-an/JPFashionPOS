@@ -37,8 +37,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" value="{{ $showroom->name ?? '' }}" class="form-control" placeholder="Enter showroom name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $showroom->name ?? '' }}" class="form-control" placeholder="Enter showroom name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">

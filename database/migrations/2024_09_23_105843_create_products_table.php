@@ -19,9 +19,6 @@ return new class extends Migration
             $table->text('short_details')->nullable();
             $table->string('sku')->nullable();
             $table->unsignedBigInteger('unit_id')->nullable();
-            $table->unsignedBigInteger('brand_id')->nullable();
-            $table->unsignedBigInteger('color_id')->nullable();
-            $table->unsignedBigInteger('size_id')->nullable();
             $table->float('width')->nullable();
             $table->float('length')->nullable();
             $table->float('density')->nullable();
@@ -32,7 +29,6 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
-            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
         });
     }
 

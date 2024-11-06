@@ -4,18 +4,28 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use App\Models\AccountTransaction;
+use App\Models\AccountTransfer;
 use App\Models\Admin;
+use App\Models\Asset;
+use App\Models\AssetCategory;
 use App\Models\Brand;
 use App\Models\Color;
 use App\Models\Customer;
+use App\Models\Deposit;
+use App\Models\Expense;
+use App\Models\ExpenseCategory;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\RawMaterial;
+use App\Models\RawMaterialPurchase;
 use App\Models\RawMaterialStock;
 use App\Models\Sell;
 use App\Models\Showroom;
 use App\Models\Size;
+use App\Models\Supplier;
 use App\Models\Warehouse;
+use App\Models\Withdraw;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -68,6 +78,7 @@ class ReportController extends Controller
 
         return view('admin.reports.rawMaterialStocks', compact('stocks', 'rawMaterials', 'warehouses', 'colors', 'brands', 'sizes'));
     }
+
     public function productStockReports(Request $request)
     {
         // Get all relevant data for filters
@@ -116,6 +127,7 @@ class ReportController extends Controller
 
         return view('admin.reports.productStocks', compact('stocks', 'products', 'showrooms', 'colors', 'brands', 'sizes'));
     }
+
     public function sellReports(Request $request)
     {
         // Get all relevant data for filters
@@ -156,11 +168,343 @@ class ReportController extends Controller
 
         return view('admin.reports.sells', compact('sells', 'customers', 'accounts', 'salesmen'));
     }
-    public function assetReports(){return view('admin.reports.assets');}
-    public function expenseReports(){return view('admin.reports.expenses');}
-    public function rawMaterialPurchaseReports(){return view('admin.reports.rawMaterialPurchases');}
-    public function balanceSheetReports(){return view('admin.reports.balanceSheets');}
-    public function depositBalanceSheet(){return view('admin.reports.depositBalanceSheets');}
-    public function withdrawBalanceSheet(){return view('admin.reports.withdrawBalanceSheets');}
-    public function transferBalanceSheet(){return view('admin.reports.transferBalanceSheets');}
+
+    public function assetReports(Request $request)
+    {
+        $categories = AssetCategory::all();
+        $accounts = Account::all();
+
+        // Start building the query
+        $query = Asset::with(['category', 'account']);
+
+        // Apply filters based on the request
+        if ($request->filled('categoryId')) {
+            $query->where('asset_category_id', $request->categoryId);
+        }
+        if ($request->filled('accountId')) {
+            $query->where('account_id', $request->accountId);
+        }
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('created_at', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('created_at', '<=', $request->endDate);
+        }
+
+        // Get the filtered stocks
+        $assets = $query->get();
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['assets' => $assets]);
+        }
+
+        return view('admin.reports.assets', compact('assets', 'categories', 'accounts'));
+    }
+
+    public function expenseReports(Request $request)
+    {
+        $categories = ExpenseCategory::all();
+        $accounts = Account::all();
+
+        // Start building the query
+        $query = Expense::with(['category', 'account']);
+
+        // Apply filters based on the request
+        if ($request->filled('categoryId')) {
+            $query->where('asset_category_id', $request->categoryId);
+        }
+        if ($request->filled('accountId')) {
+            $query->where('account_id', $request->accountId);
+        }
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('created_at', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('created_at', '<=', $request->endDate);
+        }
+
+        // Get the filtered stocks
+        $expenses = $query->get();
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['expenses' => $expenses]);
+        }
+
+        return view('admin.reports.expenses', compact('expenses', 'categories', 'accounts'));
+    }
+
+    public function rawMaterialPurchaseReports(Request $request)
+    {
+        $suppliers = Supplier::all();
+        $warehouses = Warehouse::all();
+        $accounts = Account::all();
+
+        // Start building the query
+        $query = RawMaterialPurchase::with(['supplier', 'warehouse', 'account']);
+
+        // Apply filters based on the request
+        if ($request->filled('supplierId')) {
+            $query->where('supplier_id', $request->supplierId);
+        }
+        if ($request->filled('warehouseId')) {
+            $query->where('warehouse_id', $request->warehouseId);
+        }
+        if ($request->filled('accountId')) {
+            $query->where('account_id', $request->accountId);
+        }
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('created_at', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('created_at', '<=', $request->endDate);
+        }
+
+        // Filter by PurchaseStart and PurchaseEnd dates
+        if ($request->filled('purchaseStartDate') && $request->filled('purchaseEndDate')) {
+            $query->whereBetween('purchase_date', [$request->purchaseStartDate, $request->purchaseEndDate]);
+        } elseif ($request->filled('purchaseStartDate')) {
+            $query->whereDate('purchase_date', '>=', $request->purchaseStartDate);
+        } elseif ($request->filled('purchaseEndDate')) {
+            $query->whereDate('purchase_date', '<=', $request->purchaseEndDate);
+        }
+
+        // Get the filtered stocks
+        $purchases = $query->get();
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['purchases' => $purchases]);
+        }
+
+        return view('admin.reports.rawMaterialPurchases', compact('purchases', 'suppliers', 'warehouses', 'accounts'));
+    }
+
+    public function balanceSheetReports(Request $request)
+    {
+        $accounts = Account::all();
+
+        // Start building the query with account and transaction data
+        $query = AccountTransaction::with(['account']);
+
+        // Apply filters based on the request
+        if ($request->filled('accountId')) {
+            $query->where('account_id', $request->accountId);
+        }
+        if ($request->filled('transactionType')) {
+            $query->where('transaction_type', $request->transactionType);
+        }
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('created_at', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('created_at', '<=', $request->endDate);
+        }
+
+        // Fetch the filtered transactions
+        $transactions = $query->get();
+
+        // Calculate totals, balance, and latest date, filtering out accounts without transactions
+        $accountsWithBalances = $accounts->map(function ($account) use ($transactions) {
+            $accountTransactions = $transactions->where('account_id', $account->id);
+
+            // Only proceed if there are transactions for this account
+            if ($accountTransactions->isEmpty()) {
+                return null; // No transactions, so we skip this account
+            }
+
+            // Calculate total in, total out, and balance
+            $totalIn = $accountTransactions->where('transaction_type', 'in')->sum('amount');
+            $totalOut = $accountTransactions->where('transaction_type', 'out')->sum('amount');
+            $balance = $totalIn - $totalOut;
+
+            // Get the latest transaction date for the account
+            $latestDate = $accountTransactions->max('created_at');
+
+            return [
+                'account' => $account,
+                'total_in' => $totalIn,
+                'total_out' => $totalOut,
+                'balance' => $balance,
+                'latest_date' => $latestDate
+            ];
+        })->filter(); // Remove null values from the collection
+
+        // Calculate overall totals for Total In, Total Out, and Balance from all transactions
+        $totalInSum = $transactions->where('transaction_type', 'in')->sum('amount');
+        $totalOutSum = $transactions->where('transaction_type', 'out')->sum('amount');
+        $balanceSum = $totalInSum - $totalOutSum;
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['accountsWithBalances' => $accountsWithBalances]);
+        }
+
+        return view('admin.reports.balanceSheets', compact('accountsWithBalances', 'transactions', 'accounts', 'totalInSum', 'totalOutSum', 'balanceSum'));
+    }
+
+    public function depositBalanceSheet(Request $request)
+    {
+        $accounts = Account::all();
+
+        // Start building the query
+        $query = Deposit::with(['account']);
+
+        // Apply filters based on the request
+        if ($request->filled('accountId')) {
+            $query->where('account_id', $request->accountId);
+        }
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('created_at', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('created_at', '<=', $request->endDate);
+        }
+
+        // Get the filtered stocks
+        $deposits = $query->get();
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['deposits' => $deposits]);
+        }
+
+        return view('admin.reports.depositBalanceSheets', compact('deposits', 'accounts'));
+    }
+
+    public function withdrawBalanceSheet(Request $request)
+    {
+        $accounts = Account::all();
+
+        // Start building the query
+        $query = Withdraw::with(['account']);
+
+        // Apply filters based on the request
+        if ($request->filled('accountId')) {
+            $query->where('account_id', $request->accountId);
+        }
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('created_at', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('created_at', '<=', $request->endDate);
+        }
+
+        // Get the filtered stocks
+        $withdraws = $query->get();
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['withdraws' => $withdraws]);
+        }
+
+        return view('admin.reports.withdrawBalanceSheets', compact('withdraws', 'accounts'));
+    }
+
+    public function transferBalanceSheet(Request $request)
+    {
+        $accounts = Account::all();
+
+        // Start building the query
+        $query = AccountTransfer::with(['fromAccount', 'toAccount', 'accountTransaction']);
+
+
+        // Apply filters based on the request
+        if ($request->filled('fromAccountId')) {
+            $query->where('from_account_id', $request->fromAccountId);
+        }
+        if ($request->filled('toAccountId')) {
+            $query->where('to_account_id', $request->toAccountId);
+        }
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('created_at', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('created_at', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('created_at', '<=', $request->endDate);
+        }
+
+        // Get the filtered stocks
+        $transfers = $query->get();
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['transfers' => $transfers]);
+        }
+
+        return view('admin.reports.transferBalanceSheets', compact('transfers', 'accounts'));
+    }
+
+    public function sellProfitLoss(Request $request)
+    {
+        // Start building the query
+        $query = Sell::with(['productStock', 'sell_stocks', 'account']);
+
+        // Apply filters based on the request
+        if ($request->filled('status')) {
+            if (strtolower($request->status) === 'profit') {
+                $query->whereHas('sell_stocks', function ($query) {
+                    $query->whereRaw('(SELECT SUM(cost) FROM sell_stocks WHERE sell_id = sells.id) < sells.net_total');
+                });
+            } elseif (strtolower($request->status) === 'loss') {
+                $query->whereHas('sell_stocks', function ($query) {
+                    $query->whereRaw('(SELECT SUM(cost) FROM sell_stocks WHERE sell_id = sells.id) >= sells.net_total');
+                });
+            }
+        }
+
+        // Apply date filters if provided
+        if ($request->filled('startDate')) {
+            $query->whereDate('created_at', '>=', $request->startDate);
+        }
+        if ($request->filled('endDate')) {
+            $query->whereDate('created_at', '<=', $request->endDate);
+        }
+
+        // Apply "Today's Data" filter if selected from the dropdown
+        if ($request->dataRange === 'today') {
+            $query->whereDate('created_at', \Carbon\Carbon::today());
+        }
+
+        // Get the filtered stocks
+        $sells = $query->get();
+
+        // Calculate totals
+        $totalNetTotal = $sells->sum('net_total');
+        $totalCost = $sells->sum(function($sell) {
+            return $sell->sell_stocks->first()->cost ?? 0;
+        });
+        $totalAmount = $sells->sum(function($sell) {
+            $cost = $sell->sell_stocks->first()->cost ?? 0;
+            return $cost < $sell->net_total ? $sell->net_total - $cost : $cost - $sell->net_total;
+        });
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['sells' => $sells]);
+        }
+
+        return view('admin.reports.sellProfitLoss', compact('sells', 'totalNetTotal', 'totalCost', 'totalAmount'));
+    }
 }

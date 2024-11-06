@@ -35,32 +35,32 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Full name</label>
-                                    <input id="name" name="name" value="{{ $admin->name ?? '' }}" class="form-control" placeholder="Enter full name">
+                                    <label for="name">Full name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $admin->name ?? '' }}" class="form-control" placeholder="Enter full name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email">Email address</label>
-                                    <input id="email" name="email" value="{{ $admin->email ?? '' }}" class="form-control" placeholder="Enter email address">
+                                    <label for="email">Email address <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="email" name="email" value="{{ $admin->email ?? '' }}" class="form-control" placeholder="Enter email address" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input id="password" type="password" name="password" class="form-control" placeholder="Enter password">
+                                    <label for="password">Password <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="password" type="password" name="password" class="form-control" placeholder="Enter password" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password_confirmation">Confirm password</label>
-                                    <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" placeholder="Confirm password">
+                                    <label for="password_confirmation">Confirm password <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" placeholder="Confirm password" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="role">Select roles</label>
-                                    <select name="roles[]" class="select2 form-control" id="role" multiple="true">
+                                    <label for="role">Select roles <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="roles[]" class="select2 form-control" id="role" multiple="true" required>
                                         <option value="">Select roles</option>
                                         @foreach($roles as $role)
                                             <option value="{{ $role->name }}" @if(checkAdminRole($admin,$role->name)) selected @endif>{{ $role->name }}</option>
@@ -96,7 +96,6 @@
                                 </div>
                             </div>
                         </div>
-
                         @can('admins.update')
                             <button class="btn btn-success" type="submit">Update</button>
                         @endcan
@@ -106,7 +105,6 @@
         </div>
     </div>
 @stop
-
 @section('footer')
     <strong>Developed by <a href="https://www.techyfo.com">Techyfo</a>.</strong>
     All rights reserved.
@@ -114,10 +112,8 @@
         <b>version</b> {{env('DEV_VERSION')}}
     </div>
 @stop
-
 @section('plugins.toastr',true)
 @section('plugins.Select2',true)
-
 @section('css')
     <style>
         .select2-container--default .select2-selection--multiple .select2-selection__choice {

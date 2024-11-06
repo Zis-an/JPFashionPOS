@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Product Stocks')
+@section('title', 'Product Stocks Report')
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -109,7 +109,7 @@
                             </div>
                         </form>
 
-                        <table id="adminsList" class="table  dataTable table-bordered table-striped">
+                        <table id="sellList" class="table dataTable table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -120,7 +120,7 @@
                                 <th>Brand</th>
                                 <th>Size</th>
                                 <th>Sell Price</th>
-                                <th>Action</th>
+                                <th>Date</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -148,7 +148,7 @@
                                 <th>Brand</th>
                                 <th>Size</th>
                                 <th>Sell Price</th>
-                                <th>Action</th>
+                                <th>Date</th>
                             </tr>
                             </tfoot>
                         </table>

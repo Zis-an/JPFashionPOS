@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Sell Reports')
+@section('title', 'Balance Sheets')
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -17,47 +17,31 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @can('sellReports.list')
+            @can('balanceSheets.list')
                 <div class="card">
                     <div class="card-body table-responsive">
                         <form method="GET" action="{{ route('admin.balanceSheetReports') }}" id="filterForm">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="customerFilter">Filter By Customer</label>
-                                        <select id="customerFilter" name="customerId" class="select2 form-control">
-                                            <option value="">Select an option</option>
-                                            {{--                                            @foreach($customers as $customer)--}}
-                                            {{--                                                <option value="{{ $customer->id }}" {{ request('customerId') == $customer->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $customer->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="salesmanFilter">Filter By Salesman</label>
-                                        <select id="salesmanFilter" name="salesmanId" class="select2 form-control">
-                                            <option value="">Select an option</option>
-                                            {{--                                            @foreach($salesmen as $salesman)--}}
-                                            {{--                                                <option value="{{ $salesman->id }}" {{ request('salesmanId') == $salesman->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $salesman->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="accountFilter">Filter By Account</label>
                                         <select id="accountFilter" name="accountId" class="select2 form-control">
                                             <option value="">Select an option</option>
-                                            {{--                                            @foreach($accounts as $account)--}}
-                                            {{--                                                <option value="{{ $account->id }}" {{ request('accountId') == $account->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $account->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
+                                                @foreach($accounts as $account)
+                                                    <option value="{{ $account->id }}" {{ request('accountId') == $account->id ? 'selected' : '' }}>
+                                                        {{ $account->name }}
+                                                    </option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="transactionTypeFilter">Filter By Transaction Type</label>
+                                        <select id="transactionTypeFilter" name="transactionType" class="select2 form-control">
+                                            <option value="">Select an option</option>
+                                                <option value="out" {{ request('transactionType') == 'out' ? 'selected' : '' }}>OUT</option>
+                                                <option value="in" {{ request('transactionType') == 'in' ? 'selected' : '' }}>IN</option>
                                         </select>
                                     </div>
                                 </div>
@@ -84,37 +68,31 @@
                         <table id="sellList" class="table dataTable table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Customer</th>
-                                <th>Salesman</th>
                                 <th>Account</th>
-                                <th>Total Amount</th>
-                                <th>Discount Amount</th>
-                                <th>Net Total</th>
+                                <th>Total In</th>
+                                <th>Total Out</th>
+                                <th>Balance</th>
                                 <th>Date</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{--                            @foreach($sells as $sell)--}}
-                            {{--                                <tr>--}}
-                            {{--                                    <td>{{ $sell->customer->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ $sell->salesman->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ $sell->account->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->total_amount, 2) }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->discount_amount, 2) }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->net_total, 2) }}</td>--}}
-                            {{--                                    <td>{{ $sell->created_at ? \Carbon\Carbon::parse($sell->created_at)->format('F j, Y') : '' }}</td>--}}
-                            {{--                                </tr>--}}
-                            {{--                            @endforeach--}}
+                            @foreach($accountsWithBalances as $accountData)
+                                <tr>
+                                    <td>{{ $accountData['account']->name }}</td>
+                                    <td class="text-right">{{ number_format($accountData['total_in'], 2) }}</td>
+                                    <td class="text-right">{{ number_format($accountData['total_out'], 2) }}</td>
+                                    <td class="text-right">{{ number_format($accountData['balance'], 2) }}</td>
+                                    <td>{{ $accountData['latest_date'] ? \Carbon\Carbon::parse($accountData['latest_date'])->format('F j, Y') : '' }}</td>
+                                </tr>
+                            @endforeach
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th>Customer</th>
-                                <th>Salesman</th>
-                                <th>Account</th>
-                                <th>Total Amount</th>
-                                <th>Discount Amount</th>
-                                <th>Net Total</th>
-                                <th>Date</th>
+                                <th>Total</th>
+                                <th class="text-right">{{ number_format($totalInSum, 2) }}</th>
+                                <th class="text-right">{{ number_format($totalOutSum, 2) }}</th>
+                                <th class="text-right">{{ number_format($balanceSum, 2) }}</th>
+                                <th></th>
                             </tr>
                             </tfoot>
                         </table>
@@ -188,13 +166,35 @@
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
+                buttons: [
+                    {
+                        extend: 'copy',
+                        footer: true
+                    },
+                    {
+                        extend: 'csv',
+                        footer: true
+                    },
+                    {
+                        extend: 'excel',
+                        footer: true
+                    },
+                    {
+                        extend: 'pdf',
+                        footer: true
+                    },
+                    {
+                        extend: 'print',
+                        footer: true // Include the footer in the print view
+                    },
+                    'colvis'
+                ],
                 language: {
                     paginate: {
                         first: "{{ __('First') }}",
                         previous: "{{ __('Previous') }}",
                         next: "{{ __('Next') }}",
-                        last: "{{ __('Last') }}",
+                        last: "{{ __('Last') }}"
                     }
                 }
             });

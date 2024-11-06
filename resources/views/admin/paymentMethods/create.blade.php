@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Payment Methods')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -36,14 +34,15 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Payment Method Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter payment method name" value="{{ old('name') }}">
+                                    <label for="name">Payment Method Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter payment method name" value="{{ old('name') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="amount">Amount</label>
-                                    <input id="amount" name="amount" type="number" step="0.01" class="form-control" placeholder="Enter amount" value="{{ old('amount') }}">
+                                    <label for="amount">Amount <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="amount" name="amount" type="number" step="0.01" class="form-control" placeholder="Enter amount"
+                                           value="{{ old('amount') }}" required>
                                 </div>
                             </div>
                             <div class="col-12">

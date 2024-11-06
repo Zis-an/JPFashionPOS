@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Supplier')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -38,8 +36,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" value="{{ $supplier->name }}" class="form-control" placeholder="Enter name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $supplier->name }}" class="form-control" placeholder="Enter name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -56,8 +54,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input id="email" type="email" name="email" value="{{ $supplier->email }}" class="form-control" placeholder="Enter email">
+                                    <label for="email">Email <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="email" type="email" name="email" value="{{ $supplier->email }}" class="form-control" placeholder="Enter email" required>
                                 </div>
                             </div>
                             <div class="col-md-6">

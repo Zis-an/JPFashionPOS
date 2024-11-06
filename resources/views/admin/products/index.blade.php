@@ -37,9 +37,6 @@
                                 <th>Category</th>
                                 <th>SKU</th>
                                 <th>Unit</th>
-                                <th>Brand</th>
-                                <th>Color</th>
-                                <th>Size</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -50,9 +47,6 @@
                                     <td>{{ $product->category->name ?? '' }}</td>
                                     <td>{{ $product->sku ?? '' }}</td>
                                     <td>{{ $product->unit->name ?? '' }}</td>
-                                    <td>{{ $product->brand->name ?? '' }}</td>
-                                    <td>{{ $product->color->color_name ?? '' }}</td>
-                                    <td>{{ $product->size->name ?? '' }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST">
                                             @method('DELETE')
@@ -83,9 +77,6 @@
                                 <th>Category</th>
                                 <th>SKU</th>
                                 <th>Unit</th>
-                                <th>Brand</th>
-                                <th>Color</th>
-                                <th>Size</th>
                                 <th>Action</th>
                             </tr>
                             </tfoot>

@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Currency')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -17,7 +15,6 @@
         </div>
     </div>
 @stop
-
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -38,27 +35,28 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Code</label>
-                                    <input id="code" name="code" value="{{ $currency->code ?? '' }}" class="form-control" placeholder="Enter code">
+                                    <label for="name">Code <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="code" name="code" value="{{ $currency->code ?? '' }}" class="form-control" placeholder="Enter code" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" value="{{ $currency->name ?? '' }}" class="form-control" placeholder="Enter name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $currency->name ?? '' }}" class="form-control" placeholder="Enter name" required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Rate</label>
-                                    <input type="number" id="rate" value="{{ $currency->rate ?? '' }}" name="rate" class="form-control" placeholder="Enter rate">
+                                    <label for="name">Rate <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input type="number" id="rate" value="{{ $currency->rate ?? '' }}" name="rate" step="any"
+                                           class="form-control" placeholder="Enter rate" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="status">Select Status</label>
-                                    <select id="status" name="status" class="select2 form-control">
+                                    <label for="status">Select Status <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select id="status" name="status" class="select2 form-control" required>
                                         <option value= 1 {{ $currency->status == 1 ? 'selected' : '' }}>Active</option>
                                         <option value= 0 {{ $currency->status == 0 ? 'selected' : '' }}>Inactive</option>
                                     </select>

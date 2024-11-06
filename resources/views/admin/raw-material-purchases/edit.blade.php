@@ -61,7 +61,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="account_id">Account</label>
+                                    <label for="account_id">Account <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="account_id" name="account_id" class="form-control select2" required>
                                         <option value="">Select Account</option>
                                         @foreach ($accounts as $account)
@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="purchase_date">Purchase Date</label>
+                                    <label for="purchase_date">Purchase Date <span class="text-danger font-weight-bolder">*</span></label>
                                     <input type="date" name="purchase_date" value="{{ $purchase->purchase_date }}" class="form-control" required>
                                 </div>
                             </div>
@@ -86,9 +86,9 @@
                                 <fieldset class="form-group border p-3" style="border-color: #ccc;">
                                     <div class="d-flex mb-2">
                                         <div class="total-sum mr-2">
-                                            <label>Total Cost: </label>
+                                            <label><span class="text-danger font-weight-bolder">*</span> Total Cost: </label>
                                             <input type="text" name="total_cost" value="{{ $purchase->total_cost }}"
-                                                   class="form-control" id="total-amount" readonly>
+                                                   class="form-control" id="total-amount" readonly required>
                                         </div>
                                         <div>
                                             <button class="btn btn-success btn-sm add-item-btn" type="button">Add</button>

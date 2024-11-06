@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Sell Reports')
+@section('title', 'Deposit Balance Sheets')
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -17,47 +17,21 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @can('sellReports.list')
+            @can('depositBalance.list')
                 <div class="card">
                     <div class="card-body table-responsive">
-                        <form method="GET" action="{{ route('admin.balanceSheetReports') }}" id="filterForm">
+                        <form method="GET" action="{{ route('admin.depositBalanceSheets') }}" id="filterForm">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="customerFilter">Filter By Customer</label>
-                                        <select id="customerFilter" name="customerId" class="select2 form-control">
-                                            <option value="">Select an option</option>
-                                            {{--                                            @foreach($customers as $customer)--}}
-                                            {{--                                                <option value="{{ $customer->id }}" {{ request('customerId') == $customer->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $customer->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="salesmanFilter">Filter By Salesman</label>
-                                        <select id="salesmanFilter" name="salesmanId" class="select2 form-control">
-                                            <option value="">Select an option</option>
-                                            {{--                                            @foreach($salesmen as $salesman)--}}
-                                            {{--                                                <option value="{{ $salesman->id }}" {{ request('salesmanId') == $salesman->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $salesman->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="accountFilter">Filter By Account</label>
                                         <select id="accountFilter" name="accountId" class="select2 form-control">
                                             <option value="">Select an option</option>
-                                            {{--                                            @foreach($accounts as $account)--}}
-                                            {{--                                                <option value="{{ $account->id }}" {{ request('accountId') == $account->id ? 'selected' : '' }}>--}}
-                                            {{--                                                    {{ $account->name }}--}}
-                                            {{--                                                </option>--}}
-                                            {{--                                            @endforeach--}}
+                                            @foreach($accounts as $account)
+                                                <option value="{{ $account->id }}" {{ request('accountId') == $account->id ? 'selected' : '' }}>
+                                                    {{ $account->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -73,10 +47,8 @@
                                         <input type="date" id="endDate" name="endDate" class="form-control" value="{{ request('endDate') }}">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 mb-2">
-                                    <button type="submit" class="btn btn-primary px-5">Filter</button>
+                                <div class="col-md-2 align-self-center">
+                                    <button type="submit" class="btn btn-primary px-5" style="margin-top: 14px;">Filter</button>
                                 </div>
                             </div>
                         </form>
@@ -84,36 +56,30 @@
                         <table id="sellList" class="table dataTable table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Customer</th>
-                                <th>Salesman</th>
                                 <th>Account</th>
-                                <th>Total Amount</th>
-                                <th>Discount Amount</th>
-                                <th>Net Total</th>
+                                <th>Transaction ID</th>
+                                <th>Transaction Type</th>
+                                <th>Amount</th>
                                 <th>Date</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {{--                            @foreach($sells as $sell)--}}
-                            {{--                                <tr>--}}
-                            {{--                                    <td>{{ $sell->customer->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ $sell->salesman->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ $sell->account->name ?? '' }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->total_amount, 2) }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->discount_amount, 2) }}</td>--}}
-                            {{--                                    <td>{{ number_format($sell->net_total, 2) }}</td>--}}
-                            {{--                                    <td>{{ $sell->created_at ? \Carbon\Carbon::parse($sell->created_at)->format('F j, Y') : '' }}</td>--}}
-                            {{--                                </tr>--}}
-                            {{--                            @endforeach--}}
+                            @foreach($deposits as $deposit)
+                                <tr>
+                                    <td>{{ $deposit->account->name ?? '' }}</td>
+                                    <td>{{ $deposit->transaction_id ?? '' }}</td>
+                                    <td class="text-uppercase">{{ $deposit->transaction_type ?? '' }}</td>
+                                    <td>{{ number_format($deposit->amount, 2) }}</td>
+                                    <td>{{ $deposit->created_at ? \Carbon\Carbon::parse($deposit->created_at)->format('F j, Y') : '' }}</td>
+                                </tr>
+                            @endforeach
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th>Customer</th>
-                                <th>Salesman</th>
                                 <th>Account</th>
-                                <th>Total Amount</th>
-                                <th>Discount Amount</th>
-                                <th>Net Total</th>
+                                <th>Transaction ID</th>
+                                <th>Transaction Type</th>
+                                <th>Amount</th>
                                 <th>Date</th>
                             </tr>
                             </tfoot>

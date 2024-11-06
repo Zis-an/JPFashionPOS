@@ -34,22 +34,22 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter name" value="{{ old('name') }}">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter name" value="{{ old('name') }}" required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="sq">SKU</label>
-                                    <input id="sku" name="sku" class="form-control" placeholder="Enter sku" value="{{ old('sku') }}">
+                                    <label for="sq">SKU <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="sku" name="sku" class="form-control" placeholder="Enter sku" value="{{ old('sku') }}" required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="raw_material_category_id">Category</label>
-                                    <select id="raw_material_category_id" name="raw_material_category_id" class="form-control select2">
+                                    <label for="raw_material_category_id">Category <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select id="raw_material_category_id" name="raw_material_category_id" class="form-control select2" required>
                                         <option value="">Select Category</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}" {{ old('raw_material_category_id') == $category->id ? 'selected' : '' }}>

@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Expenses')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -36,14 +34,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="title">Title</label>
-                                    <input id="title" name="title" class="form-control" placeholder="Enter title">
+                                    <label for="title">Title <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="title" name="title" class="form-control" placeholder="Enter title" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="category_id">Select Category</label>
-                                    <select name="category_id" class="select2 form-control" id="role">
+                                    <label for="category_id">Select Category <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="category_id" class="select2 form-control" id="role" required>
                                         @if(!empty($categories))
                                             @foreach($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -56,8 +54,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="account_id">Select Account</label>
-                                    <select name="account_id" class="select2 form-control" id="role">
+                                    <label for="account_id">Select Account <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="account_id" class="select2 form-control" id="role" required>
                                         @if(!empty($accounts))
                                             @foreach($accounts as $account)
                                                 <option value="{{ $account->id }}">{{ $account->name }}</option>
@@ -70,8 +68,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="amount">Amount</label>
-                                    <input id="amount" name="amount" type="number" class="form-control" placeholder="Enter amount">
+                                    <label for="amount">Amount <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="amount" name="amount" type="number" class="form-control" placeholder="Enter amount" required>
                                 </div>
                             </div>
                             <div class="col-12">

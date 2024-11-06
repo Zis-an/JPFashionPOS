@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="account_id">Account</label>
+                                    <label for="account_id">Account <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="account_id" name="account_id" class="form-control select2" required>
                                         <option value="">Select Account</option>
                                         @foreach ($accounts as $account)
@@ -73,7 +73,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="purchase_date">Purchase Date</label>
+                                    <label for="purchase_date">Purchase Date <span class="text-danger font-weight-bolder">*</span></label>
                                     <input type="date" name="purchase_date" class="form-control" required>
                                 </div>
                             </div>
@@ -82,8 +82,8 @@
                                 <fieldset class="form-group border p-3" style="border-color: #ccc;">
                                     <div class="d-flex mb-2">
                                         <div class="total-sum mr-2">
-                                            <label>Total Cost: </label>
-                                            <input type="text" name="total_cost" class="form-control" id="total-amount" value="0" readonly>
+                                            <label><span class="text-danger font-weight-bolder">*</span> Total Cost: </label>
+                                            <input type="text" name="total_cost" class="form-control" id="total-amount" value="0" readonly required>
                                         </div>
                                         <div>
                                             <button class="btn btn-success btn-sm add-item-btn" type="button">Add</button>
@@ -318,6 +318,10 @@
                 const material = rawMaterials.find(m => m.id === materialId);
 
                 if (material) {
+                    const brandOptions = material.brands.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+                    const sizeOptions = material.sizes.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                    const colorOptions = material.colors.map(c => `<option value="${c.id}">${c.color_name}</option>`).join('');
+
                     // Calculate GSM with inch to meter conversion
                     const gsm = calculateGSM(material.width, material.length, material.density);
 
@@ -329,17 +333,17 @@
                             </td>
                             <td>
                                 <select name="brand_id[]" class="form-control select2 brand-select">
-                                    ${brands.map(b => `<option value="${b.id}" ${b.id === material.brand_id ? 'selected' : ''}>${b.name}</option>`).join('')}
+                                    ${brandOptions}
                                 </select>
                             </td>
                             <td>
                                 <select name="size_id[]" class="form-control select2 size-select">
-                                    ${sizes.map(s => `<option value="${s.id}" ${s.id === material.size_id ? 'selected' : ''}>${s.name}</option>`).join('')}
+                                    ${sizeOptions}
                                 </select>
                             </td>
                             <td>
                                 <select name="color_id[]" class="form-control select2 color-select">
-                                    ${colors.map(c => `<option value="${c.id}" ${c.id === material.color_id ? 'selected' : ''}>${c.color_name}</option>`).join('')}
+                                    ${colorOptions}
                                 </select>
                             </td>
                             <td>
@@ -350,7 +354,7 @@
                                 <span class="unit-id-label">${material.unit?.code || 'N/A'}</span>
                             </td>
                             <td>
-                                <input type="number" name="total_price[]" class="form-control total-input form-control-sm" value="0">
+                                <input type="number" name="total_price[]" class="form-control total-input form-control-sm" value="0" required>
                             </td>
                             <td>
                                 <button class="btn btn-danger btn-sm remove-product-btn">&times;</button>

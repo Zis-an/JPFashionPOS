@@ -22,21 +22,6 @@ class Product extends Model
         return $this->belongsTo(Unit::class, 'unit_id');
     }
 
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class, 'brand_id');
-    }
-
-    public function color()
-    {
-        return $this->belongsTo(Color::class, 'color_id');
-    }
-
-    public function size()
-    {
-        return $this->belongsTo(Size::class, 'size_id');
-    }
-
     public function sell()
     {
         return $this->belongsTo(Sell::class, 'product_id');

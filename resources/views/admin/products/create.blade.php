@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Products')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -36,14 +34,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter name">
+                                    <label for="name">Name <span class="text-danger">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="category">Select Category</label>
-                                    <select id="category_id" name="category_id" class="select2 form-control">
+                                    <label for="category">Select Category <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select id="category_id" name="category_id" class="select2 form-control" required>
                                         @foreach($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
@@ -68,13 +66,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="name">SKU</label>
-                                    <input id="sku" name="sku" class="form-control" placeholder="Enter product sku">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="category">Select Unit</label>
                                     <select id="unit_id" name="unit_id" class="select2 form-control">
@@ -86,59 +78,29 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="category">Select Brand</label>
-                                    <select id="brand_id" name="brand_id" class="select2 form-control">
-                                        @foreach($brands as $brand)
-                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="name">SKU</label>
+                                    <input id="sku" name="sku" class="form-control" placeholder="Enter product sku">
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="width">Width</label>
                                     <small class="text-danger font-weight-bold ml-1">(Insert Width In Inch)</small>
                                     <input id="width" name="width" type="number" class="form-control" placeholder="Enter product width">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="length">Length</label>
                                     <small class="text-danger font-weight-bold ml-1">(Insert Length In Inch)</small>
                                     <input id="length" name="length" type="number" class="form-control" placeholder="Enter product length">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="density">Density</label>
                                     <small class="text-danger font-weight-bold ml-1">(Insert Density In Inch)</small>
                                     <input id="density" name="density" type="number" class="form-control" placeholder="Enter product density">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="category">Select Color</label>
-                                    <select id="color_id" name="color_id" class="select2 form-control">
-                                        @foreach($colors as $color)
-                                            <option value="{{ $color->id }}">{{ $color->color_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="category">Select Size</label>
-                                    <select id="size_id" name="size_id" class="select2 form-control">
-                                        @foreach($sizes as $size)
-                                            <option value="{{ $size->id }}">{{ $size->name }}</option>
-                                        @endforeach
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -154,9 +116,9 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="product_thumbnail">Product Thumbnail</label>
+                                    <label for="product_thumbnail">Product Thumbnail <span class="text-danger">*</span></label>
                                     <input name="old_thumbnail" value="" class="d-none">
-                                    <input name="thumbnail" type="file" class="form-control" id="product_thumbnail">
+                                    <input name="thumbnail" type="file" class="form-control" id="product_thumbnail" required>
                                 </div>
                             </div>
                         </div>

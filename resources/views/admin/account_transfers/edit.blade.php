@@ -37,8 +37,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="from_account_id">Select Account</label>
-                                    <select name="from_account_id" class="select2 form-control" id="role">
+                                    <label for="from_account_id">Select Account <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="from_account_id" class="select2 form-control" id="role" required>
                                         @if(!empty($accounts))
                                             @foreach($accounts as $account)
                                                 <option value="{{ $account->id }}" {{ $transfer->from_account_id == $account->id ? 'selected' : '' }}>
@@ -53,8 +53,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="to_account_id">Select Account</label>
-                                    <select name="to_account_id" class="select2 form-control" id="role">
+                                    <label for="to_account_id">Select Account <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="to_account_id" class="select2 form-control" id="role" required>
                                         @if(!empty($accounts))
                                             @foreach($accounts as $account)
                                                 <option value="{{ $account->id }}" {{ $transfer->to_account_id == $account->id ? 'selected' : '' }}>
@@ -69,8 +69,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="amount">Amount</label>
-                                    <input id="amount" name="amount" value="{{ $transfer->amount }}" type="number" class="form-control" placeholder="Enter amount">
+                                    <label for="amount">Amount <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="amount" name="amount" value="{{ $transfer->amount }}" type="number" class="form-control" placeholder="Enter amount" required>
                                 </div>
                             </div>
                             <div class="col-12">

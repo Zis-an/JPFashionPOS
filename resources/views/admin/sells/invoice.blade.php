@@ -64,7 +64,7 @@
         <tbody>
         @foreach($existingProducts as $product)
             <tr>
-                <td>{{ getProductName($product->product_id) }}</td>
+                <td>{{ getProductName($product->id) }}</td>
                 <td>{{ $product->price ?? 'N/A' }}</td>
                 <td>{{ $product->quantity ?? 'N/A' }}</td>
                 <td>{{ $product->discount_type ?? 'N/A' }}</td>

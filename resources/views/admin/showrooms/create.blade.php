@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Showrooms')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -36,8 +34,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter showroom name" value="{{ old('name') }}">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter showroom name" value="{{ old('name') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">

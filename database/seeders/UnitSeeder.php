@@ -22,17 +22,32 @@
 namespace Database\Seeders;
 
 use App\Models\Unit;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class UnitSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        // Seed the units table with 20 entries
-        Unit::factory()->count(10)->create();
+        $units = [
+            ['code' => 'kg', 'name' => 'Kilogram'],
+            ['code' => 'ton', 'name' => 'Ton'],
+            ['code' => 'gram', 'name' => 'Gram'],
+            ['code' => 'mg', 'name' => 'Milligram'],
+            ['code' => 'lb', 'name' => 'Pound'],
+            ['code' => 'oz', 'name' => 'Ounce']
+        ];
+
+        foreach ($units as $unit) {
+            DB::table('units')->updateOrInsert(
+                ['code' => $unit['code']], // Check for existing 'code'
+                [
+                    'name' => $unit['name'],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]
+            );
+        }
     }
 }

@@ -65,7 +65,7 @@
                                 </tr>
                             </table>
                             <fieldset>
-                                <legend>Products</legend>
+                                <legend>Raw Materials</legend>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>

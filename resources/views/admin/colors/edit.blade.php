@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Color')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -38,14 +36,16 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="code">Color Code</label>
-                                    <input id="code" name="color_code" value="{{ $color->color_code ?? '' }}" class="form-control" placeholder="Enter color code">
+                                    <label for="code">Color Code <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="code" name="color_code" value="{{ $color->color_code ?? '' }}" class="form-control"
+                                           placeholder="Enter color code" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Color Name</label>
-                                    <input id="name" name="name" value="{{ $color->color_name ?? '' }}" class="form-control" placeholder="Enter color name">
+                                    <label for="name">Color Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $color->color_name ?? '' }}" class="form-control"
+                                           placeholder="Enter color name" required>
                                 </div>
                             </div>
                         </div>

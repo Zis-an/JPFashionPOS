@@ -35,7 +35,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="production_house_id">Select Production House</label>
+                                    <label for="production_house_id">Select Production House <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="production_house_id" name="production_house_id" class="select2 form-control" required>
                                         @foreach($houses as $house)
                                             <option value="{{ $house->id }}" {{ $house->id == $production->production_house_id ? 'selected' : '' }}>
@@ -47,7 +47,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="showroom_id">Select Showroom</label>
+                                    <label for="showroom_id">Select Showroom <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="showroom_id" name="showroom_id" class="select2 form-control" required>
                                         @foreach($showrooms as $showroom)
                                             <option value="{{ $showroom->id }}" {{ $showroom->id == $production->showroom_id ? 'selected' : '' }}>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="account_id">Select Account</label>
+                                    <label for="account_id">Select Account <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="account_id" name="account_id" class="select2 form-control" required>
                                         @foreach($accounts as $account)
                                             <option value="{{ $account->id }}" {{ $account->id == $production->account_id ? 'selected' : '' }}>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="production_date">Production Date</label>
+                                    <label for="production_date">Production Date <span class="text-danger font-weight-bolder">*</span></label>
                                     <input type="date" name="production_date" class="form-control" value="{{ $production->production_date }}" required>
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="warehouse_id">Select Warehouse</label>
+                                    <label for="warehouse_id">Select Warehouse <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="warehouse_id" name="warehouse_id" class="select2 form-control">
                                         <option value="" disabled selected>Select a warehouse</option>
                                         @foreach($warehouses as $warehouse)

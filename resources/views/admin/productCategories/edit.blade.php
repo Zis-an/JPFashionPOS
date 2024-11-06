@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Product Category')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -39,8 +37,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Category name</label>
-                                    <input id="name" name="name" value="{{ $category->name ?? '' }}" class="form-control" placeholder="Enter category name">
+                                    <label for="name">Category name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $category->name ?? '' }}" class="form-control"
+                                           placeholder="Enter category name" required>
                                 </div>
                             </div>
                         </div>

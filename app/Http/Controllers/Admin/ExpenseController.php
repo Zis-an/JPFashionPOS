@@ -41,7 +41,7 @@ class ExpenseController extends Controller
             'category_id' => 'required',
             'account_id' => 'required',
             'amount' => 'required',
-            'details' => 'required',
+            'details' => 'nullable',
             'images' => 'nullable',
         ]);
         $image = '';

@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Unit')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -38,14 +36,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="code">Code</label>
-                                    <input id="code" name="code" value="{{ $unit->code ?? '' }}" class="form-control" placeholder="Enter unit code">
+                                    <label for="code">Code <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="code" name="code" value="{{ $unit->code ?? '' }}" class="form-control" placeholder="Enter unit code" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" value="{{ $unit->name ?? '' }}" class="form-control" placeholder="Enter unit name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $unit->name ?? '' }}" class="form-control" placeholder="Enter unit name" required>
                                 </div>
                             </div>
                         </div>

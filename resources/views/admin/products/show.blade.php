@@ -58,18 +58,6 @@
                                 <td>{{ $product->unit->name ?? '' }}</td>
                             </tr>
                             <tr>
-                                <th style="width: 30%;">Brand</th>
-                                <td>{{ $product->brand->name ?? '' }}</td>
-                            </tr>
-                            <tr>
-                                <th style="width: 30%;">Color</th>
-                                <td>{{ $product->color->color_name ?? '' }}</td>
-                            </tr>
-                            <tr>
-                                <th style="width: 30%;">Size</th>
-                                <td>{{ $product->size->name ?? '' }}</td>
-                            </tr>
-                            <tr>
                                 <th style="width: 30%;">Width</th>
                                 <td>{{ $product->width ?? '' }}</td>
                             </tr>

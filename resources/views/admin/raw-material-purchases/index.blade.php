@@ -78,15 +78,37 @@
                                                        class="btn btn-danger btn-sm px-1 py-0">
                                                         <i class="fas fa-times"></i>
                                                     </a>
+                                                    <a href="#" class="btn btn-warning btn-sm px-1 py-0">
+                                                        <i class="fas fa-print"></i>
+                                                    </a>
                                                 @elseif($purchase->status == 'rejected')
                                                     <a href="{{ route('admin.rawMaterialPurchases.updateStatus', ['rawMaterialPurchase' => $purchase->id, 'status' => 'pending']) }}"
                                                        class="btn btn-primary btn-sm px-1 py-0">
                                                         <i class="fas fa-arrow-alt-circle-left"></i>
                                                     </a>
+                                                    @can('rawMaterialPurchases.view')
+                                                        <a href="{{ route('admin.rawMaterialPurchases.show',['rawMaterialPurchase'=>$purchase->id]) }}"
+                                                           class="btn btn-info px-1 py-0 btn-sm">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                    @endcan
+                                                    <a href="#" class="btn btn-warning btn-sm px-1 py-0">
+                                                        <i class="fas fa-print"></i>
+                                                    </a>
                                                     @elseif($purchase->status == 'approved')
                                                     <a href="{{ route('admin.rawMaterialPurchases.updateStatus', ['rawMaterialPurchase' => $purchase->id, 'status' => 'pending']) }}"
                                                        class="btn btn-primary btn-sm px-1 py-0">
                                                         <i class="fas fa-arrow-alt-circle-left"></i>
+                                                    </a>
+                                                    @can('rawMaterialPurchases.view')
+                                                        <a href="{{ route('admin.rawMaterialPurchases.show',['rawMaterialPurchase'=>$purchase->id]) }}"
+                                                           class="btn btn-info px-1 py-0 btn-sm">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                    @endcan
+                                                    <a href="{{ route('admin.rawMaterialPurchases.print', ['rawMaterialPurchase'=>$purchase->id]) }}" class="btn btn-warning btn-sm px-1 py-0">
+                                                        <i class="fas fa-print"></i>
+                                                    </a>
                                                    @endif
                                             @endcan
                                         </form>

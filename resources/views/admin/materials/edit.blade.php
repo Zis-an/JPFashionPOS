@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Edit Raw Material')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -37,24 +35,24 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
                                     <input id="name" name="name" class="form-control" placeholder="Enter name"
-                                           value="{{ $material->name }}">
+                                           value="{{ $material->name }}" required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="sku">Sku</label>
+                                    <label for="sku">Sku <span class="text-danger font-weight-bolder">*</span></label>
                                     <input id="sku" name="sku" class="form-control" placeholder="Enter Sku"
-                                           value="{{ $material->sku }}">
+                                           value="{{ $material->sku }}" required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="raw_material_category_id">Category</label>
-                                    <select id="raw_material_category_id" name="raw_material_category_id" class="form-control select2">
+                                    <label for="raw_material_category_id">Category <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select id="raw_material_category_id" name="raw_material_category_id" class="form-control select2" required>
                                         <option value="">Select Category</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"
@@ -98,7 +96,7 @@
                                     <select id="brand_id" name="brand_id[]" class="form-control select2" multiple>
                                         <option value="">Select Brand</option>
                                         @foreach ($brands as $brand)
-                                            <option value="{{ $brand->id }}" {{ $brand_Id->contains('brand_id', $brand->id) ? 'selected' : '' }}>
+                                            <option value="{{ $brand->id }}" {{ $brand_Id->contains($brand->id) ? 'selected' : '' }}>
                                                 {{ $brand->name }}
                                             </option>
                                         @endforeach
@@ -112,7 +110,7 @@
                                     <select id="size_id" name="size_id[]" class="form-control select2" multiple>
                                         <option value="">Select Size</option>
                                         @foreach ($sizes as $size)
-                                            <option value="{{ $size->id }}" {{ $size_Id->contains('size_id', $size->id) ? 'selected' : '' }}>
+                                            <option value="{{ $size->id }}" {{ $size_Id->contains($size->id) ? 'selected' : '' }}>
                                                 {{ $size->name }}
                                             </option>
                                         @endforeach
@@ -126,7 +124,7 @@
                                     <select id="color_id" name="color_id[]" class="form-control select2" multiple>
                                         <option value="">Select Color</option>
                                         @foreach ($colors as $color)
-                                            <option value="{{ $color->id }}" {{ $color_Id->contains('color_id', $color->id) ? 'selected' : '' }}>
+                                            <option value="{{ $color->id }}" {{ $color_Id->contains($color->id) ? 'selected' : '' }}>
                                                 {{ $color->color_name }}
                                             </option>
                                         @endforeach

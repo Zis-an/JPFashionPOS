@@ -1,9 +1,17 @@
 <?php
 
+use App\Models\Account;
+use App\Models\Asset;
+use App\Models\Expense;
 use App\Models\GlobalSetting;
 use App\Models\Product;
+use App\Models\Production;
+use App\Models\ProductStock;
 use App\Models\RawMaterialPurchase;
 use App\Models\RawMaterialStock;
+use App\Models\Sell;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 if (!function_exists('checkRolePermissions')) {
 
@@ -196,5 +204,247 @@ if (!function_exists('getProductName')) {
     {
         $productModel = Product::find($productId);
         return $productModel ? $productModel->name : 'Product not found';
+    }
+}
+
+if(!function_exists('getSaLe')) {
+    function getSaLe($status = null)
+    {
+        $sell = \App\Models\Sell::query();
+        if ($status) {
+            $sell->where('status', $status);
+        }
+        return $sell->get();
+    }
+}
+
+if (!function_exists('countAssets')) {
+    function countAssets()
+    {
+        $assetCount = Asset::count();
+        $assetAmount = Asset::sum('amount');
+        return [
+            'assetCount' => $assetCount,
+            'assetAmount' => $assetAmount,
+        ];
+    }
+}
+
+if (!function_exists('countSales')) {
+    function countSales()
+    {
+        // Today's sales count
+        $todaySaleCount = Sell::whereDate('created_at', Carbon::today())->count();
+
+        // Last 7 days sales count
+        $last7DaysSaleCount = Sell::whereDate('created_at', '>=', Carbon::today()->subDays(6))->count();
+
+        // Current month's sales count
+        $currentMonthSaleCount = Sell::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)->count();
+
+        // Current year's sales count
+        $currentYearSaleCount = Sell::whereYear('created_at', Carbon::now()->year)->count();
+
+        // Assuming 'status' is a column in your 'sells' table and 'pending' indicates a pending sale
+        $pendingSaleCount = Sell::where('status', 'pending')->count();
+
+        return [
+            'todaySaleCount' => $todaySaleCount,
+            'last7DaysSaleCount' => $last7DaysSaleCount,
+            'currentMonthSaleCount' => $currentMonthSaleCount,
+            'currentYearSaleCount' => $currentYearSaleCount,
+            'pendingSaleCount' => $pendingSaleCount,
+        ];
+    }
+}
+
+if(!function_exists('countProductStock')) {
+    function countProductStock()
+    {
+        $totalProductStock = ProductStock::count();
+        return $totalProductStock;
+    }
+}
+
+if(!function_exists('countRawMaterialStock')) {
+    function countRawMaterialStock()
+    {
+        $totalRawMaterialStock = RawMaterialStock::count();
+        return $totalRawMaterialStock;
+    }
+}
+
+if(!function_exists('countRawMaterialPurchase')) {
+    function countRawMaterialPurchase()
+    {
+        $pendingRawMaterialPurchase = RawMaterialPurchase::where('status', 'pending')->count();
+        $approvedRawMaterialPurchase = RawMaterialPurchase::where('status', 'approved')->count();
+        return [
+            'pendingRawMaterialPurchase' => $pendingRawMaterialPurchase,
+            'approvedRawMaterialPurchase' => $approvedRawMaterialPurchase,
+        ];
+    }
+}
+
+if(!function_exists('countProductions')) {
+    function countProductions()
+    {
+        $pendingProductions = Production::where('status', 'pending')->count();
+        $approvedProductions = Production::where('status', 'approved')->count();
+        return [
+            'pendingProductions' => $pendingProductions,
+            'approvedProductions' => $approvedProductions,
+        ];
+    }
+}
+
+if (!function_exists('countExpense')) {
+    function countExpense()
+    {
+        $todayExpenseCount = Expense::whereDate('created_at', Carbon::today())->where('status', 'approved')->count();
+        $last7DaysExpenseCount = Expense::whereDate('created_at', '>=', Carbon::today()->subDays(6))->where('status', 'approved')->count();
+        $currentMonthExpenseCount = Expense::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)->where('status', 'approved')->count();
+        $currentYearExpenseCount = Expense::whereYear('created_at', Carbon::now()->year)->where('status', 'approved')->count();
+
+        return [
+            'todayExpenseCount' => $todayExpenseCount,
+            'last7DaysExpenseCount' => $last7DaysExpenseCount,
+            'currentMonthExpenseCount' => $currentMonthExpenseCount,
+            'currentYearExpenseCount' => $currentYearExpenseCount,
+        ];
+    }
+}
+
+if (!function_exists('getMonthlySellsData')) {
+    function getMonthlySellsData()
+    {
+        return Sell::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->selectRaw('DAY(created_at) as day, SUM(net_total) as total')
+            ->groupBy('day')
+            ->pluck('total', 'day')
+            ->toArray();
+    }
+}
+
+if (!function_exists('getMonthlyExpenseData')) {
+    function getMonthlyExpenseData()
+    {
+        return Expense::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->selectRaw('DAY(created_at) as day, SUM(amount) as total')
+            ->groupBy('day')
+            ->pluck('total', 'day')
+            ->toArray();
+    }
+}
+
+if (!function_exists('getMonthlyAssetsData')) {
+    function getMonthlyAssetsData()
+    {
+        return Asset::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->selectRaw('DAY(created_at) as day, SUM(amount) as total')
+            ->groupBy('day')
+            ->pluck('total', 'day')
+            ->toArray();
+    }
+}
+
+if (!function_exists('getMonthlyAccountsData')) {
+    function getMonthlyAccountsData()
+    {
+        return Account::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->selectRaw('DAY(created_at) as day, SUM(balance) as total')
+            ->groupBy('day')
+            ->pluck('total', 'day')
+            ->toArray();
+    }
+}
+
+if (!function_exists('getMonthlyDaywiseChartData')) {
+    function getMonthlyDaywiseChartData()
+    {
+        // Helper function to retrieve day-wise aggregated data
+        $formatDaywiseData = function ($model, $field) {
+            $daysInMonth = Carbon::now()->daysInMonth;
+            $data = [];
+
+            // Initialize each day to zero in case of missing data
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $data[$day] = 0;
+            }
+
+            // Query to get aggregated totals for each day
+            $results = $model::whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
+                ->selectRaw('DAY(created_at) as day, SUM(' . $field . ') as total')
+                ->groupBy('day')
+                ->pluck('total', 'day')
+                ->toArray();
+
+            // Merge results into the initialized array
+            foreach ($results as $day => $total) {
+                $data[$day] = $total;
+            }
+
+            return $data;
+        };
+
+        // Retrieve data for each component by day
+        $sellData = $formatDaywiseData(Sell::class, 'net_total');
+        $expenseData = $formatDaywiseData(Expense::class, 'amount');
+        $assetsData = $formatDaywiseData(Asset::class, 'amount');
+        $accountsData = $formatDaywiseData(Account::class, 'balance');
+
+        // Encode each dataset as JSON for JavaScript usage in the view
+        return [
+            'sellData' => json_encode(array_values($sellData)),
+            'sellLabels' => json_encode(array_keys($sellData)),
+            'expenseData' => json_encode(array_values($expenseData)),
+            'expenseLabels' => json_encode(array_keys($expenseData)),
+            'assetsData' => json_encode(array_values($assetsData)),
+            'assetsLabels' => json_encode(array_keys($assetsData)),
+            'accountsData' => json_encode(array_values($accountsData)),
+            'accountsLabels' => json_encode(array_keys($accountsData)),
+        ];
+    }
+}
+
+if (!function_exists('getLatestSales')) {
+    function getLatestSales($limit = 5)
+    {
+        // Store the latest sales data in a variable
+        $latestSales = Sell::orderBy('created_at', 'desc')->take($limit)->get();
+
+        // Return the variable holding the sales data
+        return $latestSales;
+    }
+}
+
+if (!function_exists('getLatestRawMaterialPurchases')) {
+    function getLatestRawMaterialPurchases($limit = 5)
+    {
+        $latestPurchases = RawMaterialPurchase::orderBy('created_at', 'desc')->take($limit)->get();
+        return $latestPurchases;
+    }
+}
+
+if (!function_exists('getLatestProductions')) {
+    function getLatestProductions($limit = 5)
+    {
+        $latestProductions = Production::orderBy('created_at', 'desc')->take($limit)->get();
+        return $latestProductions;
+    }
+}
+
+if (!function_exists('getLatestExpenses')) {
+    function getLatestExpenses($limit = 5)
+    {
+        $latestExpenses = Expense::orderBy('created_at', 'desc')->take($limit)->get();
+        return $latestExpenses;
     }
 }

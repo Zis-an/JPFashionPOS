@@ -92,9 +92,9 @@ class RawMaterialController extends Controller
         $brands = Brand::orderby('id', 'DESC')->get();
         $sizes = Size::orderby('id', 'DESC')->get();
         $colors = Color::orderby('id', 'DESC')->get();
-        $brand_Id = DB::table('brand_raw_material')->get();
-        $size_Id = DB::table('size_raw_material')->get();
-        $color_Id = DB::table('color_raw_material')->get();
+        $brand_Id = DB::table('brand_raw_material')->where('raw_material_id', $id)->pluck('brand_id'); // Retrieves only brand_id column as a collection
+        $size_Id = DB::table('size_raw_material')->where('raw_material_id', $id)->pluck('size_id');
+        $color_Id = DB::table('color_raw_material')->where('raw_material_id', $id)->pluck('color_id');
         return view('admin.materials.edit', compact('material', 'categories', 'units',
             'brands', 'sizes', 'colors', 'brand_Id', 'size_Id', 'color_Id'));
     }

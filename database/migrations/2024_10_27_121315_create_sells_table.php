@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('sells', function (Blueprint $table) {
             $table->id();
+            $table->string('unique_sale_id')->unique()->nullable();
             $table->foreignId('customer_id');
             $table->foreignId('salesman_id');
             $table->foreignId('account_id');
             $table->double('total_amount', 10, 2)->default(0);
             $table->double('discount_amount', 10, 2)->default(0);
             $table->double('net_total', 10, 2)->default(0);
+            $table->double('paid_amount', 10, 2)->default(0);
+            $table->string('status')->default('approved');
             $table->timestamps();
             $table->softDeletes();
         });

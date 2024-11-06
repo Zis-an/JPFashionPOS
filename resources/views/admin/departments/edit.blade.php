@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Department')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -17,7 +15,6 @@
         </div>
     </div>
 @stop
-
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -39,14 +36,15 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Department name</label>
-                                    <input id="name" name="name" value="{{ $department->name ?? '' }}" class="form-control" placeholder="Enter department name">
+                                    <label for="name">Department name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $department->name ?? '' }}" class="form-control"
+                                           placeholder="Enter department name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="status">Select Status</label>
-                                    <select id="status" name="status" class="form-control">
+                                    <label for="status">Select Status <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select id="status" name="status" class="form-control" required>
                                         <option value="active" {{ $department->status == 'active' ? 'selected' : '' }}>Active</option>
                                         <option value="deactive" {{ $department->status == 'deactive' ? 'selected' : '' }}>Inactive</option>
                                     </select>

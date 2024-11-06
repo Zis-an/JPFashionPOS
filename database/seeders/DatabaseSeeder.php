@@ -32,7 +32,6 @@ class DatabaseSeeder extends Seeder
             ProductCategorySeeder::class,
             ProductionHouseSeeder::class,
             RawMaterialCategorySeeder::class,
-            SellSeeder::class,
             ShowroomSeeder::class,
             SizeSeeder::class,
             SupplierSeeder::class,

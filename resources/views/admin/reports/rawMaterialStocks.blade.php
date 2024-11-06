@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Raw Material Stocks')
+@section('title', 'Raw Material Stocks Report')
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -108,7 +108,7 @@
                             </div>
                         </form>
 
-                        <table id="adminsList" class="table dataTable table-bordered table-striped">
+                        <table id="sellList" class="table dataTable table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th>Name</th>

@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Accounts')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -37,23 +35,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter account name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter account name" required>
                                 </div>
                             </div>
-{{--                            @if(Route::is('admin.accounts.create') || Route::is('admin.accounts.edit'))--}}
-{{--                            @else--}}
-{{--                                <div class="col-md-6">--}}
-{{--                                    <div class="form-group">--}}
-{{--                                        <label for="balance">Balance</label>--}}
-{{--                                        <input id="balance" name="balance" type="number" class="form-control" placeholder="Enter Balance">--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            @endif--}}
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="admin_id">Select Admin</label>
-                                    <select name="admin_id" class="select2 form-control" id="role">
+                                    <label for="admin_id">Select Admin <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="admin_id" class="select2 form-control" id="role" required>
                                         @foreach($admins as $admin)
                                             <option value="{{$admin->id}}">{{$admin->name}}</option>
                                         @endforeach
@@ -62,8 +51,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="type">Select Account Type</label>
-                                    <select name="type" class="select2 form-control" id="role">
+                                    <label for="type">Select Account Type <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="type" class="select2 form-control" id="role" required>
                                         <option value="cash">Cash</option>
                                         <option value="bank">Bank</option>
                                         <option value="mobile">Mobile</option>
@@ -73,15 +62,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select name="status" class="form-control" id="status">
+                                    <label for="status">Status <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="status" class="form-control" id="status" required>
                                         <option value="active">Active</option>
                                         <option value="deactivate">Inactive</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-
                         @can('accounts.create')
                             <button class="btn btn-success" type="submit">Create</button>
                         @endcan

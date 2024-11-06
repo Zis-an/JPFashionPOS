@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Departments')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -37,12 +35,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter name" required>
                                 </div>
                             </div>
                         </div>
-
                         @can('departments.create')
                             <button class="btn btn-success" type="submit">Create</button>
                         @endcan

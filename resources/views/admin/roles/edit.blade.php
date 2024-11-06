@@ -38,7 +38,7 @@
                         </div>
                         <div class="form-group">
                             <label for="guard_name">Guard Name</label>
-                            <input name="guard_name" type="text" value="{{ $role->guard_name }}" required class="form-control" id="guard_name" placeholder="Enter guard name">
+                            <input name="guard_name" type="text" value="{{ $role->guard_name }}" required class="form-control" id="guard_name" placeholder="Enter guard name" readonly>
                         </div>
                         <h4>Permissions</h4>
                         <div class="custom-control custom-checkbox">

@@ -37,6 +37,7 @@
                                 <th>Total Amount</th>
                                 <th>Discount Amount</th>
                                 <th>Net Total</th>
+                                <th>Payment Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -46,9 +47,10 @@
                                     <td>{{ $sell->customer->name ?? '' }}</td>
                                     <td>{{ $sell->salesman->name ?? '' }}</td>
                                     <td>{{ $sell->account->name ?? '' }}</td>
-                                    <td>{{ $sell->total_amount ?? '' }}</td>
-                                    <td>{{ $sell->discount_amount ?? '' }}</td>
-                                    <td>{{ $sell->net_total ?? '' }}</td>
+                                    <td class="text-right">{{ $sell->total_amount ?? '' }} /-</td>
+                                    <td class="text-right">{{ $sell->discount_amount ?? '' }} /-</td>
+                                    <td class="text-right">{{ $sell->net_total ?? '' }} /-</td>
+                                    <td>{{ $sell->paid_amount == $sell->net_total ? 'Paid in Full' : 'Due' ?? '' }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.sells.destroy', $sell->id) }}" method="POST">
                                             @method('DELETE')

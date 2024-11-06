@@ -36,8 +36,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Brand Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter brand name">
+                                    <label for="name">Brand Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter brand name" required>
                                 </div>
                             </div>
                         </div>

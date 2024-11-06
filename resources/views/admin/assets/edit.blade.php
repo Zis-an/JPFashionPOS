@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Asset')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -38,14 +36,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Title</label>
-                                    <input id="name" name="name" value="{{ $asset->name ?? '' }}" class="form-control" placeholder="Enter asset name">
+                                    <label for="name">Title <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{ $asset->name ?? '' }}" class="form-control" placeholder="Enter asset name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="category_id">Select Category</label>
-                                    <select name="category_id" class="select2 form-control" id="role">
+                                    <label for="category_id">Select Category <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="category_id" class="select2 form-control" id="role" required>
                                         @if(!empty($categories))
                                             @foreach($categories as $category)
                                                 <option value="{{ $category->id }}" {{ $asset->category_id == $category->id ? 'selected' : '' }}>
@@ -61,8 +59,8 @@
                             @can('assets.updateStatus')
                             <div class="col-md-4 col-sm-6">
                                 <div class="form-group">
-                                    <label for="status">Select Status</label>
-                                    <select id="status" name="status" class="select2 form-control">
+                                    <label for="status">Select Status <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select id="status" name="status" class="select2 form-control" required>
                                         <option value="pending" {{ $asset->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="rejected" {{ $asset->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                                         <option value="approved" {{ $asset->status == 'approved' ? 'selected' : '' }}>Approved</option>
@@ -72,8 +70,8 @@
                             @endcan
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="account_id">Select Account</label>
-                                    <select name="account_id" class="select2 form-control" id="role">
+                                    <label for="account_id">Select Account <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="account_id" class="select2 form-control" id="role" required>
                                         @if(!empty($accounts))
                                             @foreach($accounts as $account)
                                                 <option value="{{ $account->id }}" {{ $expense->account_id == $account->id ? 'selected' : '' }}
@@ -89,8 +87,8 @@
                             </div>
                             <div class="col-md-4 col-sm-6">
                                 <div class="form-group">
-                                    <label for="amount">Amount</label>
-                                    <input id="amount" name="amount" value="{{ $asset->amount}}" type="number" class="form-control" placeholder="Enter amount">
+                                    <label for="amount">Amount <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="amount" name="amount" value="{{ $asset->amount}}" type="number" class="form-control" placeholder="Enter amount" required>
                                 </div>
                             </div>
                             <div class="col-12">

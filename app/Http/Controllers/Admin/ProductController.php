@@ -38,10 +38,7 @@ class ProductController extends Controller
     {
         $categories = ProductCategory::all();
         $units = Unit::all();
-        $brands = Brand::all();
-        $colors = Color::all();
-        $sizes = Size::all();
-        return view('admin.products.create', compact('categories', 'units', 'brands', 'colors', 'sizes'));
+        return view('admin.products.create', compact('categories', 'units'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -53,9 +50,6 @@ class ProductController extends Controller
             'short_description' => 'nullable|string',
             'sku' => 'nullable|string',
             'unit_id' => 'nullable|integer',
-            'brand_id' => 'nullable|integer',
-            'color_id' => 'nullable|integer',
-            'size_id' => 'nullable|integer',
             'width' => 'nullable|numeric',
             'length' => 'nullable|numeric',
             'density' => 'nullable|numeric',
@@ -83,9 +77,6 @@ class ProductController extends Controller
             'short_details' => $request->input('short_description'),
             'sku' => $request->input('sku'),
             'unit_id' => $request->input('unit_id'),
-            'brand_id' => $request->input('brand_id'),
-            'color_id' => $request->input('color_id'),
-            'size_id' => $request->input('size_id'),
             'width' => $request->input('width'),
             'length' => $request->input('length'),
             'density' => $request->input('density'),
@@ -101,10 +92,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         $categories = ProductCategory::all();
         $units = Unit::all();
-        $brands = Brand::all();
-        $colors = Color::all();
-        $sizes = Size::all();
-        return view('admin.products.edit', compact('product', 'categories', 'units', 'brands', 'colors', 'sizes'));
+        return view('admin.products.edit', compact('product', 'categories', 'units'));
     }
 
     public function update(Request $request, Product $product): RedirectResponse
@@ -116,9 +104,6 @@ class ProductController extends Controller
             'short_description' => 'nullable|string',
             'sku' => 'nullable|string',
             'unit_id' => 'nullable|integer',
-            'brand_id' => 'nullable|integer',
-            'color_id' => 'nullable|integer',
-            'size_id' => 'nullable|integer',
             'width' => 'nullable|numeric',
             'length' => 'nullable|numeric',
             'density' => 'nullable|numeric',
@@ -160,9 +145,6 @@ class ProductController extends Controller
             'short_details' => $request->input('short_description'),
             'sku' => $request->input('sku'),
             'unit_id' => $request->input('unit_id'),
-            'brand_id' => $request->input('brand_id'),
-            'color_id' => $request->input('color_id'),
-            'size_id' => $request->input('size_id'),
             'width' => $request->input('width'),
             'length' => $request->input('length'),
             'density' => $request->input('density'),
@@ -259,7 +241,7 @@ class ProductController extends Controller
 
     public function getAllProducts(): JsonResponse
     {
-        $products = Product::with(['brand', 'color', 'size', 'unit'])->orderBy('id', 'DESC')->get();
+        $products = Product::with(['unit'])->orderBy('id', 'DESC')->get();
         return response()->json($products);
     }
 }

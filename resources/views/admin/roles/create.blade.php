@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group">
                             <label for="guard_name">Guard name</label>
-                            <input name="guard_name" type="text" value="admin" required class="form-control" id="guard_name" placeholder="Enter guard name">
+                            <input name="guard_name" type="text" value="admin" required class="form-control" id="guard_name" placeholder="Enter guard name" readonly>
                         </div>
                         @can('roles.create')
                             <button class="btn btn-success" type="submit">Create</button>

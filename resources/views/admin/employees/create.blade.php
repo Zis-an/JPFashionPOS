@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Create Employee')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -36,14 +34,15 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter employee name" value="{{ old('name') }}">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter employee name" value="{{ old('name') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input id="email" name="email" type="email" class="form-control" placeholder="Enter employee email" value="{{ old('email') }}">
+                                    <label for="email">Email <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="email" name="email" type="email" class="form-control" placeholder="Enter employee email"
+                                           value="{{ old('email') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -69,8 +68,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="hire_date">Hire Date</label>
-                                    <input id="hire_date" name="hire_date" type="date" class="form-control" value="{{ old('hire_date') }}">
+                                    <label for="hire_date">Hire Date <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="hire_date" name="hire_date" type="date" class="form-control" value="{{ old('hire_date') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -78,13 +77,14 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="position">Position</label>
-                                    <input id="position" name="position" class="form-control" placeholder="Enter employee position" value="{{ old('position') }}">
+                                    <label for="position">Position <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="position" name="position" class="form-control" placeholder="Enter employee position"
+                                           value="{{ old('position') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="department">Department</label>
+                                    <label for="department">Department <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="department" name="department_id" class="select2 form-control" required>
                                         @foreach($departments as $department)
                                             <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -100,7 +100,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -114,14 +113,16 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="nid">National ID (NID)</label>
-                                    <input id="nid" name="nid" type="number" class="form-control" placeholder="Enter employee NID" value="{{ old('nid') }}">
+                                    <label for="nid">National ID (NID) <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="nid" name="nid" type="number" class="form-control" placeholder="Enter employee NID"
+                                           value="{{ old('nid') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="salary">Salary</label>
-                                    <input id="salary" name="salary" type="number" step="0.01" class="form-control" placeholder="Enter salary" value="{{ old('salary') }}">
+                                    <label for="salary">Salary <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="salary" name="salary" type="number" step="0.01" class="form-control" placeholder="Enter salary"
+                                           value="{{ old('salary') }}" required>
                                 </div>
                             </div>
                         </div>
@@ -129,10 +130,10 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="service_days">Service Days</label>
+                                    <label for="service_days">Service Days <span class="text-danger font-weight-bolder">*</span></label>
                                     <small class="text-danger">(in years)</small>
                                     <input id="service_days" name="service_days" type="number"
-                                           class="form-control" placeholder="Enter service days" value="{{ old('service_days') }}">
+                                           class="form-control" placeholder="Enter service days" value="{{ old('service_days') }}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">

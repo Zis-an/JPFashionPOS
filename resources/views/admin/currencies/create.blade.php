@@ -37,26 +37,25 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Code</label>
-                                    <input id="code" name="code" class="form-control" placeholder="Enter code">
+                                    <label for="name">Code <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="code" name="code" class="form-control" placeholder="Enter code" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" name="name" class="form-control" placeholder="Enter name">
+                                    <label for="name">Name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" class="form-control" placeholder="Enter name" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Rate</label>
-                                    <input type="number" id="rate" name="rate" class="form-control" placeholder="Enter rate">
+                                    <label for="name">Rate <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input type="number" id="rate" name="rate" class="form-control" placeholder="Enter rate" required>
                                 </div>
                             </div>
                         </div>
-
                         @can('currencies.create')
                             <button class="btn btn-success" type="submit">Create</button>
                         @endcan

@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Withdraw')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -38,8 +36,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="account_id">Select Account</label>
-                                    <select name="account_id" class="select2 form-control" id="role">
+                                    <label for="account_id">Select Account <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="account_id" class="select2 form-control" id="role" required>
                                         @if(!empty($accounts))
                                             @foreach($accounts as $account)
                                                 <option value="{{ $account->id }}" {{ $withdraw->account_id == $account->id ? 'selected' : '' }}>
@@ -54,8 +52,9 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="amount">Amount</label>
-                                    <input id="amount" name="amount" value="{{ $withdraw->amount }}" type="number" class="form-control" placeholder="Enter amount">
+                                    <label for="amount">Amount <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="amount" name="amount" value="{{ $withdraw->amount }}" type="number" class="form-control"
+                                           placeholder="Enter amount" required>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -79,8 +78,8 @@
                             @can('withdraws.updateStatus')
                                 <div class="col-md-6 col-sm-6">
                                     <div class="form-group">
-                                        <label for="status">Select Status</label>
-                                        <select id="status" name="status" class="select2 form-control">
+                                        <label for="status">Select Status <span class="text-danger font-weight-bolder">*</span></label>
+                                        <select id="status" name="status" class="select2 form-control" required>
                                             <option value="pending" {{ $withdraw->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                             <option value="rejected" {{ $withdraw->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                                             <option value="approved" {{ $withdraw->status == 'approved' ? 'selected' : '' }}>Approved</option>

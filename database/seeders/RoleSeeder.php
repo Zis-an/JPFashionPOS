@@ -533,12 +533,15 @@ class RoleSeeder extends Seeder
                         'rawMaterialPurchaseReports.list',
                         'rawMaterialPurchaseReports.view',
                         'balanceSheets.list',
-                        'balanceSheets.view','depositBalance.list',
+                        'balanceSheets.view',
+                        'depositBalance.list',
                         'depositBalance.view',
                         'withdrawBalance.list',
                         'withdrawBalance.view',
                         'transferBalance.list',
-                        'transferBalance.view'
+                        'transferBalance.view',
+                        'sellProfitLoss.list',
+                        'sellProfitLoss.view'
                     ]
                 ],
         ];

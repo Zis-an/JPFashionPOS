@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Expense')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -37,14 +35,15 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="title">Title</label>
-                                    <input id="title" name="title" value="{{ $expense->title ?? '' }}" class="form-control" placeholder="Enter title">
+                                    <label for="title">Title <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="title" name="title" value="{{ $expense->title ?? '' }}" class="form-control"
+                                           placeholder="Enter title" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="category_id">Select Category</label>
-                                    <select name="category_id" class="select2 form-control" id="category_id">
+                                    <label for="category_id">Select Category <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="category_id" class="select2 form-control" id="category_id" required>
                                         @if(!empty($categories))
                                             @foreach($categories as $category)
                                                 <option value="{{ $category->id }}" {{ $expense->expense_category_id == $category->id ? 'selected' : '' }}>
@@ -59,8 +58,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="account_id">Select Account</label>
-                                    <select name="account_id" class="select2 form-control" id="role">
+                                    <label for="account_id">Select Account <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="account_id" class="select2 form-control" id="role" required>
                                         @if(!empty($accounts))
                                             @foreach($accounts as $account)
                                                 <option value="{{ $account->id }}" {{ $expense->account_id == $account->id ? 'selected' : '' }}
@@ -83,8 +82,8 @@
                             @can('expenses.updateStatus')
                                 <div class="col-md-4 col-sm-6">
                                     <div class="form-group">
-                                        <label for="status">Select Status</label>
-                                        <select id="status" name="status" class="select2 form-control">
+                                        <label for="status">Select Status <span class="text-danger font-weight-bolder">*</span></label>
+                                        <select id="status" name="status" class="select2 form-control" required>
                                             <option value="pending" {{ $expense->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                             <option value="rejected" {{ $expense->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                                             <option value="approved" {{ $expense->status == 'approved' ? 'selected' : '' }}>Approved</option>
@@ -118,7 +117,6 @@
         </div>
     </div>
 @stop
-
 @section('footer')
     <strong>Developed by <a href="https://www.techyfo.com">Techyfo</a>.</strong>
     All rights reserved.
@@ -126,7 +124,6 @@
         <b>version</b> {{ env('DEV_VERSION') }}
     </div>
 @stop
-
 @section('plugins.toastr', true)
 @section('plugins.Select2', true)
 @section('plugins.Summernote', true)

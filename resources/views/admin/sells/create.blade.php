@@ -8,7 +8,7 @@
                 <div class="ml-2">
                     <form action="{{ route('sells.setCurrency') }}" method="POST">
                         @csrf
-                        <select id="currency_id" name="currency_id" class="select2 form-control" onchange="this.form.submit()">
+                        <select id="currency_id" name="currency_id" class="select2 form-control input-sm" onchange="this.form.submit()">
                             <option value="">Select Currency</option>
                             @foreach($currencies as $currency)
                                 <option value="{{ $currency->id }}"
@@ -53,7 +53,7 @@
                                 <hr>
                                 <div class="col-12">
                                     <div class="form-group mb-2">
-                                        <select name="customer" class="select2 form-control" id="customer">
+                                        <select name="customer" class="select2 form-control input-sm" id="customer" required>
                                             <option value="" disabled selected> Select Customer </option>
                                             @foreach($customers as $customer)
                                                 <option value="{{ $customer->id }}">{{ $customer->name }}</option>
@@ -61,19 +61,19 @@
                                         </select>
                                     </div>
                                 </div>
-                                <table class="table">
+                                <table class="table table-bordered table-sm">
                                     <thead>
                                     <tr>
-                                        <th style="width: 150px;">Name</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th style="width: 150px;">Discount Type</th>
-                                        <th>Discount (%)</th>
+                                        <th style="width: 100px;">Name</th>
+                                        <th style="width: 120px;">Price</th>
+                                        <th style="width: 100px;">Quantity</th>
+                                        <th style="width: 130px;">Discount Type</th>
+                                        <th style="width: 120px;">Discount (%)</th>
                                         <th>Total</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="selected-products-body" style="height: 300px; overflow-y: auto;">
+                                    <tbody id="selected-products-body" style="overflow-y: auto;">
                                     <!-- Selected products will be populated here -->
                                     </tbody>
                                 </table>
@@ -81,8 +81,8 @@
                                     <div class="row mt-2">
                                         <div class="col-md-4">
                                             <div class="form-group mb-0">
-                                                <label for="salesman">Salesman</label>
-                                                <select name="salesman" class="select2 form-control" id="salesman">
+                                                <label for="salesman">Salesman <span class="text-danger font-weight-bolder">*</span></label>
+                                                <select name="salesman" class="select2 form-control input-sm" id="salesman" required>
                                                     @foreach($salesman as $man)
                                                         <option value="{{ $man->id }}">{{ $man->name }}</option>
                                                     @endforeach
@@ -91,24 +91,25 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group mb-0">
-                                                <label for="account">Accounts</label>
-                                                <select name="account_id" class="select2 form-control" id="account">
+                                                <label for="account">Accounts <span class="text-danger font-weight-bolder">*</span></label>
+                                                <select name="account_id" class="select2 form-control input-sm" id="account" required>
                                                     @foreach($accounts as $account)
                                                         <option value="{{ $account->id }}">{{ $account->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group mb-0">
+                                                <label for="paidAmount">Paid Amount</label>
+                                                <select name="paidAmountOption" class="form-control input-sm" id="paidAmountOption" onchange="toggleAmountInput()">
+                                                    <option value="paid_in_full">Paid In Full</option>
+                                                    <option value="custom_amount">Enter Custom Amount</option>
+                                                </select>
+                                                <input type="number" step="0.01" name="amount" class="form-control input-sm mt-2" id="amount" placeholder="Enter amount" style="display:none;">
+                                            </div>
+                                        </div>
                                     </div>
-{{--                                    <div class="d-flex flex-wrap">--}}
-{{--                                        <!-- Buttons -->--}}
-{{--                                        <div class="col-md-6 mt-3">--}}
-{{--                                            <button type="reset" id="cancel-button" class="btn btn-primary w-100">Cancel</button>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="col-md-6 mt-3">--}}
-{{--                                            <button class="btn btn-danger w-100">Payment</button>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
                                 </div>
                             </div>
                             <div class="col-md-6 border">
@@ -136,8 +137,8 @@
                                 </div>
                                 <hr>
                                 <div class="col-md-12 mt-4 mb-3">
-                                    <input type="text" id="product-search" class="form-control mb-3" placeholder="Search products...">
-                                    <div  id="product-table">
+                                    <input type="text" id="product-search" class="form-control input-sm mb-3" placeholder="Search products...">
+                                    <div id="product-table">
                                         <div id="product-table-body" class="row justify-content-start"></div>
                                     </div>
                                 </div>
@@ -324,9 +325,10 @@
                 if (Array.isArray(products) && products.length > 0) {
                     products.forEach(item => {
                         let product = item.product;
+                        let stock = item.stock;
                         let priceInSessionCurrency = getPriceInSessionCurrency(item.sell_prices);
 
-                        let productCard = createProductCard(product, priceInSessionCurrency, item.quantity);
+                        let productCard = createProductCard(stock,product, priceInSessionCurrency, item.quantity);
                         productTableBody.append(productCard);
                     });
                 } else {
@@ -348,30 +350,30 @@
             }
 
             // Create HTML for product card
-            function createProductCard(product, price, quantity) {
+            function createProductCard(stock,product, price, quantity) {
                 return `
-            <div class="col-lg-2 col-md-3 col-sm-4 col-6 " style="cursor: pointer">
-                <div class="card text-center border-0 p-0 product-card"
-                    data-product-id="${product.id}"
-                    data-product-name="${product.name}"
-                    data-product-sku="${product.sku}"
-                    data-product-price="${price}"
-                    data-product-quantity="${quantity}">
-                    <div class="card-body p-1">
-                        <img class="img-fluid img-rounded" style="max-height: 60px" src="/uploads/${product.thumbnail}" alt="${product.name}">
-                        <div class="d-block">${product.name || 'N/A'}</div>
-                        <div class="small">SKU: ${product.sku || 'N/A'}</div>
-                        <div class="small">Quantity: ${quantity}</div>
-                        <div class="small">Price: ${price}</div>
-                    </div>
-                </div>
-            </div>`;
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-6" style="cursor: pointer">
+                        <div class="card text-center border-0 p-0 product-card"
+                            data-stock-id="${stock.id}"
+                            data-product-name="${product.name}"
+                            data-product-sku="${product.sku}"
+                            data-product-price="${price}"
+                            data-product-quantity="${quantity}">
+                            <div class="card-body p-1">
+                                <img class="img-fluid img-rounded" style="max-height: 60px" src="/uploads/${product.thumbnail}" alt="${product.name}">
+                                <div class="d-block">${product.name || 'N/A'}</div>
+                                <div class="small">SKU: ${product.sku || 'N/A'}</div>
+                                <div class="small">Quantity: ${quantity}</div>
+                                <div class="small">Price: ${price}</div>
+                            </div>
+                        </div>
+                    </div>`;
             }
 
             // Attach click event to product cards
             function attachProductCardClick() {
                 $('.product-card').off('click').on('click', function() {
-                    const productId = $(this).data('product-id');
+                    const stockId = $(this).data('stock-id');
                     const productName = $(this).data('product-name');
                     const productPrice = $(this).data('product-price') === "Price was not provided" ? null : parseFloat($(this).data('product-price'));
                     const productQuantity = parseInt($(this).data('product-quantity'));
@@ -386,15 +388,15 @@
                         return;
                     }
 
-                    updateSelectedProducts(productId, productName, productPrice, productQuantity);
+                    updateSelectedProducts(stockId, productName, productPrice, productQuantity);
                     renderSelectedProducts();
                 });
             }
 
             // Update selected products based on user selection
-            function updateSelectedProducts(productId, productName, productPrice, productQuantity) {
-                if (!selectedProducts[productId]) {
-                    selectedProducts[productId] = {
+            function updateSelectedProducts(stockId, productName, productPrice, productQuantity) {
+                if (!selectedProducts[stockId]) {
+                    selectedProducts[stockId] = {
                         name: productName,
                         price: productPrice,
                         quantity: 1,
@@ -402,8 +404,8 @@
                         discount: 0 // Initialize discount
                     };
                 } else {
-                    if (selectedProducts[productId].quantity < productQuantity) {
-                        selectedProducts[productId].quantity += 1;
+                    if (selectedProducts[stockId].quantity < productQuantity) {
+                        selectedProducts[stockId].quantity += 1;
                     } else {
                         swal.fire({
                             title: "Invalid Amount", // Title of the alert
@@ -421,13 +423,13 @@
                 selectedProductsBody.empty();
                 let total = 0;
 
-                Object.keys(selectedProducts).forEach(productId => {
-                    const product = selectedProducts[productId];
+                Object.keys(selectedProducts).forEach(stockId => {
+                    const product = selectedProducts[stockId];
                     const productPrice = product.price !== null ? product.price : 0;
                     const productQuantity = product.quantity;
                     const productTotal = calculateProductTotal(product);
 
-                    const tableRow = createSelectedProductRow(productId, product, productTotal);
+                    const tableRow = createSelectedProductRow(stockId, product, productTotal, productPrice);
                     selectedProductsBody.append(tableRow);
                     total += productTotal;
                 });
@@ -449,33 +451,33 @@
             }
 
             // Create HTML for selected product row
-            function createSelectedProductRow(productId, product, productTotal) {
+            function createSelectedProductRow(stockId, product, productTotal, enteredPrice) {
                 return `
                 <tr>
                     <td>
                         ${product.name}
-                        <input type="hidden" name="product_id[]" value="${productId}">
+                        <input type="hidden" name="stock_id[]" value="${stockId}">
                     </td>
                     <td>
-                        <input type="number" name="product_price[]" min="0" value="${product.price.toFixed(2)}" class="price-input form-control" data-product-id="${productId}" readonly>
+                        <input type="number" name="product_price[]" min="0" value="${enteredPrice.toFixed(2)}" class="price-input form-control input-sm" data-stock-id="${stockId}">
                     </td>
                     <td>
-                        <input type="number" name="product_quantity[]" min="1" max="${product.maxQuantity}" value="${product.quantity}" class="quantity-input form-control" data-product-id="${productId}">
+                        <input type="number" name="product_quantity[]" min="1" max="${product.maxQuantity}" value="${product.quantity}" class="quantity-input form-control input-sm" data-stock-id="${stockId}">
                     </td>
                     <td>
-                        <select name="discount_type[]" class="form-control select2 discount_type">
+                        <select name="discount_type[]" class="form-control input-sm select2 discount_type">
                             <option value="percentage">Percentage</option>
                             <option value="fixed">Fixed</option>
                         </select>
                     </td>
                     <td>
-                        <input type="number" name="discount_amount[]" min="0" class="discount-input form-control" data-product-id="${productId}" value="${product.discount.toFixed(2)}" placeholder="0.00">
+                        <input type="number" name="discount_amount[]" min="0" class="discount-input form-control input-sm" data-stock-id="${stockId}" value="${product.discount.toFixed(2)}" placeholder="0.00">
                     </td>
                     <td>
-                        <input type="text" name="product_total[]" value="${productTotal.toFixed(2)}" class="form-control product-total" readonly>
+                        <input type="text" name="product_total[]" value="${productTotal.toFixed(2)}" class="form-control input-sm product-total" readonly>
                     </td>
                     <td>
-                        <button class="btn btn-danger remove-product" data-product-id="${productId}">
+                        <button class="btn btn-danger remove-product" data-stock-id="${stockId}">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -485,18 +487,18 @@
             // Attach listeners for removing products and changing quantities
             function attachRemoveProductAndQuantityChangeListeners() {
                 $('.remove-product').off('click').on('click', function() {
-                    const productId = $(this).data('product-id');
-                    delete selectedProducts[productId]; // Remove product from selectedProducts
+                    const stockId = $(this).data('stock-id');
+                    delete selectedProducts[stockId]; // Remove product from selectedProducts
                     renderSelectedProducts(); // Re-render the product table
                     updateOverallTotal(); // Update the overall total after rendering
                 });
 
                 $('.quantity-input').off('change').on('change', function() {
-                    const productId = $(this).data('product-id');
+                    const stockId = $(this).data('stock-id');
                     const newQuantity = parseInt($(this).val());
 
-                    if (newQuantity >= 1 && newQuantity <= selectedProducts[productId].maxQuantity) {
-                        selectedProducts[productId].quantity = newQuantity;
+                    if (newQuantity >= 1 && newQuantity <= selectedProducts[stockId].maxQuantity) {
+                        selectedProducts[stockId].quantity = newQuantity;
                     } else {
                         swal.fire({
                             title: "Invalid quantity", // Title of the alert
@@ -504,8 +506,25 @@
                             icon: "error", // Type of alert (error in this case)
                             confirmButtonText: "OK" // Optional: Customize the button text
                         });
-                        $(this).val(selectedProducts[productId].quantity);
+                        $(this).val(selectedProducts[stockId].quantity);
                     }
+
+                    renderSelectedProducts();
+                    updateOverallTotal();
+                });
+
+                $('.price-input').off('focus').on('focus', function() {
+                    // Prevent resetting the price when focusing on the price input
+                    $(this).data('manual-entry', true);
+                }).off('blur').on('blur', function() {
+                    const stockId = $(this).data('stock-id');
+                    const manualPrice = $(this).val();
+
+                    // Keep the manually entered price
+                    selectedProducts[stockId].price = parseFloat(manualPrice) || selectedProducts[stockId].price;
+
+                    // Ensure the price input reflects the stored price
+                    $(this).val(selectedProducts[stockId].price.toFixed(2));
 
                     renderSelectedProducts();
                     updateOverallTotal();
@@ -518,10 +537,10 @@
             function updateProductAndTotalOnDiscountChange() {
                 $('.discount-input, .discount_type').off('change input').on('change input', function() {
                     const productRow = $(this).closest('tr'); // Get the current product row
-                    const productId = productRow.find('.discount-input').data('product-id'); // Get the product ID
+                    const stockId = productRow.find('.discount-input').data('stock-id'); // Get the product ID
                     const discountValue = parseFloat(productRow.find('.discount-input').val()) || 0; // Get discount value
                     const discountType = productRow.find('.discount_type').val(); // Get selected discount type
-                    const product = selectedProducts[productId]; // Get the product from the selectedProducts object
+                    const product = selectedProducts[stockId]; // Get the product from the selectedProducts object
 
                     if (discountValue < 0) {
                         swal.fire({
@@ -540,6 +559,13 @@
 
                 // Prevent deletion on Enter key press in discount input
                 $('.discount-input').off('keypress').on('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent default action
+                    }
+                });
+
+                // Prevent deletion on Enter key press in discount input
+                $('.price-input').off('keypress').on('keypress', function(event) {
                     if (event.key === 'Enter') {
                         event.preventDefault(); // Prevent default action
                     }
@@ -569,7 +595,7 @@
                     productTotal = 0; // Reset to zero if below zero
                 }
 
-                selectedProducts[productRow.find('.discount-input').data('product-id')].discount = discountValue; // Update discount
+                selectedProducts[productRow.find('.discount-input').data('stock-id')].discount = discountValue; // Update discount
                 productRow.find('.product-total').val(productTotal.toFixed(2)); // Update displayed product total
             }
 
@@ -590,5 +616,17 @@
                 });
             }
         });
+    </script>
+    <script>
+        function toggleAmountInput() {
+            var select = document.getElementById("paidAmountOption");
+            var amountInput = document.getElementById("amount");
+            if (select.value === "custom_amount") {
+                amountInput.style.display = "block";
+            } else {
+                amountInput.style.display = "none";
+                amountInput.value = ""; // Clear the input when not visible
+            }
+        }
     </script>
 @endsection

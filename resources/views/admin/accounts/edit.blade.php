@@ -1,7 +1,5 @@
 @extends('adminlte::page')
-
 @section('title', 'Update Account')
-
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
@@ -38,20 +36,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Account name</label>
-                                    <input id="name" name="name" value="{{$account->name}}" class="form-control" placeholder="Enter account name">
+                                    <label for="name">Account name <span class="text-danger font-weight-bolder">*</span></label>
+                                    <input id="name" name="name" value="{{$account->name}}" class="form-control" placeholder="Enter account name" required>
                                 </div>
                             </div>
-{{--                            <div class="col-md-6">--}}
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="balance">Balance</label>--}}
-{{--                                    <input id="balance" name="balance" value="{{$account->balance}}" class="form-control" placeholder="Enter Balance">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="admin_id">Select Admin</label>
-                                    <select name="admin_id" class="select2 form-control" id="role">
+                                    <label for="admin_id">Select Admin <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="admin_id" class="select2 form-control" id="role" required>
                                         @foreach($admins as $admin)
                                             <option value="{{$admin->id}}" {{ $account->admin_id == $admin->id ? 'selected' : '' }}>{{$admin->name}}</option>
                                         @endforeach
@@ -60,8 +52,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="type">Select Account Type</label>
-                                    <select name="type" class="select2 form-control" id="role">
+                                    <label for="type">Select Account Type <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="type" class="select2 form-control" id="role" required>
                                         <option value="cash" {{ $account->type == 'cash' ? 'selected' : '' }}>Cash</option>
                                         <option value="bank" {{ $account->type == 'bank' ? 'selected' : '' }}>Bank</option>
                                         <option value="mobile" {{ $account->type == 'mobile' ? 'selected' : '' }}>Mobile</option>
@@ -71,8 +63,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select name="status" class="form-control" id="status">
+                                    <label for="status">Status <span class="text-danger font-weight-bolder">*</span></label>
+                                    <select name="status" class="form-control" id="status" required>
                                         <option value="active" {{ $account->status == 'active' ? 'selected' : '' }}>Active</option>
                                         <option value="deactivate" {{ $account->status == 'deactivate' ? 'selected' : '' }}>Inactive</option>
                                     </select>
@@ -138,7 +130,8 @@
         }
     </style>
 @stop
-
+@section('plugins.toastr',true)
+@section('plugins.Select2',true)
 @section('js')
 <script>
     $(document).ready(function() {

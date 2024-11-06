@@ -35,7 +35,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="production_house_id">Select Production House</label>
+                                    <label for="production_house_id">Select Production House <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="production_house_id" name="production_house_id" class="select2 form-control" required>
                                         @foreach($houses as $house)
                                             <option value="{{ $house->id }}">{{ $house->name }}</option>
@@ -45,7 +45,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="showroom_id">Select Showroom</label>
+                                    <label for="showroom_id">Select Showroom <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="showroom_id" name="showroom_id" class="select2 form-control" required>
                                         @foreach($showrooms as $showroom)
                                             <option value="{{ $showroom->id }}">{{ $showroom->name }}</option>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="account_id">Select Account</label>
+                                    <label for="account_id">Select Account <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="account_id" name="account_id" class="select2 form-control" required>
                                         @foreach($accounts as $account)
                                             <option value="{{ $account->id }}">{{ $account->name }}</option>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="production_date">Production Date</label>
+                                    <label for="production_date">Production Date <span class="text-danger font-weight-bolder">*</span></label>
                                     <input type="date" name="production_date" class="form-control" required>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="warehouse_id">Select Warehouse</label>
+                                    <label for="warehouse_id">Select Warehouse <span class="text-danger font-weight-bolder">*</span></label>
                                     <select id="warehouse_id" name="warehouse_id" class="select2 form-control" required>
                                         <option value="" disabled selected>Select a warehouse</option>
                                         @foreach($warehouses as $warehouse)
@@ -373,6 +373,8 @@
                 });
             });
 
+            const baseURL = "{{ asset('') }}";
+
             $('#warehouse_id').on('change', function () {
                 const warehouseId = $(this).val();
                 $('#raw-materials-container').empty();
@@ -387,7 +389,7 @@
                             <div class="raw-material-card" data-id="${material.id}" data-quantity="${material.quantity}" data-price="${material.price}"
                                 data-image="${material.raw_material.image}" data-warehouse-id="${warehouseId}"
                                 data-brand-id="${material.brand_id}" data-color-id="${material.color_id}" data-size-id="${material.size_id}">
-                                <img src="${material.raw_material.image}" alt="${material.raw_material.name}" style="width: 20px; height: 20px;">
+                                <img src="${baseURL}${material.raw_material.image}" alt="${material.raw_material.name}" style="width: 20px; height: 20px;">
                                 <h5 class="card-title">${material.raw_material.name}</h5>
                                 <p><strong>SKU:</strong> ${material.raw_material.sku}</p>
                                 <p>Price: ${material.price}</p>
@@ -448,7 +450,7 @@
 
                     $('#selected-materials').append(`
                     <tr>
-                        <td><img src="${material.image}" alt="${material.name}" style="width: 60px; height: 60px;"></td>
+                        <td><img src="${baseURL}${material.image}" alt="${material.name}" style="width: 60px; height: 60px;"></td>
                         <td>
                             <input type="hidden" name="raw_material_id[]" value="${material.id}"> <!-- Raw Material ID -->
                             <input type="hidden" name="raw_material_warehouse_id[]" value="${material.warehouseId}"> <!-- Warehouse ID -->
@@ -653,8 +655,6 @@
             url: '{{ route("products.all") }}', // New route for fetching products
             method: 'GET',
             success: function (data) {
-                console.log(data);
-                console.log(data);
                 if (Array.isArray(data)) {
                     products = data;
                 } else if (data.products) {
