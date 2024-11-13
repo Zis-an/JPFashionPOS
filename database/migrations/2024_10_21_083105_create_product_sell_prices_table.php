@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_stock_id')->constrained('product_stocks')->onDelete('cascade');
             $table->foreignId('currency_id')->constrained('currencies')->onDelete('cascade');
-            $table->double('sell_price')->comment('Sell price of the product in the specified currency');
+            $table->double('sell_price',16,2)->comment('Sell price of the product in the specified currency');
             $table->timestamps();
             $table->softDeletes();
 

@@ -11,6 +11,8 @@ use App\Models\Asset;
 use App\Models\AssetCategory;
 use App\Models\Brand;
 use App\Models\Color;
+use App\Models\CronJobLog;
+use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Deposit;
 use App\Models\Expense;
@@ -27,6 +29,7 @@ use App\Models\Supplier;
 use App\Models\Warehouse;
 use App\Models\Withdraw;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -134,9 +137,10 @@ class ReportController extends Controller
         $customers = Customer::all();
         $salesmen = Admin::where('type', '=', 'salesman')->get();
         $accounts = Account::all();
+        $defaultCurrency = Currency::where('is_default', true)->first();
 
         // Start building the query
-        $query = Sell::with(['customer', 'salesman', 'account']);
+        $query = Sell::with(['customer', 'salesman', 'account','currency']);
 
         // Apply filters based on the request
         if ($request->filled('customerId')) {
@@ -166,7 +170,7 @@ class ReportController extends Controller
             return response()->json(['sells' => $sells]);
         }
 
-        return view('admin.reports.sells', compact('sells', 'customers', 'accounts', 'salesmen'));
+        return view('admin.reports.sells', compact(['sells', 'customers', 'accounts', 'salesmen','defaultCurrency']));
     }
 
     public function assetReports(Request $request)
@@ -458,21 +462,37 @@ class ReportController extends Controller
 
     public function sellProfitLoss(Request $request)
     {
+        $defaultCurrency = Currency::where('is_default', true)->first();
         // Start building the query
-        $query = Sell::with(['productStock', 'sell_stocks', 'account']);
+        $query = Sell::with(['productStock', 'sell_stocks', 'account','currency']);
 
         // Apply filters based on the request
         if ($request->filled('status')) {
-            if (strtolower($request->status) === 'profit') {
-                $query->whereHas('sell_stocks', function ($query) {
-                    $query->whereRaw('(SELECT SUM(cost) FROM sell_stocks WHERE sell_id = sells.id) < sells.net_total');
-                });
-            } elseif (strtolower($request->status) === 'loss') {
-                $query->whereHas('sell_stocks', function ($query) {
-                    $query->whereRaw('(SELECT SUM(cost) FROM sell_stocks WHERE sell_id = sells.id) >= sells.net_total');
-                });
+            // Get the default currency
+            $defaultCurrency = Currency::where('is_default', true)->first();
+
+            if ($defaultCurrency) {
+                // Perform the query with currency conversion
+                $query->join('sell_stocks', 'sells.id', '=', 'sell_stocks.sell_id')
+                    ->join('currencies', 'sells.currency_id', '=', 'currencies.id') // Join with currencies table
+                    ->selectRaw('sells.id, SUM(sell_stocks.cost) as total_cost, sells.net_total, sells.currency_id, currencies.rate')
+                    ->groupBy('sells.id', 'sells.net_total', 'sells.currency_id', 'currencies.rate');
+
+                if (strtolower($request->status) === 'profit') {
+                    // Compare the converted net_total to cost
+                    $query->havingRaw('SUM(sell_stocks.cost) < (sells.net_total * currencies.rate)');
+                } elseif (strtolower($request->status) === 'loss') {
+                    // Compare the converted net_total to cost
+                    $query->havingRaw('SUM(sell_stocks.cost) >= (sells.net_total * currencies.rate)');
+                }
+
+                // Apply conversion to cost (if needed)
+                $query->selectRaw('SUM(sell_stocks.cost * currencies.rate) as converted_cost');
             }
         }
+
+
+
 
         // Apply date filters if provided
         if ($request->filled('startDate')) {
@@ -490,14 +510,33 @@ class ReportController extends Controller
         // Get the filtered stocks
         $sells = $query->get();
 
-        // Calculate totals
-        $totalNetTotal = $sells->sum('net_total');
+
+        // Sum of net totals converted to default currency
+        $totalNetTotal = $sells->sum(function ($sell) {
+            $converted = getDefaultCurrencyConvertedPrice($sell);
+            return $converted ? $converted['net_total'] : 0;
+        });
+
+        // Sum of costs converted to default currency
         $totalCost = $sells->sum(function($sell) {
             return $sell->sell_stocks->first()->cost ?? 0;
         });
-        $totalAmount = $sells->sum(function($sell) {
+
+        $totalAmount = $sells->sum(function ($sell) {
+            // Convert net_total to default currency
+            $converted = getDefaultCurrencyConvertedPrice($sell);
+
+            // Get the cost (without conversion)
             $cost = $sell->sell_stocks->first()->cost ?? 0;
-            return $cost < $sell->net_total ? $sell->net_total - $cost : $cost - $sell->net_total;
+
+            // If the conversion was successful, calculate the amount
+            if ($converted) {
+                $amount = $cost < $converted['net_total'] ? $converted['net_total'] - $cost : $cost - $converted['net_total'];
+                return $amount;
+            }
+
+            // If no conversion data, return 0
+            return 0;
         });
 
         // Check if request is AJAX
@@ -505,6 +544,12 @@ class ReportController extends Controller
             return response()->json(['sells' => $sells]);
         }
 
-        return view('admin.reports.sellProfitLoss', compact('sells', 'totalNetTotal', 'totalCost', 'totalAmount'));
+        return view('admin.reports.sellProfitLoss', compact(['sells', 'totalNetTotal', 'totalCost', 'totalAmount','defaultCurrency']));
+    }
+
+    public function cronJobLogs() {
+        $logs = CronJobLog::orderBy('id','desc')->get();
+
+        return view('admin.reports.cronJobLogs', compact('logs'));
     }
 }

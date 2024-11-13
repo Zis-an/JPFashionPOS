@@ -26,7 +26,7 @@ return new class extends Migration
             $table->unsignedBigInteger('nid');
             $table->float('service_days');
             $table->string('gender')->default('male');
-            $table->decimal('salary', 10, 2);
+            $table->decimal('salary', 16, 2);
             $table->string('status')->default('active');
             $table->timestamps();
             $table->softDeletes();

@@ -5,7 +5,7 @@
         <div class="col-sm-6">
             <h1>Raw Material Purchases</h1>
             @can('purchases.list')
-                <a href="{{ route('admin.rawMaterialPurchases.index') }}" class="btn btn-primary mt-2">Go Back</a>
+                <a href="{{ route('admin.raw-material-purchases.index') }}" class="btn btn-primary mt-2">Go Back</a>
             @endcan
 
         </div>
@@ -42,13 +42,13 @@
                                     <td>{{ $purchase->purchase_date }}</td>
                                     <td class="text-center">
                                         @can('rawMaterialPurchases.restore')
-                                            <a href="{{ route('admin.rawMaterialPurchases.restore',['rawMaterialPurchase'=>$purchase->id]) }}"
+                                            <a href="{{ route('admin.raw-material-purchases.restore',['raw_material_purchase'=>$purchase->id]) }}"
                                                class="btn btn-success btn-sm px-1 py-0">
                                                 <i class="fa fa-arrow-left"></i>
                                             </a>
                                         @endcan
                                         @can('rawMaterialPurchases.force_delete')
-                                            <a href="{{ route('admin.rawMaterialPurchases.force_delete',['rawMaterialPurchase'=>$purchase->id]) }}"
+                                            <a href="{{ route('admin.raw-material-purchases.force_delete',['raw_material_purchase'=>$purchase->id]) }}"
                                                class="btn btn-danger btn-sm px-1 py-0">
                                                 <i class="fa fa-trash"></i>
                                             </a>

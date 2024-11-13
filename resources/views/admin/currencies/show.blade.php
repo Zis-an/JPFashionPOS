@@ -55,6 +55,22 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <label for="name">Suffix</label>
+                                        <input type="text" id="suffix" value="{{ $currency->suffix ?? '' }}" name="suffix" class="form-control"
+                                               placeholder="Enter suffix" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">Prefix</label>
+                                        <input type="text" id="prefix" value="{{ $currency->prefix ?? '' }}" name="prefix" class="form-control"
+                                               placeholder="Enter prefix" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label for="name">Status</label>
                                         <input type="text" id="status" value="{{ $currency->status == 1 ? 'Active' : 'Inactive' }}" name="rate"
                                                class="form-control"

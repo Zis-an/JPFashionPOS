@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('code', 3)->unique(); // e.g., USD, EUR, GBP
             $table->string('name');
-            $table->double('rate'); // Exchange rate relative to the default currency
+            $table->double('rate',16,2); // Exchange rate relative to the default currency
+            $table->string('suffix')->nullable();
+            $table->string('prefix')->nullable();
+
             $table->boolean('status')->default(true); // Active or inactive currency
             $table->boolean('is_default')->default(false); // Only one record can have this set to true
             $table->timestamps();

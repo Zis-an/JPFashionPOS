@@ -1,10 +1,22 @@
 @extends('adminlte::page')
 @section('title', 'Dashboard')
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1>Dashboard
+        <span class="small badge badge-sm badge-success" id="current-time">
+        {{ \Carbon\Carbon::now()->format('F j, Y at g:i A') }}
+        </span>
+    </h1>
 @stop
 @section('content')
     <div class="row">
+        @if(!isLastCronJobLogWithinOneHour())
+        <div class="col-12">
+            <pre class="text-danger">
+                {{ getCronJobCommand('queue') }}
+                {{ getCronJobCommand('schedule') }}
+            </pre>
+        </div>
+        @endif
         <div class="col-md-3">
             <div class="small-box bg-success">
                 <div class="inner">
@@ -463,20 +475,9 @@
             </table>
         </div>
     </div>
-
-{{--    <p>Welcome to this beautiful admin panel.</p>--}}
-{{--    <div class="card">--}}
-{{--        <div class="card-body">--}}
-{{--            {!! $content !!}--}}
-{{--        </div>--}}
-{{--    </div>--}}
 @stop
-
 @section('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
-
 @section('js')
     <!-- Load Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -599,5 +600,24 @@
                 }]
             }
         });
+    </script>
+    <script>
+        function updateTime() {
+            const options = {
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                hour12: true,
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+
+            const now = new Date().toLocaleString('en-US', options);
+            document.getElementById('current-time').textContent = now;
+        }
+
+        // Update time every second
+        setInterval(updateTime, 1000);
     </script>
 @stop

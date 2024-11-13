@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('account_id')->nullable()->constrained()->nullOnDelete();
             $table->date('purchase_date');
             $table->json('cost_details');
-            $table->decimal('total_cost');
-            $table->decimal('total_price');
-            $table->decimal('amount', 10, 2)->default(0);
+            $table->decimal('total_cost', 15, 2);
+            $table->decimal('total_price', 15, 2);
+            $table->decimal('amount', 15, 2)->default(0);
             $table->string('status')->default('pending');
             $table->timestamps();
             $table->softDeletes();

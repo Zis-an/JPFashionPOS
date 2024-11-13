@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('product_stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->unsignedBigInteger('quantity');
-            $table->double('production_cost_price');
-            $table->double('avg_cost_price');
-            $table->double('total_cost_price');
+            $table->double('quantity',16,2);
+            $table->double('production_cost_price',16,2);
+            $table->double('avg_cost_price',16,2);
+            $table->double('total_cost_price',16,2);
             $table->unsignedBigInteger('color_id');
             $table->unsignedBigInteger('brand_id');
             $table->unsignedBigInteger('size_id');

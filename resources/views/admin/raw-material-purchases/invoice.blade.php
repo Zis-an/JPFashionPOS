@@ -1,41 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sell Invoice</title>
+    <title>Raw Material Purchase Invoice</title>
     <style>
         /* A4 size setup */
         @page { size: A4; margin: 20px; }
 
         /* General styles */
-        body { font-family: 'Arial', sans-serif; padding: 40px; }
-        .invoice-container { max-width: 800px; margin: 0 auto; text-align: center; }
+        body { font-family: 'Arial', sans-serif; padding: 20px; font-size: 11px; color: #333; }
+        .invoice-container { max-width: 700px; margin: 0 auto; text-align: center; color: #333; }
 
         /* Header styles */
-        .header { margin-bottom: 20px; }
-        .header img { width: 100px; }
-        .header h1 { font-size: 28px; margin-top: 5px; font-weight: bold; color: #2a2a2a; }
-        .company-name { font-size: 18px; color: #2a2a2a; margin-bottom: 30px; }
+        .header { margin-bottom: 10px; }
+        .header img { width: 70px; }
+        .header h1 { font-size: 20px; margin: 5px 0; font-weight: bold; color: #333; }
+        .company-name { font-size: 14px; color: #555; margin-bottom: 15px; }
 
         /* Invoice details */
-        .details { text-align: left; margin: 20px 0; font-size: 14px; }
-        .details p { margin: 5px 0; }
-        .details strong { color: #2a2a2a; }
+        .details { text-align: left; margin: 5px 0; font-size: 10px; color: #333; }
+        .details p { margin: 2px 0; font-weight: bold; }
 
         /* Table styles */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: center; }
-        th { background-color: #2a2a2a; color: #ffffff; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 6px 3px; border: 1px solid #ccc; text-align: center; font-size: 10px; }
+        th { background-color: #444; color: #fff; font-weight: bold; }
+        td { color: #333; font-weight: normal; }
+
+        /* Reduce whitespace in cells */
+        th, td { padding: 5px; }
+
+        /* Section titles */
+        h3 { text-align: left; font-size: 12px; font-weight: bold; margin: 10px 0; color: #333; }
 
         /* Footer */
-        .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
-
-        /* Highlight net total */
-        .net-total { font-size: 18px; font-weight: bold; color: #2a2a2a; margin-top: 20px; }
+        .footer { margin-top: 20px; font-size: 10px; color: #666; text-align: center; }
     </style>
 
     <script>
         window.onload = function() {
             window.print();
+        };
+        // Close the window when printing is completed
+        window.onafterprint = function () {
+            window.close();
         };
     </script>
 </head>
@@ -48,7 +55,7 @@
         <p class="company-name">JP Fashion</p>
     </div>
 
-    <!-- Customer and Salesman details -->
+    <!-- Supplier and Purchase details -->
     <div class="details">
         <p><strong>Supplier Name:</strong> {{ $purchase->supplier->name ?? 'N/A' }}</p>
         <p><strong>Warehouse:</strong> {{ $purchase->warehouse->name ?? 'N/A' }}</p>
@@ -60,8 +67,8 @@
     </div>
 
     <!-- Raw Materials Table -->
-    <h3 class="text-left">Raw Materials</h3>
-    <table class="table table-bordered">
+    <h3>Raw Materials</h3>
+    <table>
         <thead>
         <tr>
             <th>Product Name</th>
@@ -77,21 +84,9 @@
         @foreach($products as $product)
             <tr>
                 <td>{{ $product->name }}</td>
-                @foreach($brands as $brand)
-                    @if($brand->id == $product->pivot->brand_id)
-                        <td>{{ $brand->name }}</td>
-                    @endif
-                @endforeach
-                @foreach($sizes as $size)
-                    @if($size->id == $product->pivot->size_id)
-                        <td>{{ $size->name }}</td>
-                    @endif
-                @endforeach
-                @foreach($colors as $color)
-                    @if($color->id == $product->pivot->color_id)
-                        <td>{{ $color->color_name }}</td>
-                    @endif
-                @endforeach
+                <td>{{ optional($brands->firstWhere('id', $product->pivot->brand_id))->name ?? 'N/A' }}</td>
+                <td>{{ optional($sizes->firstWhere('id', $product->pivot->size_id))->name ?? 'N/A' }}</td>
+                <td>{{ optional($colors->firstWhere('id', $product->pivot->color_id))->color_name ?? 'N/A' }}</td>
                 <td>{{ $product->pivot->price }}</td>
                 <td>{{ $product->pivot->quantity }}</td>
                 <td>{{ $product->pivot->total_price }}</td>
@@ -100,7 +95,8 @@
         </tbody>
     </table>
 
-    <h3 class="text-left">Cost Details</h3>
+    <!-- Cost Details Table -->
+    <h3>Cost Details</h3>
     <table>
         <thead>
         <tr>

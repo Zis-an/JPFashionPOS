@@ -19,9 +19,9 @@ return new class extends Migration
             $table->text('short_details')->nullable();
             $table->string('sku')->nullable();
             $table->unsignedBigInteger('unit_id')->nullable();
-            $table->float('width')->nullable();
-            $table->float('length')->nullable();
-            $table->float('density')->nullable();
+            $table->double('width',16,2)->nullable();
+            $table->double('length',16,2)->nullable();
+            $table->double('density',16.2)->nullable();
             $table->string('thumbnail')->nullable();
             $table->json('images')->nullable();
             $table->string('slug')->unique();

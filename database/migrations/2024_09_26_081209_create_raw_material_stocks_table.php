@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('raw_material_stocks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('raw_material_id');
-            $table->double('quantity');
-            $table->double('price');
+            $table->double('quantity',16,2);
+            $table->double('price',16,2);
             $table->unsignedBigInteger('color_id');
             $table->unsignedBigInteger('brand_id');
             $table->unsignedBigInteger('size_id');

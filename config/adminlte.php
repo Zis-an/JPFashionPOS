@@ -338,7 +338,7 @@ return [
                 ],
                 [
                     'text' => 'Raw Material Purchase',
-                    'url' => 'admin/rawMaterialPurchases',
+                    'url' => 'admin/raw-material-purchases',
                     'icon' => 'far fa-money-bill-alt custom-icon-class',
                     'can' => ['rawMaterialPurchases.list', 'rawMaterialPurchases.create', 'rawMaterialPurchases.update', 'rawMaterialPurchases.delete',
                         'rawMaterialPurchases.restore', 'rawMaterialPurchases.force_delete', 'rawMaterialPurchases.trashed', 'rawMaterialPurchases.activity'],
@@ -570,6 +570,20 @@ return [
                 'sells.force_delete', 'sells.trashed', 'sells.activity'],
         ],
         [
+            'text' => 'Product Stock Transfer',
+            'url' => 'admin/product-stock-transfers',
+            'icon' => 'fas fa-store custom-icon-class',
+            'can' => ['productStockTransfers.list', 'productStockTransfers.create', 'productStockTransfers.update', 'productStockTransfers.delete',
+                'productStockTransfers.restore', 'productStockTransfers.force_delete', 'productStockTransfers.trashed', 'productStockTransfers.activity'],
+        ],
+        [
+            'text' => 'R.M. Stock Transfer',
+            'url' => 'admin/raw-material-stock-transfers',
+            'icon' => 'fas fa-life-ring custom-icon-class',
+            'can' => ['rawMaterialStockTransfers.list', 'rawMaterialStockTransfers.create', 'rawMaterialStockTransfers.update', 'rawMaterialStockTransfers.delete',
+                'rawMaterialStockTransfers.restore', 'rawMaterialStockTransfers.force_delete', 'rawMaterialStockTransfers.trashed', 'rawMaterialStockTransfers.activity'],
+        ],
+        [
             'text' => 'Report',
             'url' => 'admin/reports',
             'icon' => 'fas fa-scroll custom-icon-class',
@@ -640,6 +654,11 @@ return [
                     'icon' => 'fas fa-pause-circle custom-icon-class',
                     'can' => ['sellProfitLoss.list','sellProfitLoss.view'],
                 ],
+                [
+                    'text' => 'Cron Job Log',
+                    'url' => 'admin/cron-job-logs',
+                    'icon' => 'fas fa-pause-circle custom-icon-class',
+                ],
             ],
         ],
         [
@@ -665,6 +684,12 @@ return [
                     'icon' => 'fas fa-user-cog custom-icon-class',
                     'can' => ['admins.list', 'admins.create', 'admins.update', 'admins.delete',
                         'admins.restore', 'admins.force_delete', 'admins.trashed', 'admins.activity'],
+                ],
+                [
+                    'text'    => 'Global Settings',
+                    'icon'    => 'fas fa-cogs custom-icon-class',
+                    'can' => ['global_setting_manage'],
+                    'url' => 'admin/global-setting'
                 ],
                 [
                     'text'    => 'Commands',

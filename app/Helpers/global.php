@@ -2,6 +2,8 @@
 
 use App\Models\Account;
 use App\Models\Asset;
+use App\Models\CronJobLog;
+use App\Models\Currency;
 use App\Models\Expense;
 use App\Models\GlobalSetting;
 use App\Models\Product;
@@ -10,6 +12,7 @@ use App\Models\ProductStock;
 use App\Models\RawMaterialPurchase;
 use App\Models\RawMaterialStock;
 use App\Models\Sell;
+use App\Models\SellStock;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 
@@ -446,5 +449,95 @@ if (!function_exists('getLatestExpenses')) {
     {
         $latestExpenses = Expense::orderBy('created_at', 'desc')->take($limit)->get();
         return $latestExpenses;
+    }
+}
+if (!function_exists('getCronJobCommand')) {
+    function getCronJobCommand($type = 'queue')
+    {
+        $phpPath = PHP_BINARY; // Dynamically gets the PHP binary path
+        $artisanPath = base_path('artisan'); // Points to the artisan file in the project
+
+        if ($type === 'queue') {
+            // For queue worker cron command
+            return "* * * * *  $artisanPath queue:work >> /dev/null 2>&1";
+        } elseif ($type === 'schedule') {
+            // For schedule runner cron command
+            return "* * * * *  $artisanPath schedule:run >> /dev/null 2>&1";
+        } else {
+            return null;
+        }
+    }
+}
+
+if (!function_exists('isLastCronJobLogWithinOneHour')) {
+
+    function isLastCronJobLogWithinOneHour(): bool
+    {
+        // Get the most recent log entry for the specified command
+        $lastLog = CronJobLog::orderBy('executed_at', 'desc')->first();
+
+        // Check if the log exists and the executed_at timestamp is within the last hour
+        if ($lastLog) {
+            return Carbon::parse($lastLog->executed_at)->greaterThanOrEqualTo(Carbon::now()->subDays());
+        }
+        return false; // No log found for the command
+    }
+}
+
+
+if (!function_exists('getDefaultCurrencyConvertedPrice')) {
+
+    function getDefaultCurrencyConvertedPrice($model)
+    {
+        // Fetch the default currency
+        $defaultCurrency = Currency::where('is_default', true)->first();
+
+        if (!$defaultCurrency) {
+            // If no default currency is found, return null
+            return null;
+        }
+
+        // Initialize the result array
+        $convertedData = [];
+
+        // If the model is a Sell, convert the required fields
+        if ($model instanceof Sell) {
+            $currency = $model->currency;
+            $convertedData['total_amount'] = convertToDefaultCurrency($model->total_amount, $currency, $defaultCurrency);
+            $convertedData['discount_amount'] = convertToDefaultCurrency($model->discount_amount, $currency, $defaultCurrency);
+            $convertedData['net_total'] = convertToDefaultCurrency($model->net_total, $currency, $defaultCurrency);
+            $convertedData['paid_amount'] = convertToDefaultCurrency($model->paid_amount, $currency, $defaultCurrency);
+        }
+        // If the model is a SellStock, convert the required fields
+        elseif ($model instanceof SellStock) {
+            $currency = $model->currency;
+            $convertedData['price'] = convertToDefaultCurrency($model->price, $currency, $defaultCurrency);
+            $convertedData['discount_amount'] = convertToDefaultCurrency($model->discount_amount, $currency, $defaultCurrency);
+            $convertedData['total'] = convertToDefaultCurrency($model->total, $currency, $defaultCurrency);
+        } else {
+            return null;
+        }
+        return $convertedData;
+    }
+}
+
+
+if (!function_exists('convertToDefaultCurrency')) {
+    function convertToDefaultCurrency($amount, $currency, $defaultCurrency)
+    {
+        // If the currency is the same as the default currency, return the original amount
+        if ($currency->id === $defaultCurrency->id) {
+            return $amount;
+        }
+        // Get the conversion rate from the original currency to the default currency
+        $conversionRate = $currency->rate;
+
+        // If the rate is available, convert and return the amount
+        if ($conversionRate) {
+            return $amount * $conversionRate;
+        }
+
+        // If no conversion rate is found, return null
+        return null;
     }
 }

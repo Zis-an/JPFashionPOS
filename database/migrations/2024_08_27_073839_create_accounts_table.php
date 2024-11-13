@@ -17,7 +17,7 @@ class CreateAccountsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('type');
-            $table->double('balance', 15, 2)->default(0);
+            $table->double('balance', 16, 2)->default(0);
             $table->unsignedBigInteger('admin_id');
             $table->string('status')->default('pending');
             $table->timestamps();

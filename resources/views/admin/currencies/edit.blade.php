@@ -3,7 +3,7 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1>Update Currency1</h1>
+            <h1>Update Currency</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -53,6 +53,23 @@
                                            class="form-control" placeholder="Enter rate" required>
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="suffix">Suffix </label>
+                                    <input type="text" id="suffix" value="{{ $currency->suffix ?? '' }}" name="suffix"
+                                           class="form-control" placeholder="Enter suffix">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="prefix">Prefix </label>
+                                    <input type="text" id="prefix" value="{{ $currency->prefix ?? '' }}" name="prefix"
+                                           class="form-control" placeholder="Enter prefix">
+                                </div>
+                            </div>
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="status">Select Status <span class="text-danger font-weight-bolder">*</span></label>

@@ -88,6 +88,8 @@ class ProductionController extends Controller
             'total_product_cost' => 0, // Will be updated later
             'amount' => $totalCost + 0, // Will be updated later
         ]);
+
+        //dd($request->raw_material_id);
         foreach ($request->raw_material_id as $index => $rawMaterial) {
             DB::table('production_raw_materials')->insert([
                 'production_id' => $production->id,
@@ -365,5 +367,11 @@ class ProductionController extends Controller
         $production->status = $status;
         $production->update();
         return redirect()->back()->with('success', 'Production status updated successfully.');
+    }
+
+    public function printProduction($id)
+    {
+        $production = Production::findOrFail($id);
+        return view('admin.productions.invoice', compact('production'));
     }
 }

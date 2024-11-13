@@ -376,13 +376,7 @@ class RoleSeeder extends Seeder
                     'group_name' => 'RawMaterialStock',
                     'permissions' => [
                         'rawMaterialStocks.list',
-//                        'rawMaterialStocks.create',
                         'rawMaterialStocks.view',
-//                        'rawMaterialStocks.update',
-//                        'rawMaterialStocks.delete',
-//                        'rawMaterialStocks.trashed',
-//                        'rawMaterialStocks.restore',
-//                        'rawMaterialStocks.force_delete',
                         'rawMaterialStocks.activity'
                     ]
                 ],
@@ -479,13 +473,7 @@ class RoleSeeder extends Seeder
                     'group_name' => 'ProductStock',
                     'permissions' => [
                         'productStocks.list',
-//                        'productStocks.create',
                         'productStocks.view',
-//                        'productStocks.update',
-//                        'productStocks.delete',
-//                        'productStocks.trashed',
-//                        'productStocks.restore',
-//                        'productStocks.force_delete',
                         'productStocks.activity'
                     ]
                 ],
@@ -542,6 +530,43 @@ class RoleSeeder extends Seeder
                         'transferBalance.view',
                         'sellProfitLoss.list',
                         'sellProfitLoss.view'
+                    ]
+                ],
+                [
+                    'group_name' => 'ProductStockTransfer',
+                    'permissions' => [
+                        'productStockTransfers.list',
+                        'productStockTransfers.create',
+                        'productStockTransfers.view',
+                        'productStockTransfers.update',
+                        'productStockTransfers.delete',
+                        'productStockTransfers.trashed',
+                        'productStockTransfers.restore',
+                        'productStockTransfers.force_delete',
+                        'productStockTransfers.activity'
+                    ]
+                ],
+                [
+                    'group_name' => 'RawMaterialStockTransfer',
+                    'permissions' => [
+                        'rawMaterialStockTransfers.list',
+                        'rawMaterialStockTransfers.create',
+                        'rawMaterialStockTransfers.view',
+                        'rawMaterialStockTransfers.update',
+                        'rawMaterialStockTransfers.delete',
+                        'rawMaterialStockTransfers.trashed',
+                        'rawMaterialStockTransfers.restore',
+                        'rawMaterialStockTransfers.force_delete',
+                        'rawMaterialStockTransfers.activity'
+                    ]
+                ],
+                [
+                    'group_name' => 'Global',
+                    'permissions' => [
+                        'dashboard_manage',
+                        'site_setting_manage',
+                        'global_setting_manage',
+                        'inventory_manage',
                     ]
                 ],
         ];

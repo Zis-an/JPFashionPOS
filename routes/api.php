@@ -3,8 +3,12 @@
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductionController;
 use App\Http\Controllers\Admin\ProductSellPriceController;
+use App\Http\Controllers\Admin\ProductStockTransferController;
 use App\Http\Controllers\Admin\RawMaterialController;
+use App\Http\Controllers\Admin\RawMaterialStockTransferController;
 use App\Http\Controllers\Admin\SellController;
+use App\Http\Controllers\Admin\ShowroomTransferController;
+use App\Http\Controllers\Admin\WarehouseTransferController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,3 +45,6 @@ Route::get('/get-all-products', [SellController::class, 'getAllProducts']);
 
 Route::get('/product-stocks/{stock}/get-sell-price-data', [ProductSellPriceController::class, 'getSellPriceData']);
 Route::post('/product-stocks/{stock}/update-sell-price', [ProductSellPriceController::class, 'updateSellPrice']);
+
+Route::get('/product-stocks/{showroom_id}', [ProductStockTransferController::class, 'getProductStocksByShowroom']);
+Route::get('/raw-material-stocks/{warehouse_id}', [RawMaterialStockTransferController::class, 'getRawMaterialStocksByWarehouse']);

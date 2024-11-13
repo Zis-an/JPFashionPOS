@@ -19,9 +19,9 @@ return new class extends Migration
             $table->foreignId('size_id');
             $table->foreignId('color_id');
             $table->foreignId('warehouse_id');
-            $table->decimal('price', 8, 2);
-            $table->unsignedBigInteger('quantity');
-            $table->double('total_price', 10, 2);
+            $table->decimal('price', 16, 2);
+            $table->double('quantity',16,2);
+            $table->double('total_price', 15, 2);
             $table->timestamps();
 
             $table->foreign('production_id')->references('id')->on('productions')->onDelete('cascade');

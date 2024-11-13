@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.rawMaterialPurchases.index') }}">Purchases</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.raw-material-purchases.index') }}">Purchases</a></li>
                 <li class="breadcrumb-item active">Create Purchase</li>
             </ol>
         </div>
@@ -20,7 +20,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('admin.rawMaterialPurchases.store') }}" method="POST" enctype="multipart/form-data" id="admin-form">
+                    <form action="{{ route('admin.raw-material-purchases.store') }}" method="POST" enctype="multipart/form-data" id="admin-form">
                         @csrf
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -347,7 +347,7 @@
                                 </select>
                             </td>
                             <td>
-                                <input type="number" name="price[]" class="form-control price-input form-control-sm" placeholder="Enter price" min="0">
+                                <input type="number" name="price[]" class="form-control price-input form-control-sm" placeholder="Enter price" min="0" step="any">
                             </td>
                             <td class="d-flex">
                                 <input type="number" name="quantity[]" class="form-control quantity-input form-control-sm mr-2" value="1" min="1">

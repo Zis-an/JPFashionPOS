@@ -48,13 +48,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="password">Password <span class="text-danger font-weight-bolder">*</span></label>
-                                    <input id="password" type="password" name="password" class="form-control" placeholder="Enter password" required>
+                                    <input id="password" type="password" name="password" class="form-control" placeholder="Enter password">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="password_confirmation">Confirm password <span class="text-danger font-weight-bolder">*</span></label>
-                                    <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" placeholder="Confirm password" required>
+                                    <input id="password_confirmation" type="password" name="password_confirmation" class="form-control" placeholder="Confirm password">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -92,6 +92,7 @@
                                     <label for="type">Select Type</label>
                                     <select id="type" name="type" class="select2 form-control">
                                         <option value="salesman"{{ $admin->type == 'salesman' ? 'selected' : '' }}>Salesman</option>
+                                        <option value="no"{{ $admin->type == 'no' ? 'selected' : '' }}>Normal User</option>
                                     </select>
                                 </div>
                             </div>

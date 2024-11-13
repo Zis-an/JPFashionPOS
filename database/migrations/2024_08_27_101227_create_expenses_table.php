@@ -16,7 +16,7 @@ class CreateExpensesTable extends Migration
             $table->string('title');
             $table->unsignedBigInteger('expense_category_id');
             $table->unsignedBigInteger('account_id');
-            $table->double('amount', 15, 2)->default(0);
+            $table->double('amount', 16, 2)->default(0);
             $table->string('details')->nullable();
             $table->string('images')->nullable();
             $table->string('status')->default('pending');

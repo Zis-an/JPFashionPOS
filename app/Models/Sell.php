@@ -41,6 +41,10 @@ class Sell extends Model
     {
         return $this->belongsTo(Account::class);
     }
+    public function currency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
+    }
     protected static function boot()
     {
         parent::boot();

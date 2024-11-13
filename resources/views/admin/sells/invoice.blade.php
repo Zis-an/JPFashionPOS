@@ -7,30 +7,33 @@
         @page { size: A4; margin: 20px; }
 
         /* General styles */
-        body { font-family: 'Arial', sans-serif; padding: 40px; }
-        .invoice-container { max-width: 800px; margin: 0 auto; text-align: center; }
+        body { font-family: 'Arial', sans-serif; padding: 20px; font-size: 11px; color: #333; }
+        .invoice-container { max-width: 700px; margin: 0 auto; text-align: center; color: #333; }
 
         /* Header styles */
-        .header { margin-bottom: 20px; }
-        .header img { width: 100px; }
-        .header h1 { font-size: 28px; margin-top: 5px; font-weight: bold; color: #2a2a2a; }
-        .company-name { font-size: 18px; color: #2a2a2a; margin-bottom: 30px; }
+        .header { margin-bottom: 10px; }
+        .header img { width: 70px; }
+        .header h1 { font-size: 20px; margin: 5px 0; font-weight: bold; color: #333; }
+        .company-name { font-size: 14px; color: #555; margin-bottom: 15px; }
 
         /* Invoice details */
-        .details { text-align: left; margin: 20px 0; font-size: 14px; }
-        .details p { margin: 5px 0; }
-        .details strong { color: #2a2a2a; }
+        .details { text-align: left; margin: 5px 0; font-size: 10px; color: #333; }
+        .details p { margin: 2px 0; font-weight: bold; }
 
         /* Table styles */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: center; }
-        th { background-color: #2a2a2a; color: #ffffff; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 6px 3px; border: 1px solid #ccc; text-align: center; font-size: 10px; }
+        th { background-color: #444; color: #fff; font-weight: bold; }
+        td { color: #333; font-weight: normal; }
+
+        /* Reduce whitespace in cells */
+        th, td { padding: 5px; }
 
         /* Footer */
-        .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
+        .footer { margin-top: 20px; font-size: 10px; color: #666; text-align: center; }
 
         /* Highlight net total */
-        .net-total { font-size: 18px; font-weight: bold; color: #2a2a2a; margin-top: 20px; }
+        .net-total { font-size: 14px; font-weight: bold; color: #444; margin-top: 10px; }
     </style>
 </head>
 <body>

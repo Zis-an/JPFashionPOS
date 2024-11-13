@@ -47,9 +47,9 @@
                                     <td>{{ $sell->customer->name ?? '' }}</td>
                                     <td>{{ $sell->salesman->name ?? '' }}</td>
                                     <td>{{ $sell->account->name ?? '' }}</td>
-                                    <td class="text-right">{{ $sell->total_amount ?? '' }} /-</td>
-                                    <td class="text-right">{{ $sell->discount_amount ?? '' }} /-</td>
-                                    <td class="text-right">{{ $sell->net_total ?? '' }} /-</td>
+                                    <td class="text-right">{{$sell->currency->prefix??''}}{{ $sell->total_amount ?? '' }} {{$sell->currency->suffix??''}}</td>
+                                    <td class="text-right">{{$sell->currency->prefix??''}}{{ $sell->discount_amount ?? '' }} {{$sell->currency->suffix??''}}</td>
+                                    <td class="text-right"> {{$sell->currency->prefix??''}}{{ $sell->net_total ?? '' }} {{$sell->currency->suffix??''}}</td>
                                     <td>{{ $sell->paid_amount == $sell->net_total ? 'Paid in Full' : 'Due' ?? '' }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.sells.destroy', $sell->id) }}" method="POST">

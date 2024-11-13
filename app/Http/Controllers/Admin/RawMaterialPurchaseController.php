@@ -128,7 +128,7 @@ class RawMaterialPurchaseController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.rawMaterialPurchases.index')->with('success', 'RawMaterialPurchase Created Successfully');
+        return redirect()->route('admin.raw-material-purchases.index')->with('success', 'RawMaterialPurchase Created Successfully');
     }
 
 
@@ -137,9 +137,9 @@ class RawMaterialPurchaseController extends Controller
     {
         $purchase = RawMaterialPurchase::find($id);
         if (!$purchase) {
-            return redirect()->route('admin.rawMaterialPurchases.index')->with('error', 'RawMaterialPurchase Not Found');
+            return redirect()->route('admin.raw-material-purchases.index')->with('error', 'RawMaterialPurchase Not Found');
         }elseif ($purchase->status == 'approved'){
-            return redirect()->route('admin.rawMaterialPurchases.index')->with('error', 'RawMaterialPurchase already approved');
+            return redirect()->route('admin.raw-material-purchases.index')->with('error', 'RawMaterialPurchase already approved');
         }
         $suppliers = Supplier::orderBy('id', 'DESC')->get();
         $warehouses = Warehouse::orderBy('id', 'DESC')->get();
@@ -156,9 +156,9 @@ class RawMaterialPurchaseController extends Controller
     {
         $purchase = RawMaterialPurchase::find($id);
         if (!$purchase) {
-            return redirect()->route('admin.rawMaterialPurchases.index')->with('error', 'RawMaterialPurchase Not Found');
+            return redirect()->route('admin.raw-material-purchases.index')->with('error', 'RawMaterialPurchase Not Found');
         }elseif ($purchase->status == 'approved'){
-            return redirect()->route('admin.rawMaterialPurchases.index')->with('error', 'RawMaterialPurchase already approved');
+            return redirect()->route('admin.raw-material-purchases.index')->with('error', 'RawMaterialPurchase already approved');
         }
         $request->validate([
             'supplier_id' => 'nullable|exists:suppliers,id',
@@ -239,7 +239,7 @@ class RawMaterialPurchaseController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.rawMaterialPurchases.index')->with('success', 'RawMaterialPurchase Updated Successfully');
+        return redirect()->route('admin.raw-material-purchases.index')->with('success', 'RawMaterialPurchase Updated Successfully');
     }
 
     public function show($id): View|Factory|Application
@@ -261,7 +261,7 @@ class RawMaterialPurchaseController extends Controller
     {
         $purchase = RawMaterialPurchase::find($id);
         $purchase->delete();
-        return redirect()->route('admin.rawMaterialPurchases.index')->with('success', 'RawMaterialPurchase Deleted Successfully');
+        return redirect()->route('admin.raw-material-purchases.index')->with('success', 'RawMaterialPurchase Deleted Successfully');
     }
 
     public function trashed_list(): View|Factory|Application
@@ -281,17 +281,17 @@ class RawMaterialPurchaseController extends Controller
     {
         $purchase = RawMaterialPurchase::withTrashed()->find($id);
         $purchase->forceDelete();
-        return redirect()->route('admin.rawMaterialPurchases.trashed')->with('success', 'RawMaterialPurchase Permanently Deleted');
+        return redirect()->route('admin.raw-material-purchases.trashed')->with('success', 'RawMaterialPurchase Permanently Deleted');
     }
 
     public function updateStatus($id, $status): RedirectResponse
     {
         $purchase = RawMaterialPurchase::find($id);
         if (!in_array($status, ['pending', 'approved', 'rejected'])) {
-            return redirect()->route('admin.rawMaterialPurchases.index')->with('error', 'Invalid status.');
+            return redirect()->route('admin.raw-material-purchases.index')->with('error', 'Invalid status.');
         }
         elseif ($purchase->status == 'approved' && in_array($status, ['pending', 'rejected']) && !canRawMaterialPurchaseStatusChangeFromApprove($purchase)) {
-            return redirect()->route('admin.rawMaterialPurchases.index')->with('error', 'You cant Change Status yet.');
+            return redirect()->route('admin.raw-material-purchases.index')->with('error', 'You cant Change Status yet.');
         }
         elseif (!$purchase) {
             return redirect()->back()->with('error', 'Purchase not found.');

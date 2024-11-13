@@ -92,6 +92,7 @@
                                     <label for="type">Select Type</label>
                                     <select id="type" name="type" class="select2 form-control">
                                         <option value="salesman">Salesman</option>
+                                        <option value="no">Normal User</option>
                                     </select>
                                 </div>
                             </div>

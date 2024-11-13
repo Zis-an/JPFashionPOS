@@ -91,9 +91,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 @foreach($production->rawMaterials as $material)
-
                                     <tr>
                                         <td>{{ optional($material->rawMaterial)->name }}</td>
                                         <td>{{ optional($material->brand)->name }}</td>
@@ -137,21 +135,6 @@
                                 </tbody>
                             </table>
                         </fieldset>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         <form action="{{ route('admin.productions.destroy', $production->id) }}" method="POST">
                             @method('DELETE')

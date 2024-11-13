@@ -2,23 +2,54 @@
 
 namespace App\Console;
 
+use App\Console\Commands\UpdateAccountBalance;
+use App\Jobs\DeleteOldCronJobLogs;
+use App\Jobs\UpdateAccountBalanceJob;
+use App\Jobs\UpdateProductSellPricesJob;
+use App\Models\CronJobLog;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * Define the application's command schedule.
-     */
-//    protected function schedule(Schedule $schedule): void
-//    {
-//        // $schedule->command('inspire')->hourly();
-//        $schedule->command('app:update-account-balance')->everyMinute();
-//    }
-
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('app:update-account-balance')->everyMinute();
+        // Log before and after the UpdateAccountBalanceJob
+        $schedule->job(new UpdateAccountBalanceJob())
+            ->everyMinute() // Adjust as needed
+            ->before(function () {
+                $this->logCronJob('UpdateAccountBalanceJob', 'initiated');
+            })
+            ->after(function () {
+                $this->logCronJob('UpdateAccountBalanceJob', 'completed');
+            });
+
+        // Log before and after the UpdateProductSellPricesJob
+        $schedule->job(new UpdateProductSellPricesJob())
+            ->hourly()
+            ->before(function () {
+                $this->logCronJob('UpdateProductSellPricesJob', 'initiated');
+            })
+            ->after(function () {
+                $this->logCronJob('UpdateProductSellPricesJob', 'completed');
+            });
+
+        $schedule->job(new DeleteOldCronJobLogs())->dailyAt('00:00');
+    }
+
+    /**
+     * Log the cron job execution in the cron_job_logs table.
+     *
+     * @param string $command
+     * @param string $status
+     */
+    private function logCronJob(string $command, string $status)
+    {
+        CronJobLog::create([
+            'command' => $command,
+            'status' => $status,
+            'executed_at' => now(),
+        ]);
     }
 
     /**

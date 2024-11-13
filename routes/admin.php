@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DepositController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ExpenseCategoryController;
 use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\GlobalSettingController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductCategoryController;
@@ -22,18 +23,22 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductionController;
 use App\Http\Controllers\Admin\ProductionHouseController;
 use App\Http\Controllers\Admin\ProductStockController;
+use App\Http\Controllers\Admin\ProductStockTransferController;
 use App\Http\Controllers\Admin\RawMaterialCategoryController;
 use App\Http\Controllers\Admin\RawMaterialController;
 use App\Http\Controllers\Admin\RawMaterialPurchaseController;
 use App\Http\Controllers\Admin\RawMaterialStockController;
+use App\Http\Controllers\Admin\RawMaterialStockTransferController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SellController;
 use App\Http\Controllers\Admin\ShowroomController;
+use App\Http\Controllers\Admin\ShowroomTransferController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\WarehouseController;
+use App\Http\Controllers\Admin\WarehouseTransferController;
 use App\Http\Controllers\Admin\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
@@ -245,22 +250,22 @@ Route::resource('/materials', RawMaterialController::class)
 
 
 // RawMaterialPurchase
-Route::get('/rawMaterialPurchases/trashed', [RawMaterialPurchaseController::class, 'trashed_list'])
+Route::get('/raw-material-purchases/trashed', [RawMaterialPurchaseController::class, 'trashed_list'])
     ->middleware('permission:rawMaterialPurchases.trashed')
-    ->name('rawMaterialPurchases.trashed');
-Route::get('/rawMaterialPurchases/trashed/{rawMaterialPurchase}/restore', [RawMaterialPurchaseController::class, 'restore'])
+    ->name('raw-material-purchases.trashed');
+Route::get('/raw-material-purchases/trashed/{raw_material_purchase}/restore', [RawMaterialPurchaseController::class, 'restore'])
     ->middleware('permission:rawMaterialPurchases.restore')
-    ->name('rawMaterialPurchases.restore');
-Route::get('/rawMaterialPurchases/trashed/{rawMaterialPurchase}/delete', [RawMaterialPurchaseController::class, 'force_delete'])
+    ->name('raw-material-purchases.restore');
+Route::get('/raw-material-purchases/trashed/{raw_material_purchase}/delete', [RawMaterialPurchaseController::class, 'force_delete'])
     ->middleware('permission:rawMaterialPurchases.force_delete')
-    ->name('rawMaterialPurchases.force_delete');
-Route::get('/rawMaterialPurchases/{rawMaterialPurchase}/status/{status}',
+    ->name('raw-material-purchases.force_delete');
+Route::get('/raw-material-purchases/{raw_material_purchase}/status/{status}',
     [RawMaterialPurchaseController::class, 'updateStatus'])
-    ->name('rawMaterialPurchases.updateStatus');
-Route::get('/raw-material-purchases/{rawMaterialPurchase}',
+    ->name('raw-material-purchases.updateStatus');
+Route::get('/raw-material-purchases/{raw_material_purchase}/print',
     [RawMaterialPurchaseController::class, 'printRawMaterialPurchase'])
-    ->name('rawMaterialPurchases.print');
-Route::resource('/rawMaterialPurchases', RawMaterialPurchaseController::class)
+    ->name('raw-material-purchases.print');
+Route::resource('/raw-material-purchases', RawMaterialPurchaseController::class)
     ->middleware('permission:rawMaterialPurchases.list');
 
 // Showroom
@@ -331,18 +336,8 @@ Route::resource('/products', ProductController::class)->middleware('permission:p
 
 
 // Raw Material Stock
-//Route::get('/raw-material-stocks/trashed', [RawMaterialStockController::class, 'trashed_list'])
-//    ->middleware('permission:rawMaterialStocks.trashed')
-//    ->name('raw-material-stocks.trashed');
-//Route::get('/raw-material-stocks/trashed/{stock}/restore', [RawMaterialStockController::class, 'restore'])
-//    ->middleware('permission:rawMaterialStocks.restore')
-//    ->name('raw-material-stocks.restore');
-//Route::get('/raw-material-stocks/trashed/{stock}/delete', [RawMaterialStockController::class, 'force_delete'])
-//    ->middleware('permission:rawMaterialStocks.force_delete')
-//    ->name('raw-material-stocks.force_delete');
 Route::resource('/raw-material-stocks', RawMaterialStockController::class)
     ->middleware('permission:rawMaterialStocks.list');
-
 
 // Deposit
 Route::get('/deposits/trashed', [DepositController::class, 'trashed_list'])
@@ -415,6 +410,8 @@ Route::get('/productions/trashed/{production}/delete', [ProductionController::cl
 Route::get('/productions/{production}/status/{status}',[ProductionController::class, 'updateStatus'])
     ->name('productions.updateStatus')
     ->middleware('permission:productions.updateStatus');
+Route::get('/productions/{production}/print',[ProductionController::class, 'printProduction'])
+    ->name('productions.print');
 Route::resource('/productions', ProductionController::class)
     ->middleware('permission:productions.list');
 
@@ -436,15 +433,6 @@ Route::resource('/sells', SellController::class)
     ->middleware('permission:sells.list');
 
 // Product Stock
-//Route::get('/product-stocks/trashed', [ProductStockController::class, 'trashed_list'])
-//    ->middleware('permission:productStocks.trashed')
-//    ->name('product-stocks.trashed');
-//Route::get('/product-stocks/trashed/{stock}/restore', [ProductStockController::class, 'restore'])
-//    ->middleware('permission:productStocks.restore')
-//    ->name('product-stocks.restore');
-//Route::get('/product-stocks/trashed/{stock}/delete', [ProductStockController::class, 'force_delete'])
-//    ->middleware('permission:productStocks.force_delete')
-//    ->name('product-stocks.force_delete');
 Route::resource('/product-stocks', ProductStockController::class)
     ->middleware('permission:productStocks.list');
 
@@ -460,6 +448,37 @@ Route::get('/currencies/trashed/{currency}/delete', [CurrencyController::class, 
     ->name('currencies.force_delete');
 Route::resource('/currencies', CurrencyController::class)
     ->middleware('permission:currencies.list');
+
+// ShowroomTransfer
+Route::get('/product-stock-transfers/trashed', [ProductStockTransferController::class, 'trashed_list'])
+    ->middleware('permission:productStockTransfers.trashed')
+    ->name('product-stock-transfers.trashed');
+Route::get('/product-stock-transfers/trashed/{product_stock_transfer}/restore', [ProductStockTransferController::class, 'restore'])
+    ->middleware('permission:productStockTransfers.restore')
+    ->name('product-stock-transfers.restore');
+Route::get('/product-stock-transfers/trashed/{product_stock_transfer}/delete', [ProductStockTransferController::class, 'force_delete'])
+    ->middleware('permission:productStockTransfers.force_delete')
+    ->name('product-stock-transfers.force_delete');
+Route::get('/product-stock-transfers/{product_stock_transfer}/status',[ProductStockTransferController::class, 'changeStatus'])
+    ->name('product-stock-transfers.changeStatus');
+Route::resource('/product-stock-transfers', ProductStockTransferController::class)
+    ->middleware('permission:productStockTransfers.list');
+
+// WarehouseTransfer
+Route::get('/raw-material-stock-transfers/trashed', [RawMaterialStockTransferController::class, 'trashed_list'])
+    ->middleware('permission:rawMaterialStockTransfers.trashed')
+    ->name('raw-material-stock-transfers.trashed');
+Route::get('/raw-material-stock-transfers/trashed/{raw_material_stock_transfer}/restore', [RawMaterialStockTransferController::class, 'restore'])
+    ->middleware('permission:rawMaterialStockTransfers.restore')
+    ->name('raw-material-stock-transfers.restore');
+Route::get('/raw-material-stock-transfers/trashed/{raw_material_stock_transfer}/delete', [RawMaterialStockTransferController::class, 'force_delete'])
+    ->middleware('permission:rawMaterialStockTransfers.force_delete')
+    ->name('raw-material-stock-transfers.force_delete');
+Route::get('/raw-material-stock-transfers/{raw_material_stock_transfer}/status',[RawMaterialStockTransferController::class, 'changeStatus'])
+    ->name('raw-material-stock-transfers.changeStatus');
+
+Route::resource('/raw-material-stock-transfers', RawMaterialStockTransferController::class)
+    ->middleware('permission:rawMaterialStockTransfers.list');
 
 // Reports
 Route::get('/raw-material-stock-reports', [ReportController::class, 'rawMaterialStockReports'])
@@ -484,6 +503,12 @@ Route::get('/transfer-balance-sheets', [ReportController::class, 'transferBalanc
     ->name('transferBalanceSheets');
 Route::get('/sell-profit-loss', [ReportController::class, 'sellProfitLoss'])
     ->name('sellProfitLoss');
+Route::get('/cron-job-logs', [ReportController::class, 'cronJobLogs'])
+    ->name('cronJobLogs');
+
+// Setting
+Route::get('global-setting',[GlobalSettingController::class,'global_setting'])->name('global_setting');
+Route::post('update-global-setting',[GlobalSettingController::class,'update_global_setting'])->name('update_global_setting');
 
 // Profile
 Route::get('/profile',[AdminController::class,'profile'])->name('profile');

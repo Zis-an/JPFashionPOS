@@ -53,12 +53,6 @@
                                             @csrf
                                             @can('productions.updateStatus')
                                                 @if($production->status == 'pending')
-                                                    @can('productions.view')
-                                                        <a href="{{ route('admin.productions.show',['production'=>$production->id]) }}"
-                                                           class="btn btn-info px-1 py-0 btn-sm">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                    @endcan
                                                     @can('productions.update')
                                                         <a href="{{ route('admin.productions.edit',['production'=>$production->id]) }}"
                                                            class="btn btn-warning px-1 py-0 btn-sm">
@@ -87,8 +81,22 @@
                                                     <a href="{{ route('admin.productions.updateStatus', ['production' => $production->id, 'status' => 'pending']) }}"
                                                        class="btn btn-primary btn-sm px-1 py-0">
                                                         <i class="fas fa-arrow-alt-circle-left"></i>
+                                                    </a>
                                                 @endif
                                             @endcan
+                                            @can('productions.view')
+                                                <a href="{{ route('admin.productions.show',['production'=>$production->id]) }}"
+                                                   class="btn btn-info px-1 py-0 btn-sm">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            @endcan
+                                            <a target="_blank"
+                                               rel="noopener noreferrer"
+                                               onclick="openSinglePrivateWindow(this.href); return false;"
+                                               href="{{ route('admin.productions.print',['production' => $production->id]) }}"
+                                               class="btn btn-warning btn-sm px-1 py-0">
+                                                <i class="fas fa-print"></i>
+                                            </a>
                                         </form>
                                     </td>
                                 </tr>
@@ -129,6 +137,18 @@
 @stop
 
 @section('js')
+    <script>
+        let privateWindow = null;
+
+        function openSinglePrivateWindow(url) {
+            // If a private window is already open, focus on it instead of opening a new one
+            if (!privateWindow || privateWindow.closed) {
+                privateWindow = window.open(url, '_blank', 'noopener,noreferrer,width=800,height=600');
+            } else {
+                privateWindow.focus();
+            }
+        }
+    </script>
     <script>
         function isDelete(button) {
             event.preventDefault();

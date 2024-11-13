@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sell_id');
             $table->foreignId('stock_id');
-            $table->double('price', 10, 2);
-            $table->double('cost', 10, 2);
-            $table->unsignedBigInteger('quantity');
+            $table->foreignId('currency_id');
+            $table->double('price', 16, 2);
+            $table->double('cost', 16, 2);
+            $table->double('quantity',16,2);
             $table->string('discount_type');
             $table->double('discount_amount', 10, 2);
-            $table->double('total', 10, 2);
+            $table->double('total', 16, 2);
             $table->timestamps();
         });
     }

@@ -53,7 +53,7 @@
                                             <a class="badge badge-success text-capitalize">{{ $role->name }}</a>
                                         @endforeach
                                     </td>
-                                    <td class="text-capitalize">{{ $admin->type ?? '' }}</td>
+                                    <td class="text-capitalize">{{ ($admin->type == 'salesman' ? 'Salesman' : 'Not a Salesman') ?? '' }}</td>
                                     <td>
                                         @if($admin->status=='active') <span class="badge-success badge">Active</span>
                                         @else <span class="badge-danger badge">Deactivate</span>

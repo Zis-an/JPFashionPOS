@@ -46,7 +46,7 @@
                                 </tr>
                                 <tr>
                                     <th style="width: 30%;">Net Total</th>
-                                    <td>{{ $sell->net_total ?? '' }}</td>
+                                    <td>{{$sell->currency->prefix??''}}{{ $sell->net_total ?? '' }} {{$sell->currency->suffix??''}}</td>
                                 </tr>
                             </table>
                             <div class="mt-3">
@@ -66,11 +66,11 @@
                                         @foreach($existingProducts as $product)
                                             <tr>
                                                 <td>{{ getProductName($product->id) }}</td>
-                                                <td>{{ $product->price ?? '' }}</td>
+                                                <td>{{ $product->currency->prefix??''}}{{ $product->price ?? '' }} {{ $product->currency->suffix??''}}</td>
                                                 <td>{{ $product->quantity ?? '' }}</td>
                                                 <td>{{ $product->discount_type ?? '' }}</td>
-                                                <td>{{ $product->discount_amount ?? '' }}</td>
-                                                <td>{{ $product->total ?? '' }}</td>
+                                                <td>{{ $product->currency->prefix??''}}{{ $product->discount_amount ?? '' }} {{ $product->currency->suffix??''}}</td>
+                                                <td>{{ $product->currency->prefix??''}}{{ $product->total ?? '' }} {{ $product->currency->suffix??''}}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>

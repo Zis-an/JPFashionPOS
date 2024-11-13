@@ -386,7 +386,7 @@
                     success: function (data) {
                         data.forEach(function (material) {
                             $('#raw-materials-container').append(`
-                            <div class="raw-material-card" data-id="${material.id}" data-quantity="${material.quantity}" data-price="${material.price}"
+                            <div class="raw-material-card" data-id="${material.id}" data-raw-material-id="${material.raw_material_id}" data-quantity="${material.quantity}" data-price="${material.price}"
                                 data-image="${material.raw_material.image}" data-warehouse-id="${warehouseId}"
                                 data-brand-id="${material.brand_id}" data-color-id="${material.color_id}" data-size-id="${material.size_id}">
                                 <img src="${baseURL}${material.raw_material.image}" alt="${material.raw_material.name}" style="width: 20px; height: 20px;">
@@ -400,7 +400,8 @@
 
                         // Add click event for each raw material card
                         $('.raw-material-card').on('click', function () {
-                            const materialId = $(this).data('id');
+                            const id = $(this).data('id');
+                            const materialId = $(this).data('raw-material-id');
                             const availableQuantity = $(this).data('quantity');
                             const price = $(this).data('price');
                             const image = $(this).data('image'); // Get the image URL
@@ -409,7 +410,7 @@
                             const colorId = $(this).data('color-id');
                             const sizeId = $(this).data('size-id');
 
-                            const selectedMaterial = selectedMaterials[materialId];
+                            const selectedMaterial = selectedMaterials[id];
                             let count = selectedMaterial ? selectedMaterial.count + 1 : 1;
 
                             // Prevent adding more than available quantity
@@ -419,8 +420,9 @@
                             }
 
                             $('#alert-container').empty(); // Clear previous alerts
-                            selectedMaterials[materialId] = {
-                                id: materialId,
+                            selectedMaterials[id] = {
+                                id: id,
+                                materialId: materialId,
                                 name: $(this).find('h5').text(),
                                 sku: $(this).find('p').eq(0).text().replace('SKU: ', ''),
                                 price: price,
@@ -452,7 +454,7 @@
                     <tr>
                         <td><img src="${baseURL}${material.image}" alt="${material.name}" style="width: 60px; height: 60px;"></td>
                         <td>
-                            <input type="hidden" name="raw_material_id[]" value="${material.id}"> <!-- Raw Material ID -->
+                            <input type="hidden" name="raw_material_id[]" value="${material.materialId}"> <!-- Raw Material ID -->
                             <input type="hidden" name="raw_material_warehouse_id[]" value="${material.warehouseId}"> <!-- Warehouse ID -->
                             <input type="hidden" name="raw_material_brand_id[]" value="${material.brandId}"> <!-- Brand ID -->
                             <input type="hidden" name="raw_material_color_id[]" value="${material.colorId}"> <!-- Color ID -->

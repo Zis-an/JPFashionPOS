@@ -95,13 +95,16 @@
                             </thead>
                             <tbody>
                             @foreach($sells as $sell)
+                                @php
+                                    $convertedData = getDefaultCurrencyConvertedPrice($sell);
+                                @endphp
                                 <tr>
                                     <td>{{ $sell->customer->name ?? '' }}</td>
                                     <td>{{ $sell->salesman->name ?? '' }}</td>
                                     <td>{{ $sell->account->name ?? '' }}</td>
-                                    <td>{{ number_format($sell->total_amount, 2) }}</td>
-                                    <td>{{ number_format($sell->discount_amount, 2) }}</td>
-                                    <td>{{ number_format($sell->net_total, 2) }}</td>
+                                    <td>{{$defaultCurrency->prefix}}{{ number_format($convertedData['total_amount'], 2) }} {{$defaultCurrency->suffix}}</td>
+                                    <td>{{$defaultCurrency->prefix}}{{ number_format($convertedData['discount_amount'], 2) }} {{$defaultCurrency->suffix}}</td>
+                                    <td>{{$defaultCurrency->prefix}}{{ number_format($convertedData['net_total'], 2) }} {{$defaultCurrency->suffix}}</td>
                                     <td>{{ $sell->created_at ? \Carbon\Carbon::parse($sell->created_at)->format('F j, Y') : '' }}</td>
                                 </tr>
                             @endforeach

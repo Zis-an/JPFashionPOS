@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{route('admin.rawMaterialPurchases.index')}}">Purchases</a></li>
+                <li class="breadcrumb-item"><a href="{{route('admin.raw-material-purchases.index')}}">Purchases</a></li>
                 <li class="breadcrumb-item active">View Purchase</li>
             </ol>
 
@@ -107,12 +107,13 @@
                             </fieldset>
 
 
-                        <form action="{{ route('admin.rawMaterialPurchases.destroy', $purchase->id) }}" method="POST">
+                        <form action="{{ route('admin.raw-material-purchases.destroy', $purchase->id) }}" method="POST">
                             @method('DELETE')
                             @csrf
-                            <a href="{{route('admin.rawMaterialPurchases.index')}}" class="btn btn-success" >Go Back</a>
+                            <a href="{{route('admin.raw-material-purchases.index')}}" class="btn btn-success" >Go Back</a>
                             @can('rawMaterialPurchases.update')
-                                <a href="{{route('admin.rawMaterialPurchases.edit',['rawMaterialPurchase'=>$purchase->id])}}" class="btn btn-warning "><i class="fa fa-pen"></i> Edit</a>
+                                <a href="{{route('admin.raw-material-purchases.edit',['raw_material_purchase'=>$purchase->id])}}" class="btn btn-warning ">
+                                    <i class="fa fa-pen"></i> Edit</a>
                             @endcan
                             @can('rawMaterialPurchases.delete')
                                 <button onclick="isDelete(this)" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>

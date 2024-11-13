@@ -38,10 +38,13 @@ class CurrencyController extends Controller
             'name' => 'required',
             'rate' => 'required',
         ]);
+
         $currency = Currency::create([
             'code' => $request->code,
             'name' => $request->name,
             'rate' => $request->rate,
+            'suffix' => $request->suffix,
+            'prefix' => $request->prefix,
         ]);
         return redirect()->route('admin.currencies.index')->with('success', 'Currency created successfully');
     }
@@ -66,6 +69,8 @@ class CurrencyController extends Controller
                 'code' => $request->code,
                 'name' => $request->name,
                 'rate' => $request->rate,
+                'suffix' => $request->suffix,
+                'prefix' => $request->prefix,
                 'status' => $request->status,
             ]);
             return redirect()->route('admin.currencies.index')->with('success', 'Currency Updated Successfully');
@@ -78,8 +83,13 @@ class CurrencyController extends Controller
     {
         try {
             $currency = Currency::findOrFail($id);
-            $currency->delete();
-            return redirect()->route('admin.currencies.index')->with('success', 'Currency Deleted Successfully');
+            if (!$currency->is_default){
+                $currency->delete();
+                return redirect()->route('admin.currencies.index')->with('success', 'Currency Deleted Successfully');
+            }else{
+                return redirect()->route('admin.currencies.index')->with('error', 'Default Currency Cannot Delete');
+            }
+
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

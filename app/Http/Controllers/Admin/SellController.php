@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\UpdateAccountBalanceJob;
+use App\Jobs\UpdateProductSellPricesJob;
 use App\Models\Account;
 use App\Models\AccountTransaction;
 use App\Models\Admin;
@@ -28,6 +29,7 @@ class SellController extends Controller
 {
     public function index(): View|Factory|Application
     {
+        UpdateProductSellPricesJob::dispatch();
         $sells = Sell::orderBy('id', 'DESC')->get();
         return view('admin.sells.index', compact('sells'));
     }
@@ -68,6 +70,11 @@ class SellController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $currency_id = session('currency')['id'];
+        $selectedCurrency = Currency::find($currency_id);
+        if (!$selectedCurrency) {
+            return redirect()->route('admin.sells.create')->with('error','Currency not found');
+        }
         // Validate the request
         $request->validate([
             'customer' => 'required',
@@ -96,6 +103,7 @@ class SellController extends Controller
             'customer_id' => $request->customer,
             'salesman_id' => $request->salesman,
             'account_id' => $request->account_id,
+            'currency_id'=>$currency_id,
             'total_amount' => $totalAmount,
             'discount_amount' => $discountAmount,
             'net_total' => $netTotal,
@@ -122,6 +130,7 @@ class SellController extends Controller
             DB::table('sell_stocks')->insert([
                 'sell_id' => $sell->id,
                 'stock_id' => $stockId,
+                'currency_id'=>$currency_id,
                 'cost' => $productStock->total_cost_price * $request->product_quantity[$key],
                 'price' => $request->product_price[$key],
                 'quantity' => $request->product_quantity[$key],
@@ -153,8 +162,8 @@ class SellController extends Controller
             'net_total' => $sellStockSums->net_total,
             'paid_amount'=> $paidAmount
         ]);
-
-
+        $sell = Sell::findOrFail($sell->id);
+        $convertedData = getDefaultCurrencyConvertedPrice($sell);
         $reference = sprintf(
             '%s sale has been created with a status of "%s" for %s (Customer) by %s (Salesman) with reference ID: %s.',
             class_basename($sell),        // Model's class name without the namespace
@@ -179,7 +188,7 @@ class SellController extends Controller
             'account_id' => $sell->account_id,
             'transaction_id' =>$transactionId,
             'transaction_type' => 'in',
-            'amount' => $paidAmount,
+            'amount' => $convertedData['paid_amount'],
             'model' => get_class($sell),
             'model_id' => $sell->id,
             'reference' => $reference,
@@ -210,6 +219,11 @@ class SellController extends Controller
 
     public function update(Request $request, $id): RedirectResponse
     {
+        $currency_id = session('currency')['id'];
+        $selectedCurrency = Currency::find($currency_id);
+        if (!$selectedCurrency) {
+            return redirect()->route('admin.sells.create')->with('error','Currency not found');
+        }
         // Validate the request
         $request->validate([
             'customer' => 'required',
@@ -234,7 +248,7 @@ class SellController extends Controller
 
         // Find the sell record and update
         $sell = Sell::findOrFail($id);
-
+        $convertedData = getDefaultCurrencyConvertedPrice($sell);
         $reference = sprintf(
             '%s sale has been updated with a status of "%s" for %s (Customer) by %s (Salesman) with reference ID: %s.',
             class_basename($sell),        // Model's class name without the namespace
@@ -259,7 +273,7 @@ class SellController extends Controller
             'account_id' => $sell->account_id,
             'transaction_id' =>$transactionId,
             'transaction_type' => 'out',
-            'amount' => $sell->paid_amount,
+            'amount' => $convertedData['paid_amount'],
             'model' => get_class($sell),
             'model_id' => $sell->id,
             'reference' => $reference,
@@ -271,6 +285,7 @@ class SellController extends Controller
             'customer_id' => $request->customer,
             'salesman_id' => $request->salesman,
             'account_id' => $request->account_id,
+            'currency_id'=>$currency_id,
             'total_amount' => $totalAmount,
             'discount_amount' => $discountAmount,
             'net_total' => $netTotal,
@@ -305,6 +320,7 @@ class SellController extends Controller
             DB::table('sell_stocks')->insert([
                 'sell_id' => $sell->id,
                 'stock_id' => $stockId,
+                'currency_id'=>$currency_id,
                 'cost' => $productStock->total_cost_price * $request->product_quantity[$key],
                 'price' => $request->product_price[$key],
                 'quantity' => $request->product_quantity[$key],
@@ -337,6 +353,7 @@ class SellController extends Controller
             'paid_amount'=> $paidAmount
         ]);
         $sell = Sell::find($sell->id);
+        $convertedData = getDefaultCurrencyConvertedPrice($sell);
         $reference = sprintf(
             '%s sale has been updated with a status of "%s" for %s (Customer) by %s (Salesman) with reference ID: %s.',
             class_basename($sell),        // Model's class name without the namespace
@@ -361,7 +378,7 @@ class SellController extends Controller
             'account_id' => $sell->account_id,
             'transaction_id' =>$transactionId,
             'transaction_type' => 'in',
-            'amount' => $paidAmount,
+            'amount' => $convertedData['paid_amount'],
             'model' => get_class($sell),
             'model_id' => $sell->id,
             'reference' => $reference,
@@ -419,7 +436,7 @@ class SellController extends Controller
     public function show($id): View|Factory|Application
     {
         $sell = Sell::findOrFail($id);
-        $existingProducts = DB::table('sell_stocks')->where('sell_id', $sell->id)->get();
+        $existingProducts = SellStock::with('currency')->where('sell_id', $sell->id)->get();
         $admins = Admin::all();
         $activities = AdminActivity::getActivities(Sell::class, $id)->orderBy('created_at', 'desc')->take(10)->get();
         return view('admin.sells.show', compact('sell', 'admins', 'activities', 'existingProducts'));

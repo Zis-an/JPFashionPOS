@@ -16,9 +16,9 @@ class CreateRawMaterialsTable extends Migration
             $table->string('sku')->unique();
             $table->string('image')->nullable();
             $table->text('details')->nullable();
-            $table->decimal('width', 8, 2)->nullable();
-            $table->decimal('length', 8, 2)->nullable();
-            $table->decimal('density', 8, 2)->nullable();
+            $table->decimal('width', 16, 2)->nullable();
+            $table->decimal('length', 16, 2)->nullable();
+            $table->decimal('density', 16, 2)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

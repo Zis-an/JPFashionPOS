@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('brand_id');
             $table->foreignId('size_id');
             $table->foreignId('color_id');
-            $table->double('per_pc_cost');
-            $table->unsignedBigInteger('quantity');
-            $table->double('sub_total');
+            $table->double('per_pc_cost',16,2);
+            $table->double('quantity',16,2);
+            $table->double('sub_total',16,2);
             $table->timestamps();
 
             $table->foreign('production_id')->references('id')->on('productions')->onDelete('cascade');

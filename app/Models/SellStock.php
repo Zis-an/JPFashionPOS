@@ -13,6 +13,14 @@ class SellStock extends Model
     {
         return $this->belongsTo(ProductStock::class);
     }
+    public function sell(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Sell::class);
+    }
+    public function currency(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
+    }
 
 
 }

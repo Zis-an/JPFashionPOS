@@ -34,6 +34,8 @@
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Rate</th>
+                                <th>Suffix</th>
+                                <th>Prefix</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -41,9 +43,11 @@
                             <tbody>
                             @foreach($currencies as $currency)
                                 <tr>
-                                    <td>{{ $currency->code ?? '' }}</td>
+                                    <td>{{ $currency->code ?? '' }} @if($currency->is_default) <span class="badge badge-success">Default</span> @endif</td>
                                     <td>{{ $currency->name ?? '' }}</td>
                                     <td>{{ $currency->rate ?? '' }}</td>
+                                    <td>{{ $currency->suffix ?? '' }}</td>
+                                    <td>{{ $currency->prefix ?? '' }}</td>
                                     <td>{{ $currency->status == 1 ? 'Active' : 'Inactive' }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.currencies.destroy', $currency->id) }}" method="POST">
@@ -55,10 +59,11 @@
                                             @can('currencies.update')
                                                 <a href="{{ route('admin.currencies.edit',['currency'=>$currency->id]) }}" class="btn btn-warning px-1 py-0 btn-sm"><i class="fa fa-pen"></i></a>
                                             @endcan
+                                            @if(!$currency->is_default)
                                             @can('currencies.delete')
                                                 <button onclick="isDelete(this)" class="btn btn-danger btn-sm px-1 py-0"><i class="fa fa-trash"></i></button>
                                             @endcan
-
+                                            @endif
                                         </form>
                                     </td>
                                 </tr>
@@ -70,6 +75,8 @@
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Rate</th>
+                                <th>Suffix</th>
+                                <th>Prefix</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>

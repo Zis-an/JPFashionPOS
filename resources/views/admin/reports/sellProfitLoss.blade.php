@@ -76,13 +76,16 @@
                             </thead>
                             <tbody>
                             @foreach($sells as $sell)
+                                @php
+                                    $convertedData = getDefaultCurrencyConvertedPrice($sell);
+                                @endphp
                                 <tr>
                                     <td>{{ $sell->customer->name ?? '' }}</td>
                                     <td>{{ $sell->account->name ?? '' }}</td>
-                                    <td class="text-right">{{ number_format($sell->net_total, 2) }}</td>
-                                    <td class="text-right">{{ number_format($sell->sell_stocks->first()->cost ?? 0, 2) }}</td>
-                                    <td>{{ ($sell->sell_stocks->first()->cost ?? 0) < $sell->net_total ? 'Profit' : 'Loss' }}</td>
-                                    <td class="text-right">{{ ($sell->sell_stocks->first()->cost ?? 0) < $sell->net_total ? number_format($sell->net_total - ($sell->sell_stocks->first()->cost ?? 0), 2) : number_format(($sell->sell_stocks->first()->cost ?? 0) - $sell->net_total, 2) }}</td>
+                                    <td class="text-right">{{$defaultCurrency->prefix}}{{ number_format($convertedData['net_total'], 2) }} {{$defaultCurrency->suffix}}</td>
+                                    <td class="text-right">{{$defaultCurrency->prefix}}{{ number_format($sell->sell_stocks->first()->cost ?? 0, 2) }} {{$defaultCurrency->suffix}}</td>
+                                    <td>{!! ($sell->sell_stocks->first()->cost ?? 0) < $convertedData['net_total'] ? '<span class="badge badge-success">Profit<span>' : '<span class="badge badge-danger">Loss<span>' !!}</td>
+                                    <td class="text-right">{{$defaultCurrency->prefix}}{{ ($sell->sell_stocks->first()->cost ?? 0) < $convertedData['net_total'] ? number_format($convertedData['net_total'] - ($sell->sell_stocks->first()->cost ?? 0), 2) : number_format(($sell->sell_stocks->first()->cost ?? 0) - $convertedData['net_total'], 2) }} {{$defaultCurrency->suffix}}</td>
                                     <td>{{ $sell->created_at ? \Carbon\Carbon::parse($sell->created_at)->format('F j, Y') : '' }}</td>
                                 </tr>
                             @endforeach
@@ -90,10 +93,10 @@
                             <tfoot>
                             <tr>
                                 <th colspan="2">Total</th>
-                                <th class="text-right">{{ number_format($totalNetTotal, 2) }}</th>
-                                <th class="text-right">{{ number_format($totalCost, 2) }}</th>
-                                <th></th>
-                                <th class="text-right">{{ number_format($totalAmount, 2) }}</th>
+                                <th class="text-right">{{$defaultCurrency->prefix}}{{ number_format($totalNetTotal, 2) }} {{$defaultCurrency->suffix}}</th>
+                                <th class="text-right">{{$defaultCurrency->prefix}}{{ number_format($totalCost, 2) }} {{$defaultCurrency->suffix}}</th>
+                                <th>{!!   ($totalCost < $totalNetTotal) ? '<span class="badge badge-success">Profit<span>' : '<span class="badge badge-danger">Loss<span>' !!}</th>
+                                <th class="text-right">{{$defaultCurrency->prefix}}{{ number_format($totalAmount, 2) }} {{$defaultCurrency->suffix}}</th>
                                 <th></th>
                             </tr>
                             </tfoot>
