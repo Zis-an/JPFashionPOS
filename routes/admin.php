@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\CustomerPaymentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DepositController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductionController;
 use App\Http\Controllers\Admin\ProductionHouseController;
+use App\Http\Controllers\Admin\ProductionPaymentController;
 use App\Http\Controllers\Admin\ProductStockController;
 use App\Http\Controllers\Admin\ProductStockTransferController;
 use App\Http\Controllers\Admin\RawMaterialCategoryController;
@@ -33,12 +35,11 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SellController;
 use App\Http\Controllers\Admin\ShowroomController;
-use App\Http\Controllers\Admin\ShowroomTransferController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\SupplierPaymentController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\WarehouseController;
-use App\Http\Controllers\Admin\WarehouseTransferController;
 use App\Http\Controllers\Admin\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
@@ -506,9 +507,54 @@ Route::get('/sell-profit-loss', [ReportController::class, 'sellProfitLoss'])
 Route::get('/cron-job-logs', [ReportController::class, 'cronJobLogs'])
     ->name('cronJobLogs');
 
-// Setting
+// Settings
 Route::get('global-setting',[GlobalSettingController::class,'global_setting'])->name('global_setting');
 Route::post('update-global-setting',[GlobalSettingController::class,'update_global_setting'])->name('update_global_setting');
+
+// CustomerPayments
+Route::get('/customer-payments/trashed', [CustomerPaymentController::class, 'trashed_list'])
+    ->middleware('permission:customerPayments.trashed')
+    ->name('customer-payments.trashed');
+Route::get('/customer-payments/trashed/{customer_payment}/restore', [CustomerPaymentController::class, 'restore'])
+    ->middleware('permission:customerPayments.restore')
+    ->name('customer-payments.restore');
+Route::get('/customer-payments/trashed/{customer_payment}/delete', [CustomerPaymentController::class, 'force_delete'])
+    ->middleware('permission:customerPayments.force_delete')
+    ->name('customer-payments.force_delete');
+Route::get('/customer-payments/{customer_payment}/status/{status}',[CustomerPaymentController::class, 'updateStatus'])
+    ->name('customer-payments.updateStatus')
+    ->middleware('permission:customerPayments.updateStatus');
+Route::resource('/customer-payments', CustomerPaymentController::class)->middleware('permission:customerPayments.list');
+
+// SupplierPayments
+Route::get('/supplier-payments/trashed', [SupplierPaymentController::class, 'trashed_list'])
+    ->middleware('permission:supplierPayments.trashed')
+    ->name('supplier-payments.trashed');
+Route::get('/supplier-payments/trashed/{supplier_payment}/restore', [SupplierPaymentController::class, 'restore'])
+    ->middleware('permission:supplierPayments.restore')
+    ->name('supplier-payments.restore');
+Route::get('/supplier-payments/trashed/{supplier_payment}/delete', [SupplierPaymentController::class, 'force_delete'])
+    ->middleware('permission:supplierPayments.force_delete')
+    ->name('supplier-payments.force_delete');
+Route::get('/supplier-payments/{supplier_payment}/status/{status}',[SupplierPaymentController::class, 'updateStatus'])
+    ->name('supplier-payments.updateStatus')
+    ->middleware('permission:supplierPayments.updateStatus');
+Route::resource('/supplier-payments', SupplierPaymentController::class)->middleware('permission:supplierPayments.list');
+
+// ProductionPayments
+Route::get('/production-payments/trashed', [ProductionPaymentController::class, 'trashed_list'])
+    ->middleware('permission:productionPayments.trashed')
+    ->name('production-payments.trashed');
+Route::get('/production-payments/trashed/{production_payment}/restore', [ProductionPaymentController::class, 'restore'])
+    ->middleware('permission:productionPayments.restore')
+    ->name('production-payments.restore');
+Route::get('/production-payments/trashed/{production_payment}/delete', [ProductionPaymentController::class, 'force_delete'])
+    ->middleware('permission:productionPayments.force_delete')
+    ->name('production-payments.force_delete');
+Route::get('/production-payments/{production_payment}/status/{status}',[ProductionPaymentController::class, 'updateStatus'])
+    ->name('production-payments.updateStatus')
+    ->middleware('permission:productionPayments.updateStatus');
+Route::resource('/production-payments', ProductionPaymentController::class)->middleware('permission:productionPayments.list');
 
 // Profile
 Route::get('/profile',[AdminController::class,'profile'])->name('profile');

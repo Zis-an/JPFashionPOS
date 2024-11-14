@@ -35,6 +35,7 @@
                                 <th>Address</th>
                                 <th>Phone</th>
                                 <th>Email</th>
+                                <th>Balance</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -44,8 +45,9 @@
                                 <tr>
                                     <td>{{ $house->name ?? '' }}</td>
                                     <td>{{ $house->address ?? '' }}</td>
-                                    <td>{{ $ouse->phone ?? '' }}</td>
+                                    <td>{{ $house->phone ?? '' }}</td>
                                     <td>{{ $house->email ?? '' }}</td>
+                                    <td>{{ $house->balance ?? '' }}</td>
                                     <td>{{ ucfirst($house->status) ?? '' }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.houses.destroy', $house->id) }}" method="POST">

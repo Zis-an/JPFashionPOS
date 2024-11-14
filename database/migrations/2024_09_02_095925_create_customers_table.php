@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
+            $table->double('balance', 15,2)->nullable()->default(0);
             $table->longText('address')->nullable();
             $table->date('dob')->nullable();
             $table->date('anniversary_date')->nullable();

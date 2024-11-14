@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('contact_person')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->unique();
+            $table->double('balance', 15,2)->nullable()->default(0);
             $table->string('address')->nullable();
             $table->longText('description')->nullable();
             $table->timestamps();

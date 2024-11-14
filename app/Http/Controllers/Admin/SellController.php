@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\UpdateAccountBalanceJob;
+use App\Jobs\UpdateCustomerBalance;
 use App\Jobs\UpdateProductSellPricesJob;
 use App\Models\Account;
 use App\Models\AccountTransaction;
@@ -29,7 +30,7 @@ class SellController extends Controller
 {
     public function index(): View|Factory|Application
     {
-        UpdateProductSellPricesJob::dispatch();
+        UpdateCustomerBalance::dispatch();
         $sells = Sell::orderBy('id', 'DESC')->get();
         return view('admin.sells.index', compact('sells'));
     }
@@ -194,8 +195,7 @@ class SellController extends Controller
             'reference' => $reference,
         ]);
         UpdateAccountBalanceJob::dispatch();
-
-
+        UpdateCustomerBalance::dispatch();
         return redirect()->route('admin.sells.index')->with('success', 'Sell created successfully');
     }
 
@@ -211,6 +211,8 @@ class SellController extends Controller
 
         // Retrieve selected products for the sale
         $existingProducts = SellStock::with(['stock','stock.product'])->where('sell_id', $sell->id)->get();
+
+        UpdateCustomerBalance::dispatch();
 
 
         return view('admin.sells.edit',
@@ -384,6 +386,7 @@ class SellController extends Controller
             'reference' => $reference,
         ]);
         UpdateAccountBalanceJob::dispatch();
+        UpdateCustomerBalance::dispatch();
 
         return redirect()->route('admin.sells.index')->with('success', 'Sell updated successfully');
     }
@@ -429,6 +432,7 @@ class SellController extends Controller
             'reference' => $reference,
         ]);
         UpdateAccountBalanceJob::dispatch();
+        UpdateCustomerBalance::dispatch();
         $sell->delete();
         return redirect()->route('admin.sells.index')->with('success', 'Sell Deleted Successfully');
     }
@@ -483,6 +487,7 @@ class SellController extends Controller
             'reference' => $reference,
         ]);
         UpdateAccountBalanceJob::dispatch();
+        UpdateCustomerBalance::dispatch();
         return redirect()->route('admin.sells.index')->with('success', 'Sell Restored Successfully');
     }
 
@@ -494,6 +499,7 @@ class SellController extends Controller
             $stock->delete();
         }
         $sell->forceDelete();
+        UpdateCustomerBalance::dispatch();
         return redirect()->route('admin.sells.trashed')->with('success', 'Sell Permanently Deleted');
     }
 

@@ -46,7 +46,7 @@
                                                 <i class="fa fa-arrow-left"></i>
                                             </a>
                                         @endcan
-                                        @can('deposit.force_delete')
+                                        @can('deposits.force_delete')
                                             <a href="{{ route('admin.deposits.force_delete',['deposit'=>$deposit->id]) }}" class="btn btn-danger btn-sm px-1 py-0">
                                                 <i class="fa fa-trash"></i>
                                             </a>

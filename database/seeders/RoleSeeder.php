@@ -561,6 +561,51 @@ class RoleSeeder extends Seeder
                     ]
                 ],
                 [
+                    'group_name' => 'CustomerPayment',
+                    'permissions' => [
+                        'customerPayments.list',
+                        'customerPayments.create',
+                        'customerPayments.view',
+                        'customerPayments.update',
+                        'customerPayments.delete',
+                        'customerPayments.trashed',
+                        'customerPayments.restore',
+                        'customerPayments.force_delete',
+                        'customerPayments.activity',
+                        'customerPayments.updateStatus'
+                    ]
+                ],
+                [
+                    'group_name' => 'SupplierPayment',
+                    'permissions' => [
+                        'supplierPayments.list',
+                        'supplierPayments.create',
+                        'supplierPayments.view',
+                        'supplierPayments.update',
+                        'supplierPayments.delete',
+                        'supplierPayments.trashed',
+                        'supplierPayments.restore',
+                        'supplierPayments.force_delete',
+                        'supplierPayments.activity',
+                        'supplierPayments.updateStatus'
+                    ]
+                ],
+                [
+                    'group_name' => 'ProductionPayment',
+                    'permissions' => [
+                        'productionPayments.list',
+                        'productionPayments.create',
+                        'productionPayments.view',
+                        'productionPayments.update',
+                        'productionPayments.delete',
+                        'productionPayments.trashed',
+                        'productionPayments.restore',
+                        'productionPayments.force_delete',
+                        'productionPayments.activity',
+                        'productionPayments.updateStatus'
+                    ]
+                ],
+                [
                     'group_name' => 'Global',
                     'permissions' => [
                         'dashboard_manage',

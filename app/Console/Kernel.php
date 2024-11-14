@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\UpdateAccountBalance;
 use App\Jobs\DeleteOldCronJobLogs;
 use App\Jobs\UpdateAccountBalanceJob;
+use App\Jobs\UpdateCustomerBalance;
 use App\Jobs\UpdateProductSellPricesJob;
 use App\Models\CronJobLog;
 use Illuminate\Console\Scheduling\Schedule;
@@ -34,7 +35,23 @@ class Kernel extends ConsoleKernel
                 $this->logCronJob('UpdateProductSellPricesJob', 'completed');
             });
 
-        $schedule->job(new DeleteOldCronJobLogs())->dailyAt('00:00');
+        $schedule->job(new UpdateCustomerBalance())
+            ->hourly()
+            ->before(function () {
+                $this->logCronJob('UpdateCustomerBalance', 'initiated');
+            })
+            ->after(function () {
+                $this->logCronJob('UpdateCustomerBalance', 'completed');
+            });
+
+        $schedule->job(new DeleteOldCronJobLogs())
+            ->daily()
+            ->before(function () {
+                $this->logCronJob('DeleteOldCronJobLogs', 'initiated');
+            })
+            ->after(function () {
+                $this->logCronJob('DeleteOldCronJobLogs', 'completed');
+            });
     }
 
     /**
