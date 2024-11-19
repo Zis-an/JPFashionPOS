@@ -120,19 +120,35 @@
                                 <div class="col-md-6" style="height: 300px; overflow-y: auto;">
                                     <legend class="w-auto ml-1">Cost Details</legend>
                                     <fieldset class="form-group border p-3" style="border-color: #ccc;">
-                                        <div class="d-flex mb-2">
-                                            <div class="total-sum mr-2">
-                                                <label>Total Cost: </label>
-                                                <input type="text" name="total_cost" class="form-control" id="total-amount" value="0" readonly>
+                                        <div class="d-flex align-items-center" style="gap: 15px;">
+                                            <!-- Total Cost -->
+                                            <div class="d-flex align-items-center">
+                                                <div class="total-sum me-3">
+                                                    <label>Total Cost: </label>
+                                                    <input type="text" name="total_cost" class="form-control" id="total-amount" value="0" readonly>
+                                                </div>
+                                                <!-- Add Button -->
+                                                <div class="ml-2">
+                                                    <button class="btn btn-success btn-sm add-item-btn" type="button">Add</button>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <button class="btn btn-success btn-sm add-item-btn" type="button">Add</button>
+                                            <!-- Payment -->
+                                            <div class="d-flex align-items-center ml-2">
+                                                <label for="payment_type">Payment: </label>
+                                                <select id="payment_type" name="payment_type" class="select2 form-control ml-2">
+                                                    <option value="full_paid">PAID</option>
+                                                    <option value="partial_paid">PARTIAL</option>
+                                                </select>
+                                            </div>
+                                            <!-- Container for the dynamic input field -->
+                                            <div id="dueInputContainer" class="" style="display: none;">
+                                                <input type="number" id="paid_amount" name="paid_amount" class="form-control" placeholder="Enter Paid Amount">
                                             </div>
                                         </div>
-                                        <div id="cost-details-container">
+                                        <div id="cost-details-container" class="mt-1">
                                             <div class="cost-detail-item d-flex align-items-center mb-2">
-                                                <input type="text" name="cost_details[]" class="form-control cost-detail-input mr-2" placeholder="Cost Details" required>
-                                                <input type="number" name="cost_amount[]" class="form-control amount-input mr-2" placeholder="Amount" required>
+                                                <input type="text" name="cost_details[]" class="form-control cost-detail-input mr-1" placeholder="Cost Details" required>
+                                                <input type="number" name="cost_amount[]" class="form-control amount-input ml-1" placeholder="Amount" required>
                                                 <div class="button-placeholder"></div>
                                             </div>
                                         </div>
@@ -372,6 +388,25 @@
                     }
                 });
             });
+
+            // Paid + Due Amount Input Field Reveal and Hide Related Code Starts
+            const paymentTypeSelect = document.getElementById('payment_type');
+            const dueInputContainer = document.getElementById('dueInputContainer');
+
+            // Listen for changes to the select element
+            paymentTypeSelect.addEventListener('change', function () {
+                const selectedValue = paymentTypeSelect.value;
+
+                // Show or hide the input field based on selection
+                if (selectedValue === 'partial_paid') {
+                    dueInputContainer.style.display = 'block'; // Show input
+                } else {
+                    dueInputContainer.style.display = 'none'; // Hide input
+                }
+
+                console.log("Selected Payment Type:", selectedValue);
+            });
+            // Paid + Due Amount Input Field Reveal and Hide Related Code Ends
 
             const baseURL = "{{ asset('') }}";
 

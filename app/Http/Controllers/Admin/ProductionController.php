@@ -128,7 +128,9 @@ class ProductionController extends Controller
         $production->update([
             'total_raw_material_cost' => $totalRawMaterialCost, // Update amount
             'total_product_cost' => $totalProductCost,// Update amount
-            'amount' => $totalForProduction // Update amount
+            'net_total' => $totalForProduction,
+            'payment_type'=>$request->payment_type,
+            'amount' => $request->payment_type == 'full_paid'?$totalForProduction: $request->paid_amount
         ]);
         return redirect()->route('admin.productions.index')->with('success', 'Productions Created Successfully');
     }
@@ -304,7 +306,9 @@ class ProductionController extends Controller
         $production->update([
             'total_raw_material_cost' => $totalRawMaterialCost,
             'total_product_cost' => $totalProductCost,
-            'amount' => $totalForProduction,
+            'net_total' => $totalForProduction,
+            'payment_type'=>$request->payment_type,
+            'amount' => $request->payment_type == 'full_paid'?$totalForProduction: $request->paid_amount
         ]);
 
         // Redirect with a success message

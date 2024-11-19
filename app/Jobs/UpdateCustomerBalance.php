@@ -4,12 +4,14 @@ namespace App\Jobs;
 
 use App\Models\Customer;
 use App\Models\CustomerPayment;
+use App\Models\CustomerRefund;
 use App\Models\Sell;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class UpdateCustomerBalance implements ShouldQueue
 {
@@ -28,6 +30,7 @@ class UpdateCustomerBalance implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('UpdateCustomerBalance job started.');
         // Loop through each customer
         $customers = Customer::all();
 
@@ -44,9 +47,12 @@ class UpdateCustomerBalance implements ShouldQueue
             $totalPayments = CustomerPayment::where('customer_id', $customer->id)
                 ->whereNull('deleted_at') // Optional: ensure no deleted records are included
                 ->sum('amount'); // Sum of all payments made by the customer
+            $totalRefunds = CustomerRefund::where('customer_id', $customer->id)
+                ->whereNull('deleted_at') // Optional: ensure no deleted records are included
+                ->sum('amount');
 
             // Calculate the new balance (total sales - total payments)
-            $newBalance = ($totalPayments + $totalSalesPaid)- $totalSales;
+            $newBalance = ($totalPayments + $totalSalesPaid) - $totalSales - $totalRefunds;
 
             // Update the customer's balance
             $customer->balance = $newBalance;

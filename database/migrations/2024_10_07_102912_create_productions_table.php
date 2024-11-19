@@ -22,8 +22,10 @@ return new class extends Migration
             $table->decimal('total_cost', 15, 2);
             $table->decimal('total_raw_material_cost', 15, 2);
             $table->decimal('total_product_cost', 15, 2);
+            $table->decimal('net_total', 15, 2)->nullable()->default(0);
+            $table->decimal('amount', 15, 2)->default(0)->comment('Paid amount');
             $table->decimal('net_total', 15, 2)->default(0);
-            $table->decimal('amount', 15, 2)->default(0);
+            $table->string('payment_type')->default('full_paid');
             $table->string('status')->default('pending');
             $table->timestamps();
             $table->softDeletes();

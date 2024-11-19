@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdateProductionHouseBalance;
 use App\Models\Admin;
 use App\Models\AdminActivity;
 use App\Models\Brand;
@@ -21,18 +22,21 @@ class ProductionHouseController extends Controller
 {
     public function index(): View|Factory|Application
     {
+        UpdateProductionHouseBalance::dispatch();
         $houses = ProductionHouse::orderBy('id', 'DESC')->get();
         return view('admin.houses.index', compact('houses'));
     }
 
     public function trashed_list(): View|Factory|Application
     {
+        UpdateProductionHouseBalance::dispatch();
         $houses = ProductionHouse::onlyTrashed()->orderBy('id', 'DESC')->get();
         return view('admin.houses.trashed', compact('houses'));
     }
 
     public function create(): View|Factory|Application
     {
+        UpdateProductionHouseBalance::dispatch();
         return view('admin.houses.create');
     }
 
@@ -52,11 +56,13 @@ class ProductionHouseController extends Controller
             'email' => $request->input('email')
         ]);
 
+        UpdateProductionHouseBalance::dispatch();
         return redirect()->route('admin.houses.index')->with('success', 'Production House created successfully');
     }
 
     public function edit($id): View|Factory|Application
     {
+        UpdateProductionHouseBalance::dispatch();
         $house = ProductionHouse::find($id);
         return view('admin.houses.edit', compact('house'));
     }
@@ -79,6 +85,7 @@ class ProductionHouseController extends Controller
             'email' => $request->input('email'),
             'status' => $request->input('status')
         ]);
+        UpdateProductionHouseBalance::dispatch();
         return redirect()->route('admin.houses.index')->with('success', 'Production House updated successfully');
     }
 
@@ -86,6 +93,7 @@ class ProductionHouseController extends Controller
     {
         $house = ProductionHouse::find($id);
         $house->delete();
+        UpdateProductionHouseBalance::dispatch();
         return redirect()->route('admin.houses.index')->with('success', 'Production House Deleted Successfully');
     }
 
@@ -94,6 +102,7 @@ class ProductionHouseController extends Controller
         $house = ProductionHouse::findOrFail($id);
         $admins = Admin::all();
         $activities = AdminActivity::getActivities(ProductionHouse::class, $id)->orderBy('created_at', 'desc')->take(10)->get();
+        UpdateProductionHouseBalance::dispatch();
         return view('admin.houses.show', compact('house', 'admins', 'activities'));
     }
 
@@ -101,6 +110,7 @@ class ProductionHouseController extends Controller
     {
         $house = ProductionHouse::withTrashed()->find($id);
         $house->restore();
+        UpdateProductionHouseBalance::dispatch();
         return redirect()->route('admin.houses.index')->with('Production House Restored Successfully');
     }
 
@@ -108,6 +118,7 @@ class ProductionHouseController extends Controller
     {
         $house = ProductionHouse::withTrashed()->find($id);
         $house->forceDelete();
+        UpdateProductionHouseBalance::dispatch();
         return redirect()->route('admin.houses.trashed')->with('success', 'Production House Permanently Deleted');
     }
 }

@@ -1,23 +1,18 @@
 @extends('adminlte::page')
-
-@section('title', 'Suppliers')
-
+@section('title', 'Supplier Refunds')
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1>Suppliers</h1>
-            @can('suppliers.create')
-                <a href="{{ route('admin.suppliers.create') }}" class="btn btn-primary mt-2">Add new</a>
-            @endcan
-            @can('suppliers.trashed')
-                <a href="{{ route('admin.suppliers.trashed') }}" class="btn btn-danger mt-2">Trash List</a>
+            <h1>Supplier Refunds</h1>
+            @can('supplierRefunds.list')
+                <a href="{{ route('admin.supplier-refunds.index') }}" class="btn btn-primary mt-2">Go Back</a>
             @endcan
 
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">Suppliers</li>
+                <li class="breadcrumb-item active">Supplier Refunds</li>
             </ol>
 
         </div>
@@ -27,43 +22,35 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            @can('suppliers.list')
+            @can('supplierRefunds.list')
                 <div class="card">
                     <div class="card-body table-responsive">
-                        <table id="adminsList" class="table  dataTable table-bordered table-striped">
+                        <table id="adminsList" class="table dataTable table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Contact Person</th>
-                                <th>Phone</th>
-                                <th>Balance</th>
-                                <th>Email</th>
+                                <th>Supplier Name</th>
+                                <th>Account Name</th>
+                                <th>Amount</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($suppliers as $supplier)
+                            @foreach($refunds as $refund)
                                 <tr>
-                                    <td>{{ $supplier->name ?? '' }}</td>
-                                    <td>{{ $supplier->contact_person ?? '' }}</td>
-                                    <td>{{ $supplier->phone ?? '' }}</td>
-                                    <td title="@if($supplier->balance<0) We will get {{$supplier->balance}} Taka From the supplier @else Supplier will get {{$supplier->balance}} Taka From us  @endif ">{{ $supplier->balance ?? '' }}</td>
-                                    <td>{{ $supplier->email ?? '' }}</td>
+                                    <td>{{ $refund->supplier->name }}</td>
+                                    <td>{{ $refund->account->name }}</td>
+                                    <td>{{ $refund->amount }}</td>
                                     <td class="text-center">
-                                        <form action="{{ route('admin.suppliers.destroy', $supplier->id) }}" method="POST">
-                                            @method('DELETE')
-                                            @csrf
-                                            @can('suppliers.view')
-                                                <a href="{{ route('admin.suppliers.show',['supplier'=>$supplier->id]) }}" class="btn btn-info px-1 py-0 btn-sm"><i class="fa fa-eye"></i></a>
-                                            @endcan
-                                            @can('suppliers.update')
-                                                <a href="{{ route('admin.suppliers.edit',['supplier'=>$supplier->id]) }}" class="btn btn-warning px-1 py-0 btn-sm"><i class="fa fa-pen"></i></a>
-                                            @endcan
-                                            @can('suppliers.delete')
-                                                <button onclick="isDelete(this)" class="btn btn-danger btn-sm px-1 py-0"><i class="fa fa-trash"></i></button>
-                                            @endcan
-
-                                        </form>
+                                        @can('supplierRefunds.restore')
+                                            <a href="{{ route('admin.supplier-refunds.restore',['supplier_refund'=>$refund->id]) }}" class="btn btn-success btn-sm px-1 py-0">
+                                                <i class="fa fa-arrow-left"></i>
+                                            </a>
+                                        @endcan
+                                        @can('supplierRefunds.force_delete')
+                                            <a href="{{ route('admin.supplier-refunds.force_delete',['supplier_refund'=>$refund->id]) }}" class="btn btn-danger btn-sm px-1 py-0">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -71,11 +58,9 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th>Name</th>
-                                <th>Contact Person</th>
-                                <th>Phone</th>
-                                <th>Balance</th>
-                                <th>Email</th>
+                                <th>Supplier Name</th>
+                                <th>Account Name</th>
+                                <th>Amount</th>
                                 <th>Action</th>
                             </tr>
                             </tfoot>
@@ -98,21 +83,16 @@
 @section('plugins.datatablesPlugins', true)
 @section('plugins.Datatables', true)
 @section('plugins.Sweetalert2', true)
-
-
 @section('css')
-
 @stop
-
 @section('js')
-
     <script>
         function isDelete(button) {
             event.preventDefault();
             var row = $(button).closest("tr");
             var form = $(button).closest("form");
             Swal.fire({
-                title: @json(__('Delete Supplier')),
+                title: @json(__('Delete Refund Permanently')),
                 text: @json(__('Are you sure you want to delete this?')),
                 icon: "warning",
                 showCancelButton: true,
@@ -168,10 +148,10 @@
                 lengthMenu: [10, 25, 50, 100],
                 language: {
                     paginate: {
-                        first: "{{ __('First') }}",
-                        previous: "{{ __('Previous') }}",
-                        next: "{{ __('Next') }}",
-                        last: "{{ __('Last') }}",
+                        first: "First",
+                        previous: "Previous",
+                        next: "Next",
+                        last: "Last",
                     }
                 }
             });

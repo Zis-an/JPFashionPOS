@@ -324,7 +324,7 @@
                             <td>{{ $sale->total_amount ?? '' }}</td>
                             <td>{{ $sale->discount_amount ?? '' }}</td>
                             <td>{{ $sale->net_total ?? '' }}</td>
-                            <td>{{ $sale->status ?? '' }}</td>
+                            <td class="text-capitalize">{{ $sale->status ?? '' }}</td>
                         </tr>
                     @endforeach
                 @endif
@@ -340,8 +340,8 @@
                     <th scope="col">Supplier</th>
                     <th scope="col">Warehouse</th>
                     <th scope="col">Account</th>
-                    <th scope="col">Purchase Date</th>
-                    <th scope="col">Total Cost</th>
+                    <th scope="col">P.Date</th>
+                    <th scope="col">T.Cost</th>
                     <th scope="col">Total Price</th>
                     <th scope="col">Amount</th>
                     <th scope="col">Status</th>
@@ -373,7 +373,7 @@
                             <td>${{ number_format($purchase->total_cost, 2) ?? '' }}</td>
                             <td>${{ number_format($purchase->total_price, 2) ?? '' }}</td>
                             <td>${{ number_format($purchase->amount, 2) ?? '' }}</td>
-                            <td>{{ $purchase->status ?? '' }}</td>
+                            <td class="text-capitalize">{{ $purchase->status ?? '' }}</td>
                         </tr>
                     @endforeach
                 @endif
@@ -389,10 +389,10 @@
                     <th scope="col">PDN House</th>
                     <th scope="col">Showroom</th>
                     <th scope="col">Account</th>
-                    <th scope="col">PDN Date</th>
-                    <th scope="col">Total Cost</th>
-                    <th scope="col">Total R.M. Cost</th>
-                    <th scope="col">Total Product Cost</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">T.Cost</th>
+                    <th scope="col">T.R.M. Cost</th>
+                    <th scope="col">T.P.Cost</th>
                     <th scope="col">Amount</th>
                     <th scope="col">Status</th>
                 </tr>
@@ -424,7 +424,7 @@
                             <td>{{ $production->total_raw_material_cost ?? '' }}</td>
                             <td>{{ $production->total_product_cost ?? '' }}</td>
                             <td>{{ $production->amount ?? '' }}</td>
-                            <td>{{ $production->status ?? '' }}</td>
+                            <td class="text-capitalize">{{ $production->status ?? '' }}</td>
                         </tr>
                     @endforeach
                 @endif
@@ -467,7 +467,7 @@
                             <td>{{ $expense->category->name ?? '' }}</td>
                             <td>{{ $expense->account->name ?? '' }}</td>
                             <td>${{ number_format($expense->amount, 2) ?? '' }}</td>
-                            <td>{{ $expense->status ?? '' }}</td>
+                            <td class="text-capitalize">{{ $expense->status ?? '' }}</td>
                         </tr>
                     @endforeach
                 @endif

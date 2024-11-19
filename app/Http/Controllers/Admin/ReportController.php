@@ -19,9 +19,11 @@ use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\Product;
 use App\Models\ProductStock;
+use App\Models\ProductStockTransfer;
 use App\Models\RawMaterial;
 use App\Models\RawMaterialPurchase;
 use App\Models\RawMaterialStock;
+use App\Models\RawMaterialStockTransfer;
 use App\Models\Sell;
 use App\Models\Showroom;
 use App\Models\Size;
@@ -551,5 +553,74 @@ class ReportController extends Controller
         $logs = CronJobLog::orderBy('id','desc')->get();
 
         return view('admin.reports.cronJobLogs', compact('logs'));
+    }
+
+    public function productTransferReports(Request $request)
+    {
+        $showrooms = Showroom::all();
+        // Start building the query
+        $query = ProductStockTransfer::with(['fromShowroom', 'toShowroom']);
+
+        // Apply filters based on the request
+        if ($request->filled('fromShowroomId')) {
+            $query->where('from_showroom_id', $request->fromShowroomId);
+        }
+        if ($request->filled('toShowroomId')) {
+            $query->where('to_showroom_id', $request->toShowroomId);
+        }
+
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('date', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('date', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('date', '<=', $request->endDate);
+        }
+
+        // Get the filtered stocks
+        $transfers = $query->get();
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['transfers' => $transfers]);
+        }
+
+        return view('admin.reports.productTransferReports', compact('transfers', 'showrooms'));
+    }
+
+    public function rawMaterialTransferReports(Request $request)
+    {
+        $warehouses = Warehouse::all();
+        // Start building the query
+        $query = RawMaterialStockTransfer::with(['fromWarehouse', 'toWarehouse']);
+
+        // Apply filters based on the request
+        if ($request->filled('fromWarehouseId')) {
+            $query->where('from_warehouse_id', $request->fromWarehouseId);
+        }
+        if ($request->filled('toWarehouseId')) {
+            $query->where('to_warehouse_id', $request->toWarehouseId);
+        }
+
+        // Filter by start and end dates
+        if ($request->filled('startDate') && $request->filled('endDate')) {
+            $query->whereBetween('date', [$request->startDate, $request->endDate]);
+        } elseif ($request->filled('startDate')) {
+            $query->whereDate('date', '>=', $request->startDate);
+        } elseif ($request->filled('endDate')) {
+            $query->whereDate('date', '<=', $request->endDate);
+        }
+
+        // Get the filtered stocks
+        $transfers = $query->get();
+
+        // Check if request is AJAX
+        if ($request->ajax()) {
+            return response()->json(['transfers' => $transfers]);
+        }
+
+        return view('admin.reports.rawMaterialTransferReports', compact('transfers', 'warehouses'));
     }
 }

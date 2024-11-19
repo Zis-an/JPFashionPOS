@@ -34,6 +34,7 @@
                                 <th>Customer Name</th>
                                 <th>Phone</th>
                                 <th>Email</th>
+                                <th>Balance</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -43,6 +44,10 @@
                                     <td>{{ $customer->name ?? '' }}</td>
                                     <td>{{ $customer->phone ?? '' }}</td>
                                     <td>{{ $customer->email ?? '' }}</td>
+                                    <td title="@if($customer->balance > 0) We will get {{$customer->balance}} Taka From the customer @else Customer will get {{$customer->balance}} Taka From us  @endif ">
+                                        {{ $customer->balance ?? '' }}
+                                        <span title="@if($customer->balance > 0) We will get {{$customer->balance}} Taka From the customer @else Customer will get {{$customer->balance}} Taka From us  @endif " class="badge badge-sm badge-info" style="cursor: pointer"><i class="fas fa-info"></i> </span>
+                                    </td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.customers.destroy', $customer->id) }}" method="POST">
                                             @method('DELETE')

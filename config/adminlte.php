@@ -497,7 +497,7 @@ return [
                         'withdraws.force_delete', 'withdraws.trashed', 'withdraws.activity'],
                 ],
                 [
-                    'text' => 'CustomerPayment',
+                    'text' => 'Customer Payment',
                     'url' => 'admin/customer-payments',
                     'icon' => 'fas fa-people-arrows custom-icon-class',
                     'label_color' => 'success',
@@ -505,12 +505,28 @@ return [
                         'customerPayments.force_delete', 'customerPayments.trashed', 'customerPayments.activity'],
                 ],
                 [
-                    'text' => 'SupplierPayment',
+                    'text' => 'Customer Refund',
+                    'url' => 'admin/customer-refunds',
+                    'icon' => 'fab fa-confluence custom-icon-class',
+                    'label_color' => 'success',
+                    'can' => ['customerRefunds.list','customerRefunds.create','customerRefunds.update','customerRefunds.delete', 'customerRefunds.restore',
+                        'customerRefunds.force_delete', 'customerRefunds.trashed', 'customerRefunds.activity'],
+                ],
+                [
+                    'text' => 'Supplier Payment',
                     'url' => 'admin/supplier-payments',
                     'icon' => 'fas fa-people-carry custom-icon-class',
                     'label_color' => 'success',
                     'can' => ['supplierPayments.list','supplierPayments.create','supplierPayments.update','supplierPayments.delete', 'supplierPayments.restore',
                         'supplierPayments.force_delete', 'supplierPayments.trashed', 'supplierPayments.activity'],
+                ],
+                [
+                    'text' => 'Supplier Refund',
+                    'url' => 'admin/supplier-refunds',
+                    'icon' => 'fas fa-stopwatch-20 custom-icon-class',
+                    'label_color' => 'success',
+                    'can' => ['supplierRefunds.list','supplierRefunds.create','supplierRefunds.update','supplierRefunds.delete', 'supplierRefunds.restore',
+                        'supplierRefunds.force_delete', 'supplierRefunds.trashed', 'supplierRefunds.activity'],
                 ],
                 [
                     'text' => 'ProductionPayment',
@@ -671,6 +687,18 @@ return [
                     'url' => 'admin/transfer-balance-sheets',
                     'icon' => 'fas fa-scroll custom-icon-class',
                     'can' => ['transferBalance.list','transferBalance.view'],
+                ],
+                [
+                    'text' => 'Product Transfer',
+                    'url' => 'admin/product-transfer-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['productTransferReports.list','productTransferReports.view'],
+                ],
+                [
+                    'text' => 'R.M. Transfer',
+                    'url' => 'admin/raw-material-transfer-reports',
+                    'icon' => 'fas fa-scroll custom-icon-class',
+                    'can' => ['rawMaterialTransferReports.list','rawMaterialTransferReports.view'],
                 ],
                 [
                     'text' => 'Sell Profit/Loss',

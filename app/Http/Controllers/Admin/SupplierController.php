@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdateSupplierBalance;
 use App\Models\Admin;
 use App\Models\AdminActivity;
 use App\Models\Supplier;
@@ -16,18 +17,21 @@ class SupplierController extends Controller
 {
     public function index(): View|Factory|Application
     {
+        UpdateSupplierBalance::dispatch();
         $suppliers = Supplier::orderBy('id', 'DESC')->get();
         return view('admin.suppliers.index', compact('suppliers'));
     }
 
     public function trashed_list(): View|Factory|Application
     {
+        UpdateSupplierBalance::dispatch();
         $suppliers = Supplier::onlyTrashed()->orderBy('id', 'DESC')->get();
         return view('admin.suppliers.trashed', compact('suppliers'));
     }
 
     public function create(): View|Factory|Application
     {
+        UpdateSupplierBalance::dispatch();
         return view('admin.suppliers.create');
     }
 
@@ -46,11 +50,13 @@ class SupplierController extends Controller
             'address' => $request->address ?? '',
             'description' => $request->description ?? ''
         ]);
+        UpdateSupplierBalance::dispatch();
         return redirect()->route('admin.suppliers.index')->with('success', 'Supplier created successfully.');
     }
 
     public function edit($id): View|Factory|Application
     {
+        UpdateSupplierBalance::dispatch();
         $supplier = Supplier::find($id);
         return view('admin.suppliers.edit', compact('supplier'));
     }
@@ -70,6 +76,7 @@ class SupplierController extends Controller
             'address' => $request->address ?? $supplier->address,
             'description' => $request->description ?? $supplier->description
         ]);
+        UpdateSupplierBalance::dispatch();
         return redirect()->route('admin.suppliers.index')->with('success', 'Supplier updated successfully.');
     }
 
@@ -77,6 +84,7 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::find($id);
         $supplier->delete();
+        UpdateSupplierBalance::dispatch();
         return redirect()->route('admin.suppliers.index')->with('success', 'Supplier deleted successfully.');
     }
 
@@ -85,6 +93,7 @@ class SupplierController extends Controller
         $supplier = Supplier::findOrFail($id);
         $admins = Admin::all();
         $activities = AdminActivity::getActivities(Supplier::class, $id)->orderBy('created_at', 'desc')->take(10)->get();
+        UpdateSupplierBalance::dispatch();
         return view('admin.suppliers.show', compact('supplier', 'admins', 'activities'));
     }
 
@@ -92,6 +101,7 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::withTrashed()->find($id);
         $supplier->restore();
+        UpdateSupplierBalance::dispatch();
         return redirect()->route('admin.suppliers.index')->with('success', 'Supplier restored successfully.');
     }
 
@@ -99,6 +109,7 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::withTrashed()->find($id);
         $supplier->forceDelete();
+        UpdateSupplierBalance::dispatch();
         return redirect()->route('admin.suppliers.trashed')->with('success', 'Supplier Permanently Deleted');
     }
 }

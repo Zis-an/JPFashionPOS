@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerPaymentController;
+use App\Http\Controllers\Admin\CustomerRefundController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\DepositController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\Admin\ShowroomController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\SupplierPaymentController;
+use App\Http\Controllers\Admin\SupplierRefundController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\WarehouseController;
 use App\Http\Controllers\Admin\WithdrawController;
@@ -494,6 +496,10 @@ Route::get('/expense-reports', [ReportController::class, 'expenseReports'])
     ->name('expenseReports');
 Route::get('/raw-material-purchase-reports', [ReportController::class, 'rawMaterialPurchaseReports'])
     ->name('rawMaterialPurchaseReports');
+Route::get('/product-transfer-reports', [ReportController::class, 'productTransferReports'])
+    ->name('productTransferReports');
+Route::get('/raw-material-transfer-reports', [ReportController::class, 'rawMaterialTransferReports'])
+    ->name('rawMaterialTransferReports');
 Route::get('/account-balance-sheets', [ReportController::class, 'balanceSheetReports'])
     ->name('balanceSheetReports');
 Route::get('/deposit-balance-sheets', [ReportController::class, 'depositBalanceSheet'])
@@ -555,6 +561,36 @@ Route::get('/production-payments/{production_payment}/status/{status}',[Producti
     ->name('production-payments.updateStatus')
     ->middleware('permission:productionPayments.updateStatus');
 Route::resource('/production-payments', ProductionPaymentController::class)->middleware('permission:productionPayments.list');
+
+// CustomerRefunds
+Route::get('/customer-refunds/trashed', [CustomerRefundController::class, 'trashed_list'])
+    ->middleware('permission:customerRefunds.trashed')
+    ->name('customer-refunds.trashed');
+Route::get('/customer-refunds/trashed/{customer_refund}/restore', [CustomerRefundController::class, 'restore'])
+    ->middleware('permission:customerRefunds.restore')
+    ->name('customer-refunds.restore');
+Route::get('/customer-refunds/trashed/{customer_refund}/delete', [CustomerRefundController::class, 'force_delete'])
+    ->middleware('permission:customerRefunds.force_delete')
+    ->name('customer-refunds.force_delete');
+Route::get('/customer-refunds/{customer_refund}/status/{status}',[CustomerRefundController::class, 'updateStatus'])
+    ->name('customer-refunds.updateStatus')
+    ->middleware('permission:customerRefunds.updateStatus');
+Route::resource('/customer-refunds', CustomerRefundController::class)->middleware('permission:customerRefunds.list');
+
+// SupplierRefunds
+Route::get('/supplier-refunds/trashed', [SupplierRefundController::class, 'trashed_list'])
+    ->middleware('permission:supplierRefunds.trashed')
+    ->name('supplier-refunds.trashed');
+Route::get('/supplier-refunds/trashed/{supplier_refund}/restore', [SupplierRefundController::class, 'restore'])
+    ->middleware('permission:supplierRefunds.restore')
+    ->name('supplier-refunds.restore');
+Route::get('/supplier-refunds/trashed/{supplier_refund}/delete', [SupplierRefundController::class, 'force_delete'])
+    ->middleware('permission:supplierRefunds.force_delete')
+    ->name('supplier-refunds.force_delete');
+Route::get('/supplier-refunds/{supplier_refund}/status/{status}',[SupplierRefundController::class, 'updateStatus'])
+    ->name('supplier-refunds.updateStatus')
+    ->middleware('permission:customerRefunds.updateStatus');
+Route::resource('/supplier-refunds', SupplierRefundController::class)->middleware('permission:supplierRefunds.list');
 
 // Profile
 Route::get('/profile',[AdminController::class,'profile'])->name('profile');

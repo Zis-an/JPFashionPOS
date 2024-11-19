@@ -529,7 +529,11 @@ class RoleSeeder extends Seeder
                         'transferBalance.list',
                         'transferBalance.view',
                         'sellProfitLoss.list',
-                        'sellProfitLoss.view'
+                        'sellProfitLoss.view',
+                        'productTransferReports.list',
+                        'productTransferReports.view',
+                        'rawMaterialTransferReports.list',
+                        'rawMaterialTransferReports.view',
                     ]
                 ],
                 [
@@ -588,6 +592,36 @@ class RoleSeeder extends Seeder
                         'supplierPayments.force_delete',
                         'supplierPayments.activity',
                         'supplierPayments.updateStatus'
+                    ]
+                ],
+                [
+                    'group_name' => 'CustomerRefund',
+                    'permissions' => [
+                        'customerRefunds.list',
+                        'customerRefunds.create',
+                        'customerRefunds.view',
+                        'customerRefunds.update',
+                        'customerRefunds.delete',
+                        'customerRefunds.trashed',
+                        'customerRefunds.restore',
+                        'customerRefunds.force_delete',
+                        'customerRefunds.activity',
+                        'customerRefunds.updateStatus'
+                    ]
+                ],
+                [
+                    'group_name' => 'SupplierRefund',
+                    'permissions' => [
+                        'supplierRefunds.list',
+                        'supplierRefunds.create',
+                        'supplierRefunds.view',
+                        'supplierRefunds.update',
+                        'supplierRefunds.delete',
+                        'supplierRefunds.trashed',
+                        'supplierRefunds.restore',
+                        'supplierRefunds.force_delete',
+                        'supplierRefunds.activity',
+                        'supplierRefunds.updateStatus'
                     ]
                 ],
                 [

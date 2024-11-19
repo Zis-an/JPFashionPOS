@@ -23,7 +23,7 @@ class RawMaterialPurchaseController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('checkModelStatus:App\Models\RawMaterialPurchase,rawMaterialPurchase')
+        $this->middleware('checkModelStatus:App\Models\RawMaterialPurchase,raw_material_purchase')
             ->only(['edit', 'update', 'updateStatus', 'destroy', 'restore', 'force_delete']);
     }
 
@@ -124,7 +124,9 @@ class RawMaterialPurchaseController extends Controller
             $amount = $totalCost + $totalPrice;
             $purchase->update([
                 'total_price' => $totalPrice,
-                'amount' => $amount, // Update amount
+                'net_total' => $amount,
+                'payment_type'=>$request->payment_type,
+                'amount' => $request->payment_type == 'full_paid' ? $amount: $request->paid_amount
             ]);
         }
 
@@ -138,7 +140,8 @@ class RawMaterialPurchaseController extends Controller
         $purchase = RawMaterialPurchase::find($id);
         if (!$purchase) {
             return redirect()->route('admin.raw-material-purchases.index')->with('error', 'RawMaterialPurchase Not Found');
-        }elseif ($purchase->status == 'approved'){
+        }
+        elseif ($purchase->status == 'approved'){
             return redirect()->route('admin.raw-material-purchases.index')->with('error', 'RawMaterialPurchase already approved');
         }
         $suppliers = Supplier::orderBy('id', 'DESC')->get();
@@ -235,7 +238,10 @@ class RawMaterialPurchaseController extends Controller
             $amount = $totalCost + $totalPrice;
             $purchase->update([
                 'total_price' => $totalPrice,
-                'amount' => $amount, // Update amount
+                //'amount' => $amount, // Update amount
+                'net_total' => $amount,
+                'payment_type'=>$request->payment_type,
+                'amount' => $request->payment_type == 'full_paid' ? $amount: $request->paid_amount
             ]);
         }
 

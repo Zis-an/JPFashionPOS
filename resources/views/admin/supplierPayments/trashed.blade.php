@@ -5,7 +5,7 @@
         <div class="col-sm-6">
             <h1>Supplier Payments</h1>
             @can('supplierPayments.list')
-                <a href="{{ route('admin.supplier-payment.index') }}" class="btn btn-primary mt-2">Go Back</a>
+                <a href="{{ route('admin.supplier-payments.index') }}" class="btn btn-primary mt-2">Go Back</a>
             @endcan
 
         </div>
@@ -42,12 +42,12 @@
                                     <td>{{ $payment->amount }}</td>
                                     <td class="text-center">
                                         @can('supplierPayments.restore')
-                                            <a href="{{ route('admin.supplier-payment.restore',['supplier_payment'=>$payment->id]) }}" class="btn btn-success btn-sm px-1 py-0">
+                                            <a href="{{ route('admin.supplier-payments.restore',['supplier_payment'=>$payment->id]) }}" class="btn btn-success btn-sm px-1 py-0">
                                                 <i class="fa fa-arrow-left"></i>
                                             </a>
                                         @endcan
                                         @can('supplierPayments.force_delete')
-                                            <a href="{{ route('admin.supplier-payment.force_delete',['supplier_payment'=>$payment->id]) }}" class="btn btn-danger btn-sm px-1 py-0">
+                                            <a href="{{ route('admin.supplier-payments.force_delete',['supplier_payment'=>$payment->id]) }}" class="btn btn-danger btn-sm px-1 py-0">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         @endcan

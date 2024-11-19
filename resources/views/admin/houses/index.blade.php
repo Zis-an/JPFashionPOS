@@ -47,7 +47,7 @@
                                     <td>{{ $house->address ?? '' }}</td>
                                     <td>{{ $house->phone ?? '' }}</td>
                                     <td>{{ $house->email ?? '' }}</td>
-                                    <td>{{ $house->balance ?? '' }}</td>
+                                    <td title="@if($house->balance<0) We will get {{$house->balance}} Taka From the production house @else Production house will get {{$house->balance}} Taka From us  @endif ">{{ $house->balance ?? '' }}</td>
                                     <td>{{ ucfirst($house->status) ?? '' }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('admin.houses.destroy', $house->id) }}" method="POST">

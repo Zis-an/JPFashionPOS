@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdateCustomerBalance;
 use App\Models\Admin;
 use App\Models\AdminActivity;
 use App\Models\Customer;
@@ -19,18 +20,21 @@ class CustomerController extends Controller
      */
     public function index(): View|Factory|Application
     {
+        UpdateCustomerBalance::dispatch();
         $customers = Customer::orderBy('id', 'DESC')->get();
         return view('admin.customers.index', compact('customers'));
     }
 
     public function trashed_list(): View|Factory|Application
     {
+        UpdateCustomerBalance::dispatch();
         $customers = Customer::onlyTrashed()->orderBy('id', 'DESC')->get();
         return view('admin.customers.trashed', compact('customers'));
     }
 
     public function create(): View|Factory|Application
     {
+        UpdateCustomerBalance::dispatch();
         return view('admin.customers.create');
     }
 
@@ -46,11 +50,13 @@ class CustomerController extends Controller
             'registration_date' => $request->registration_date,
             'family_details' => json_encode($request->only(['relation_type', 'family_name', 'family_age'])),
         ]);
+        UpdateCustomerBalance::dispatch();
         return redirect()->route('admin.customers.index')->with('success', 'Customer created successfully.');
     }
 
     public function edit($id): View|Factory|Application
     {
+        UpdateCustomerBalance::dispatch();
         $customer = Customer::find($id);
         return view('admin.customers.edit', compact('customer'));
     }
@@ -68,6 +74,7 @@ class CustomerController extends Controller
             'registration_date' => $request->registration_date,
             'family_details' => json_encode($request->only(['relation_type', 'family_name', 'family_age'])),
         ]);
+        UpdateCustomerBalance::dispatch();
         return redirect()->route('admin.customers.index')->with('success', 'Customer updated successfully.');
     }
 
@@ -75,11 +82,13 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $customer->delete();
+        UpdateCustomerBalance::dispatch();
         return redirect()->route('admin.customers.index')->with('success', 'Customer deleted successfully.');
     }
 
     public function show($id): View|Factory|Application
     {
+        UpdateCustomerBalance::dispatch();
         $customer = Customer::findOrFail($id);
         $admins = Admin::all();
         $activities = AdminActivity::getActivities(Customer::class, $id)->orderBy('created_at', 'desc')->take(10)->get();
@@ -90,6 +99,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::withTrashed()->find($id);
         $customer->restore();
+        UpdateCustomerBalance::dispatch();
         return redirect()->route('admin.customers.index')->with('success', 'Customer restored successfully.');
     }
 
@@ -97,6 +107,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::withTrashed()->find($id);
         $customer->forceDelete();
+        UpdateCustomerBalance::dispatch();
         return redirect()->route('admin.customers.trashed')->with('success', 'Customer permanently deleted.');
     }
 

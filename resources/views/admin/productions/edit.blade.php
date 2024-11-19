@@ -139,6 +139,18 @@
                                             <div>
                                                 <button class="btn btn-success btn-sm add-item-btn" type="button">Add</button>
                                             </div>
+                                            <!-- Payment -->
+                                            <div class="d-flex align-items-center ml-2">
+                                                <label for="payment_type">Payment: </label>
+                                                <select id="payment_type" name="payment_type" class="select2 form-control ml-2">
+                                                    <option value="full_paid" @if($production->payment_type == 'full_paid') selected @endif>PAID</option>
+                                                    <option value="partial_paid" @if($production->payment_type == 'partial_paid') selected @endif>PARTIAL</option>
+                                                </select>
+                                            </div>
+                                            <!-- Container for the dynamic input field -->
+                                            <div id="dueInputContainer" class="" style="display: @if($production->payment_type == 'full_paid')none @else block @endif">
+                                                <input type="number" id="paid_amount" name="paid_amount" value="{{ $production->amount }}" class="form-control" placeholder="Enter Paid Amount">
+                                            </div>
                                         </div>
                                         <div id="cost-details-container">
                                             @if(is_array($cost_details))
@@ -428,6 +440,25 @@
                     }
                 });
             });
+
+            // Paid + Due Amount Input Field Reveal and Hide Related Code Starts
+            const paymentTypeSelect = document.getElementById('payment_type');
+            const dueInputContainer = document.getElementById('dueInputContainer');
+
+            // Listen for changes to the select element
+            paymentTypeSelect.addEventListener('change', function () {
+                const selectedValue = paymentTypeSelect.value;
+
+                // Show or hide the input field based on selection
+                if (selectedValue === 'partial_paid') {
+                    dueInputContainer.style.display = 'block'; // Show input
+                } else {
+                    dueInputContainer.style.display = 'none'; // Hide input
+                }
+
+                console.log("Selected Payment Type:", selectedValue);
+            });
+            // Paid + Due Amount Input Field Reveal and Hide Related Code Ends
 
             $('#warehouse_id').on('change', function () {
                 const warehouseId = $(this).val();
