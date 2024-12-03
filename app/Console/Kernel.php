@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('queue:work')->withoutOverlapping();
         // Log before and after the UpdateAccountBalanceJob
         $schedule->job(new UpdateAccountBalanceJob())
             ->everyMinute() // Adjust as needed
@@ -29,7 +30,7 @@ class Kernel extends ConsoleKernel
 
         // Log before and after the UpdateProductSellPricesJob
         $schedule->job(new UpdateProductSellPricesJob())
-            ->hourly()
+            ->everyMinute()
             ->before(function () {
                 $this->logCronJob('UpdateProductSellPricesJob', 'initiated');
             })
@@ -38,7 +39,7 @@ class Kernel extends ConsoleKernel
             });
 
         $schedule->job(new UpdateCustomerBalance())
-            ->hourly()
+            ->everyMinute()
             ->before(function () {
                 $this->logCronJob('UpdateCustomerBalance', 'initiated');
             })
@@ -47,7 +48,7 @@ class Kernel extends ConsoleKernel
             });
 
         $schedule->job(new UpdateSupplierBalance())
-            ->hourly()
+            ->everyMinute()
             ->before(function () {
                 $this->logCronJob('UpdateSupplierBalance', 'initiated');
             })
@@ -65,7 +66,7 @@ class Kernel extends ConsoleKernel
             });
 
         $schedule->job(new DeleteOldCronJobLogs())
-            ->daily()
+            ->hourly()
             ->before(function () {
                 $this->logCronJob('DeleteOldCronJobLogs', 'initiated');
             })

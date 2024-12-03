@@ -28,13 +28,13 @@ class DeleteOldCronJobLogs implements ShouldQueue
      */
     public function handle()
     {
-        // Get the date 1 days ago
-        $sevenDaysAgo = Carbon::now()->subDays(1);
+        // Get the date 6 hours ago
+        $sevenDaysAgo = Carbon::now()->subHours(6);
 
-        // Delete CronJobLog entries older than 1 days
+        // Delete CronJobLog entries older than 6 hours
         CronJobLog::where('created_at', '<', $sevenDaysAgo)->delete();
 
         // Optionally, log that the cleanup has occurred (for monitoring purposes)
-        Log::info('Deleted CronJobLogs older than 1 days');
+        Log::info('Deleted CronJobLogs older than 6 hours');
     }
 }

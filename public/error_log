@@ -1,0 +1,8 @@
+[20-Nov-2024 10:24:45 UTC] PHP Warning:  require(/home/jpfashionsbd/public_html/vendor/composer/../laravel/framework/src/Illuminate/Collections/helpers.php): Failed to open stream: No such file or directory in /home/jpfashionsbd/public_html/vendor/composer/autoload_real.php on line 41
+[20-Nov-2024 10:24:45 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/jpfashionsbd/public_html/vendor/composer/../laravel/framework/src/Illuminate/Collections/helpers.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/jpfashionsbd/public_html/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/jpfashionsbd/public_html/vendor/composer/autoload_real.php(45): {closure}('265b4faa2b3a976...', '/home/jpfashion...')
+#1 /home/jpfashionsbd/public_html/vendor/autoload.php(25): ComposerAutoloaderInit245f5053334814275d75e866cf21dfea::getLoader()
+#2 /home/jpfashionsbd/public_html/public/index.php(34): require('/home/jpfashion...')
+#3 {main}
+  thrown in /home/jpfashionsbd/public_html/vendor/composer/autoload_real.php on line 41

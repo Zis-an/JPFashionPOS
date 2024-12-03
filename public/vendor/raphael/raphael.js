@@ -1348,7 +1348,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             mx = p1x + 2 * t * (c1x - p1x) + t2 * (c2x - 2 * c1x + p1x),
             my = p1y + 2 * t * (c1y - p1y) + t2 * (c2y - 2 * c1y + p1y),
             nx = c1x + 2 * t * (c2x - c1x) + t2 * (p2x - 2 * c2x + c1x),
-            ny = c1y + 2 * t * (c2y - c1y) + t2 * (p2y - 2 * c2y + c1y),
+            ny = c1y + 2 * t * (c2y - c1y) + t2 * (p2y - 2 * c2y + c1y),
             ax = t1 * p1x + t * c1x,
             ay = t1 * p1y + t * c1y,
             cx = t1 * c2x + t * p2x,
